@@ -17,10 +17,27 @@ public class Arco {
         this.anguloFin = anguloFin;
     }
 
+    // Getters
     public Punto getCentro() { return centro; }
     public int getRadio() { return radio; }
     public double getAnguloInicio() { return anguloInicio; }
     public double getAnguloFin() { return anguloFin; }
 
+    // Devuelve la lista de todos los arcos
     public static List<Arco> getArcos() { return arcos; }
+
+    // Agrega un arco a la lista
+    public static void agregarArco(Arco arco) {
+        arcos.add(arco);
+    }
+
+    // Elimina un arco de la lista
+    public static void eliminarArco(Arco arco) {
+        arcos.remove(arco);
+    }
+
+    // Limpia todos los arcos
+    public static void limpiarArcos() {
+        arcos.clear();
+    }
 }

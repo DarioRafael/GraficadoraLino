@@ -153,7 +153,7 @@ public class DrawingFrame extends JFrame {
         add(planoCartesiano, BorderLayout.CENTER);
 
         scrollPane = new JScrollPane(infoTable);
-        scrollPane.setPreferredSize(new Dimension(200, 400)); // Ajustar el tamaño preferido
+        scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
         add(scrollPane, BorderLayout.EAST);
 
     }
@@ -317,7 +317,6 @@ public class DrawingFrame extends JFrame {
 
                 switch (lineType) {
                     case "Vertical":
-                        configurarColumnas(false);
                         panelFin.add(new JLabel("X final (fijo):"));
                         xFinField.setText(String.valueOf(xInicio));
                         xFinField.setEditable(false);
@@ -326,7 +325,6 @@ public class DrawingFrame extends JFrame {
                         panelFin.add(yFinField);
                         break;
                     case "Horizontal":
-                        configurarColumnas(false);
                         panelFin.add(new JLabel("X final:"));
                         panelFin.add(xFinField);
                         panelFin.add(new JLabel("Y final (fijo):"));
@@ -335,13 +333,13 @@ public class DrawingFrame extends JFrame {
                         panelFin.add(yFinField);
                         break;
                     case "Diagonal":
-                        configurarColumnas(false);
                         panelFin.add(new JLabel("X final:"));
                         panelFin.add(xFinField);
                         panelFin.add(new JLabel("Y final:"));
                         panelFin.add(yFinField);
                         break;
                 }
+
 
                 int resultFin = JOptionPane.showConfirmDialog(null, panelFin,
                         "Ingrese el punto final", JOptionPane.OK_CANCEL_OPTION);
@@ -354,7 +352,7 @@ public class DrawingFrame extends JFrame {
                     // Crear y dibujar la línea
                     Linea nuevaLinea = new Linea(puntoInicio, puntoFin);
                     planoCartesiano.repaint();
-
+                    configurarColumnas(false);
                     // Actualizar la tabla con los puntos de la nueva línea
                     updateTableWithLinePoints(nuevaLinea);
                 }
@@ -415,7 +413,7 @@ public class DrawingFrame extends JFrame {
                 switch (option) {
                     case "Circulo":
                         if (metodoSeleccionado.equals("Polinomial")) {
-                            configurarColumnas(false);
+
                             // Pedir el radio para el método polinomial
                             JTextField radioField = new JTextField(5);
                             JPanel panelRadio = new JPanel(new GridLayout(1, 2));
@@ -427,13 +425,15 @@ public class DrawingFrame extends JFrame {
 
                             if (resultRadio == JOptionPane.OK_OPTION) {
                                 radio = Integer.parseInt(radioField.getText());
+                                configurarColumnas(false);
                                 calcularPuntosCirculoPolinomio(xInicio, yInicio, radio);
                                 Circulo nuevoCirculoPolinomial = new Circulo(puntoInicio, radio);
                                 planoCartesiano.repaint();
 
+
                             }
                         } else { // Método trigonométrico
-                            configurarColumnas(true); // Para trigonometría
+
                             // Pedir radio para el método trigonométrico
                             JTextField radioField = new JTextField(5);
                             JPanel panelRadio = new JPanel(new GridLayout(1, 2));
@@ -445,9 +445,11 @@ public class DrawingFrame extends JFrame {
 
                             if (resultRadio == JOptionPane.OK_OPTION) {
                                 radio = Integer.parseInt(radioField.getText());
+                                configurarColumnas(true); // Para trigonometría
                                 calcularPuntosCirculoTrigonometrico(xInicio, yInicio, radio);
                                 Circulo nuevoCirculoTrigonometrico =new Circulo(puntoInicio, radio);
                                 planoCartesiano.repaint();
+
                             }
                         }
                         break;
@@ -467,8 +469,10 @@ public class DrawingFrame extends JFrame {
                             int radioX = Integer.parseInt(radioXField.getText());
                             int radioY = Integer.parseInt(radioYField.getText());
                             if (metodoSeleccionado.equals("Polinomial")) {
+                                configurarColumnas(false); // Para trigonometría
                                 calcularPuntosElipsePolinomio(xInicio, yInicio, radioX, radioY);
                             } else {
+                                configurarColumnas(true); // Para trigonometría
                                 calcularPuntosElipseTrigonometrico(xInicio, yInicio, radioX, radioY);
                             }
                             Elipse nuevaElipse = new Elipse(puntoInicio, radioX, radioY);
@@ -550,7 +554,15 @@ public class DrawingFrame extends JFrame {
             double angle = 2 * Math.PI * i / numSteps;
             double x = centerX + radioX * Math.cos(angle);
             double y = centerY + radioY * Math.sin(angle);
-            tableModel.addRow(new Object[]{"P" + (i + 1), String.format("%.2f", radioX), String.format("%.2f", radioY), String.format("%.2f", Math.toDegrees(angle))});
+
+            // Calcular el radio efectivo en este punto
+            double radioEfectivo = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+
+            tableModel.addRow(new Object[]{
+                    "P" + (i + 1),
+                    String.format("%.2f", radioEfectivo),
+                    String.format("%.2f", Math.toDegrees(angle))
+            });
         }
     }
 

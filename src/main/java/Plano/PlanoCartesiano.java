@@ -27,7 +27,6 @@ public class PlanoCartesiano extends JPanel {
     private boolean isDarkMode = false; // Flag to track dark mode status
 
 
-
     public PlanoCartesiano() {
         setupMouseListeners();
     }
@@ -125,6 +124,7 @@ public class PlanoCartesiano extends JPanel {
         drawElipses(g2);
         drawArcos(g2);
     }
+
     private void drawGrid(Graphics2D g2) {
         if (isDarkMode) {
             g2.setColor(Color.GRAY);
@@ -143,12 +143,12 @@ public class PlanoCartesiano extends JPanel {
 
         for (int i = startX; i <= endX; i++) {
             int x = i * GRID_SIZE;
-            g2.drawLine(x, (int)(-offsetY - viewportHeight/2), x, (int)(-offsetY + viewportHeight/2));
+            g2.drawLine(x, (int) (-offsetY - viewportHeight / 2), x, (int) (-offsetY + viewportHeight / 2));
         }
 
         for (int i = startY; i <= endY; i++) {
             int y = i * GRID_SIZE;
-            g2.drawLine((int)(-offsetX - viewportWidth/2), y, (int)(-offsetX + viewportWidth/2), y);
+            g2.drawLine((int) (-offsetX - viewportWidth / 2), y, (int) (-offsetX + viewportWidth / 2), y);
         }
     }
 
@@ -163,14 +163,14 @@ public class PlanoCartesiano extends JPanel {
         double viewportWidth = getWidth() / zoomFactor;
         double viewportHeight = getHeight() / zoomFactor;
 
-        g2.drawLine((int)(-offsetX - viewportWidth/2), 0, (int)(-offsetX + viewportWidth/2), 0);
-        g2.drawLine(0, (int)(-offsetY - viewportHeight/2), 0, (int)(-offsetY + viewportHeight/2));
+        g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0);
+        g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2));
 
         g2.setFont(new Font("Arial", Font.PLAIN, 12));
-        g2.drawString("X", (int)(-offsetX + viewportWidth/2) - LABEL_OFFSET, -LABEL_OFFSET);
-        g2.drawString("-X", (int)(-offsetX - viewportWidth/2) + LABEL_OFFSET, -LABEL_OFFSET);
-        g2.drawString("Y", LABEL_OFFSET, (int)(-offsetY - viewportHeight/2) + LABEL_OFFSET);
-        g2.drawString("-Y", LABEL_OFFSET, (int)(-offsetY + viewportHeight/2) - LABEL_OFFSET);
+        g2.drawString("X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
+        g2.drawString("-X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
+        g2.drawString("Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
+        g2.drawString("-Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 10));
 
@@ -220,8 +220,6 @@ public class PlanoCartesiano extends JPanel {
             }
         }
     }
-
-
 
 
     // Método para agregar un nuevo punto y repintar
@@ -289,14 +287,13 @@ public class PlanoCartesiano extends JPanel {
     public List<Punto> calcularPuntosCirculo(int xCentro, int yCentro, int radio) {
         List<Punto> puntos = new ArrayList<>();
         puntos.add(new Punto(xCentro + radio, yCentro));        // P₁ (derecha)
-        puntos.add(new Punto((int)(xCentro + radio / Math.sqrt(2)), (int)(yCentro - radio / Math.sqrt(2)))); // P₇ (diagonal arriba derecha)
+        puntos.add(new Punto((int) (xCentro + radio / Math.sqrt(2)), (int) (yCentro - radio / Math.sqrt(2)))); // P₇ (diagonal arriba derecha)
         puntos.add(new Punto(xCentro, yCentro - radio));        // P₄ (arriba)
-        puntos.add(new Punto((int)(xCentro - radio / Math.sqrt(2)), (int)(yCentro - radio / Math.sqrt(2)))); // P₈ (diagonal arriba izquierda)
+        puntos.add(new Punto((int) (xCentro - radio / Math.sqrt(2)), (int) (yCentro - radio / Math.sqrt(2)))); // P₈ (diagonal arriba izquierda)
         puntos.add(new Punto(xCentro - radio, yCentro));        // P₂ (izquierda)
-        puntos.add(new Punto((int)(xCentro - radio / Math.sqrt(2)), (int)(yCentro + radio / Math.sqrt(2)))); // P₆ (diagonal abajo izquierda)
+        puntos.add(new Punto((int) (xCentro - radio / Math.sqrt(2)), (int) (yCentro + radio / Math.sqrt(2)))); // P₆ (diagonal abajo izquierda)
         puntos.add(new Punto(xCentro, yCentro + radio));        // P₃ (abajo)
-        puntos.add(new Punto((int)(xCentro + radio / Math.sqrt(2)), (int)(yCentro + radio / Math.sqrt(2)))); // P₅ (diagonal abajo derecha)
-
+        puntos.add(new Punto((int) (xCentro + radio / Math.sqrt(2)), (int) (yCentro + radio / Math.sqrt(2)))); // P₅ (diagonal abajo derecha)
 
 
         return puntos;
@@ -319,6 +316,19 @@ public class PlanoCartesiano extends JPanel {
         }
     }
 
+    private List<int[]> calcularPuntosElipse(int xCentro, int yCentro, int semiEjeMayor, int semiEjeMenor) {
+        List<int[]> puntos = new ArrayList<>();
+        puntos.add(new int[]{xCentro + semiEjeMayor, yCentro, 0}); // Punto derecho
+        puntos.add(new int[]{xCentro + (int)(semiEjeMayor / Math.sqrt(2)), yCentro - (int)(semiEjeMenor / Math.sqrt(2)), 45}); // Diagonal derecha arriba
+        puntos.add(new int[]{xCentro, yCentro - semiEjeMenor, 90}); // Punto superior
+        puntos.add(new int[]{xCentro - (int)(semiEjeMayor / Math.sqrt(2)), yCentro - (int)(semiEjeMenor / Math.sqrt(2)), 135}); // Diagonal izquierda arriba
+        puntos.add(new int[]{xCentro - semiEjeMayor, yCentro, 180}); // Punto izquierdo
+        puntos.add(new int[]{xCentro - (int)(semiEjeMayor / Math.sqrt(2)), yCentro + (int)(semiEjeMenor / Math.sqrt(2)), 225}); // Diagonal izquierda abajo
+        puntos.add(new int[]{xCentro, yCentro + semiEjeMenor, 270}); // Punto inferior
+        puntos.add(new int[]{xCentro + (int)(semiEjeMayor / Math.sqrt(2)), yCentro + (int)(semiEjeMenor / Math.sqrt(2)), 315}); // Diagonal derecha abajo
+        return puntos;
+    }
+
     private void drawElipses(Graphics2D g2) {
         if (isDarkMode) {
             g2.setColor(Color.PINK);
@@ -337,86 +347,59 @@ public class PlanoCartesiano extends JPanel {
             g2.setColor(Color.RED);
             int puntoCounter = 1; // Contador para los nombres de los puntos
 
-
-            g2.fillOval(xCentro + semiEjeMayor - 3, yCentro - 3, 6, 6); // Punto derecho
-            g2.drawString("P" + puntoCounter++, xCentro + semiEjeMayor + 5, yCentro - 5); // Etiquetar punto derecho
-
-            g2.fillOval(xCentro + (int)(semiEjeMayor / Math.sqrt(2)) - 3, yCentro - (int)(semiEjeMenor / Math.sqrt(2)), 6, 6); // Diagonal derecha arriba
-            g2.drawString("P" + puntoCounter++, xCentro + (int)(semiEjeMayor / Math.sqrt(2)) + 5, yCentro - (int)(semiEjeMenor / Math.sqrt(2)) - 5); // Etiquetar
-
-            g2.fillOval(xCentro - 3, yCentro - semiEjeMenor, 6, 6); // Punto superior
-            g2.drawString("P" + puntoCounter++, xCentro + 5, yCentro - semiEjeMenor - 5); // Etiquetar punto superior
-
-            g2.fillOval(xCentro - (int)(semiEjeMayor / Math.sqrt(2)), yCentro - (int)(semiEjeMenor / Math.sqrt(2)), 6, 6); // Diagonal izquierda arriba
-            g2.drawString("P" + puntoCounter++, xCentro - (int)(semiEjeMayor / Math.sqrt(2)) + 5, yCentro - (int)(semiEjeMenor / Math.sqrt(2)) - 5); // Etiquetar
-
-            g2.fillOval(xCentro - semiEjeMayor, yCentro - 3, 6, 6); // Punto izquierdo
-            g2.drawString("P" + puntoCounter++, xCentro - semiEjeMayor + 5, yCentro - 5); // Etiquetar punto izquierdo
-
-
-
-            g2.fillOval(xCentro - (int)(semiEjeMayor / Math.sqrt(2)), yCentro + (int)(semiEjeMenor / Math.sqrt(2)) - 3, 6, 6); // Diagonal izquierda abajo
-            g2.drawString("P" + puntoCounter++, xCentro - (int)(semiEjeMayor / Math.sqrt(2)) + 5, yCentro + (int)(semiEjeMenor / Math.sqrt(2)) + 5); // Etiquetar
-
-
-            g2.fillOval(xCentro - 3, yCentro + semiEjeMenor - 3, 6, 6); // Punto inferior
-            g2.drawString("P" + puntoCounter++, xCentro + 5, yCentro + semiEjeMenor + 5); // Etiquetar punto inferior
-
-
-            g2.fillOval(xCentro + (int)(semiEjeMayor / Math.sqrt(2)) - 3, yCentro + (int)(semiEjeMenor / Math.sqrt(2)) - 3, 6, 6); // Diagonal derecha abajo
-            g2.drawString("P" + puntoCounter++, xCentro + (int)(semiEjeMayor / Math.sqrt(2)) + 5, yCentro + (int)(semiEjeMenor / Math.sqrt(2)) + 5); // Etiquetar
-
-
-
-
-
-
-}
+            List<int[]> puntos = calcularPuntosElipse(xCentro, yCentro, semiEjeMayor, semiEjeMenor);
+            for (int[] punto : puntos) {
+                int x = punto[0];
+                int y = punto[1];
+                int angulo = punto[2];
+                g2.fillOval(x - 3, y - 3, 6, 6);
+                //g2.drawString("P" + puntoCounter++ + " (" + angulo + "°)", x + 5, y - 5);
+                g2.drawString("P" + puntoCounter++, x + 5, y - 5);
+            }
+        }
     }
+
+
 
     private void drawArcos(Graphics2D g2) {
         if (isDarkMode) {
-            g2.setColor(Color.ORANGE); // Mantener el mismo color para arcos en modo oscuro
-        } else {
             g2.setColor(Color.ORANGE);
+        } else {
+            g2.setColor(Color.RED);
         }
+
         for (Arco arco : Arco.getArcos()) {
             int xCentro = arco.getCentro().getX() * GRID_SIZE;
             int yCentro = -arco.getCentro().getY() * GRID_SIZE;
             int radio = arco.getRadio() * GRID_SIZE;
-            int anguloInicio = (int) Math.toDegrees(arco.getAnguloInicio());
-            int anguloFin = (int) Math.toDegrees(arco.getAnguloFin());
+            int anguloInicio = (int) arco.getAnguloInicio();
+            int anguloFinal = (int) arco.getAnguloFin();
 
-            // Calcular la extensión del arco (siempre positiva)
-            int anguloExtendido = (anguloFin - anguloInicio + 360) % 360;
 
-            // Dibujar solo el arco
-            g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloExtendido);
+            // Dibujar el arco
+            g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFinal - anguloInicio);
 
-            // Dibujar puntos de inicio y fin del arco
-            g2.setColor(Color.RED);
-            int xInicio = (int) (xCentro + radio * Math.cos(arco.getAnguloInicio()));
-            int yInicio = (int) (yCentro - radio * Math.sin(arco.getAnguloInicio()));
-            int xFin = (int) (xCentro + radio * Math.cos(arco.getAnguloFin()));
-            int yFin = (int) (yCentro - radio * Math.sin(arco.getAnguloFin()));
-            g2.fillOval(xInicio - 3, yInicio - 3, 6, 6);
-            g2.fillOval(xFin - 3, yFin - 3, 6, 6);
+            // Dibujar los puntos inicial y final del arco
+            Point puntoInicial = calcularPuntoEnArco(xCentro, yCentro, radio, anguloInicio);
+            Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFinal);
 
-            // Imprimir ángulos en radianes y grados para verificar
-            System.out.println("Arco - Ángulo Inicio (radianes): " + arco.getAnguloInicio());
-            System.out.println("Arco - Ángulo Fin (radianes): " + arco.getAnguloFin());
-            System.out.println("Arco - Ángulo Inicio (grados): " + anguloInicio);
-            System.out.println("Arco - Ángulo Fin (grados): " + anguloFin);
-            System.out.println("Arco - Ángulo Extendido (grados): " + anguloExtendido);
+            g2.fillOval(puntoInicial.x - 3, puntoInicial.y - 3, 6, 6);
+            g2.fillOval(puntoFinal.x - 3, puntoFinal.y - 3, 6, 6);
 
-            // Dibujar líneas desde el centro hasta los puntos de inicio y fin del arco
-            g2.setColor(Color.BLUE);
-            g2.drawLine(xCentro, yCentro, xInicio, yInicio);
-            g2.drawLine(xCentro, yCentro, xFin, yFin);
-
-            g2.setColor(Color.ORANGE);
+            // Etiquetar los puntos
+            g2.drawString("Inicio", puntoInicial.x + 5, puntoInicial.y - 5);
+            g2.drawString("Fin", puntoFinal.x + 5, puntoFinal.y - 5);
         }
     }
+
+    // Método auxiliar para calcular un punto en el arco dado el ángulo
+    private Point calcularPuntoEnArco(int xCentro, int yCentro, int radio, int angulo) {
+        double anguloRadianes = Math.toRadians(angulo);
+        int x = (int) (xCentro + radio * Math.cos(anguloRadianes));
+        int y = (int) (yCentro - radio * Math.sin(anguloRadianes)); // Y invertido en gráficos
+        return new Point(x, y);
+    }
+
 
     public void addElipse(Elipse elipse) {
         Elipse.getElipses().add(elipse);
@@ -429,12 +412,10 @@ public class PlanoCartesiano extends JPanel {
     }
 
 
-
     public void setDarkMode(boolean darkMode) {
         isDarkMode = darkMode;
         repaint(); // Redibujar el plano al cambiar el modo
     }
-
 
 
     public void addCirculo(Circulo circulo) {
