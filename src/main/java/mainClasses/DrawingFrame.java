@@ -481,30 +481,64 @@ public class DrawingFrame extends JFrame {
                         break;
                     case "Arco":
                         JTextField radioField = new JTextField(5);
-                        JTextField anguloInicioField = new JTextField(5);
-                        JTextField anguloFinField = new JTextField(5);
-                        JPanel panelArco = new JPanel(new GridLayout(3, 2));
-                        panelArco.add(new JLabel("Radio:"));
-                        panelArco.add(radioField);
-                        panelArco.add(new JLabel("Ángulo inicio (grados):"));
-                        panelArco.add(anguloInicioField);
-                        panelArco.add(new JLabel("Ángulo fin (grados):"));
-                        panelArco.add(anguloFinField);
+                        JPanel panelArco;
 
-                        int resultArco = JOptionPane.showConfirmDialog(null, panelArco,
-                                "Ingrese los parámetros del arco", JOptionPane.OK_CANCEL_OPTION);
+                        if (metodoSeleccionado.equals("Polinomial")) {
+                            // Configuración del panel para el método Polinomial
+                            JTextField x1Field = new JTextField(5);
+                            JTextField x2Field = new JTextField(5);
 
-                        if (resultArco == JOptionPane.OK_OPTION) {
-                            int radioArco = Integer.parseInt(radioField.getText());
-                            double anguloInicio = Double.parseDouble(anguloInicioField.getText());
-                            double anguloFin = Double.parseDouble(anguloFinField.getText());
-                            if (metodoSeleccionado.equals("Polinomial")) {
-                                calcularPuntosArcoPolinomio(xInicio, yInicio, radioArco, anguloInicio, anguloFin);
-                            } else {
-                                calcularPuntosArcoTrigonometrico(xInicio, yInicio, radioArco, anguloInicio, anguloFin);
+                            panelArco = new JPanel(new GridLayout(3, 2));
+                            panelArco.add(new JLabel("Radio:"));
+                            panelArco.add(radioField);
+                            panelArco.add(new JLabel("x1 (coordenada inicial en X):"));
+                            panelArco.add(x1Field);
+                            panelArco.add(new JLabel("x2 (coordenada final en X):"));
+                            panelArco.add(x2Field);
+
+                            int resultPolinomial = JOptionPane.showConfirmDialog(null, panelArco,
+                                    "Ingrese los parámetros del arco (método Polinomial)", JOptionPane.OK_CANCEL_OPTION);
+
+                            if (resultPolinomial == JOptionPane.OK_OPTION) {
+                                int radioArco = Integer.parseInt(radioField.getText());
+                                int x1 = Integer.parseInt(x1Field.getText());
+                                int x2 = Integer.parseInt(x2Field.getText());
+
+                                // Llama a la función polinomial que usa los puntos x1 y x2
+                                calcularPuntosArcoPolinomio(xInicio, yInicio, radioArco, x1, x2);
+
+                                // Se agrega un nuevo Arco (o puede ser que solo quieras los puntos calculados)
+                                Arco nuevoArco = new Arco(puntoInicio, radioArco, x1, x2); // Ajusta si es necesario
+                                planoCartesiano.addArco(nuevoArco);
                             }
-                            Arco nuevoArco = new Arco(puntoInicio, radioArco, anguloInicio, anguloFin);
-                            planoCartesiano.addArco(nuevoArco);
+                        } else {
+                            // Configuración del panel para el método Trigonométrico
+                            JTextField anguloInicioField = new JTextField(5);
+                            JTextField anguloFinField = new JTextField(5);
+
+                            panelArco = new JPanel(new GridLayout(3, 2));
+                            panelArco.add(new JLabel("Radio:"));
+                            panelArco.add(radioField);
+                            panelArco.add(new JLabel("Ángulo inicio (grados):"));
+                            panelArco.add(anguloInicioField);
+                            panelArco.add(new JLabel("Ángulo fin (grados):"));
+                            panelArco.add(anguloFinField);
+
+                            int resultTrigonometrico = JOptionPane.showConfirmDialog(null, panelArco,
+                                    "Ingrese los parámetros del arco (método Trigonométrico)", JOptionPane.OK_CANCEL_OPTION);
+
+                            if (resultTrigonometrico == JOptionPane.OK_OPTION) {
+                                int radioArco = Integer.parseInt(radioField.getText());
+                                double anguloInicio = Double.parseDouble(anguloInicioField.getText());
+                                double anguloFin = Double.parseDouble(anguloFinField.getText());
+
+                                // Llama a la función trigonométrica
+                                calcularPuntosArcoTrigonometrico(xInicio, yInicio, radioArco, anguloInicio, anguloFin);
+
+                                // Se agrega un nuevo Arco
+                                Arco nuevoArco = new Arco(puntoInicio, radioArco, anguloInicio, anguloFin);
+                                planoCartesiano.addArco(nuevoArco);
+                            }
                         }
                         break;
                 }
