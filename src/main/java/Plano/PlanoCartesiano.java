@@ -375,7 +375,6 @@ public class PlanoCartesiano extends JPanel {
             int anguloInicio = (int) arco.getAnguloInicio();
             int anguloFinal = (int) arco.getAnguloFin();
 
-
             // Dibujar el arco
             g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFinal - anguloInicio);
 
@@ -389,6 +388,10 @@ public class PlanoCartesiano extends JPanel {
             // Etiquetar los puntos
             g2.drawString("Inicio", puntoInicial.x + 5, puntoInicial.y - 5);
             g2.drawString("Fin", puntoFinal.x + 5, puntoFinal.y - 5);
+
+            // Dibujar las líneas desde los puntos inicial y final hacia el centro (simulando la rebanada de pizza)
+            g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);  // Línea desde el centro al punto inicial
+            g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);      // Línea desde el centro al punto final
         }
     }
 
