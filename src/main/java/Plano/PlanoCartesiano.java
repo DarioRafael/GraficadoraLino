@@ -238,6 +238,8 @@ public class PlanoCartesiano extends JPanel {
         g2.setStroke(new BasicStroke(2));
 
         List<Linea> lineas = Linea.getLineas();
+
+
         for (Linea linea : lineas) {
             Punto inicio = linea.getPuntoInicio();
             Punto fin = linea.getPuntoFin();
@@ -247,21 +249,83 @@ public class PlanoCartesiano extends JPanel {
             int y2 = -fin.getY() * GRID_SIZE;
 
             g2.drawLine(x1, y1, x2, y2);
+            //g2.drawString("P" + 1, x1 + 5, y1 - 5);
 
             // Dibujar todos los puntos intermedios
-            List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
             int puntoCounter = 1; // Contador para los nombres de los puntos
-            for (Punto punto : puntosIntermedios) {
 
-                int x = punto.getX() * GRID_SIZE;
-                int y = -punto.getY() * GRID_SIZE;
-                g2.fillOval(x - 3, y - 3, 6, 6);
+            if (linea.isEsParteDeFiguraAnonima()) {
+                List<Punto> puntos = Punto.getPuntos();
 
-                // Dibujar el nombre del punto
-                g2.drawString("P" + puntoCounter++, x + 5, y - 5); // Etiquetar el punto
+                for (Punto punto : puntos) {
+                    int x = punto.getX() * GRID_SIZE;
+                    int y = -punto.getY() * GRID_SIZE;
+
+                    g2.fillOval(x - 3, y - 3, 6, 6);
+                   // g2.drawString("P" + 1, x1 + 5, y1 - 5);
+
+                    // Verificar si el nombre no es null antes de dibujar
+                    String nombrePunto = punto.getNombrePunto();
+                    if (nombrePunto != null) {
+                        g2.drawString(nombrePunto, x + 5, y - 5);
+                    }
+                }
+            } else {
+                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
+                for (Punto punto : puntosIntermedios) {
+
+                    int x = punto.getX() * GRID_SIZE;
+                    int y = -punto.getY() * GRID_SIZE;
+                    g2.fillOval(x - 3, y - 3, 6, 6);
+
+                    // Dibujar el nombre del punto
+                    g2.drawString("P" + puntoCounter++, x + 5, y - 5); // Etiquetar el punto
+                }
             }
         }
     }
+
+    private void drawLinesfk(Graphics2D g2) {
+        if (isDarkMode) {
+            g2.setColor(Color.CYAN);
+        } else {
+            g2.setColor(Color.BLUE);
+        }
+        g2.setStroke(new BasicStroke(2));
+
+        List<Linea> lineas = Linea.getLineas();
+        int puntoCounter = 1; // Contador global para los nombres de los puntos
+
+        for (Linea linea : lineas) {
+            Punto inicio = linea.getPuntoInicio();
+            Punto fin = linea.getPuntoFin();
+            int x1 = inicio.getX() * GRID_SIZE;
+            int y1 = -inicio.getY() * GRID_SIZE;
+            int x2 = fin.getX() * GRID_SIZE;
+            int y2 = -fin.getY() * GRID_SIZE;
+
+            g2.drawLine(x1, y1, x2, y2);
+// Etiquetar el punto de inicio
+
+            if (linea.isEsParteDeFiguraAnonima()) {
+                // Para la figura anónima, solo dibujamos y etiquetamos los puntos de inicio y fin
+                g2.fillOval(x1 - 3, y1 - 3, 6, 6);
+                g2.fillOval(x2 - 3, y2 - 3, 6, 6);
+                g2.drawString("P" + puntoCounter++, x1 + 5, y1 - 5);
+                g2.drawString("P" + puntoCounter++, x2 + 5, y2 - 5);
+            } else {
+                // Para líneas normales, dibujamos todos los puntos intermedios
+                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
+                for (Punto punto : puntosIntermedios) {
+                    int x = punto.getX() * GRID_SIZE;
+                    int y = -punto.getY() * GRID_SIZE;
+                    g2.fillOval(x - 3, y - 3, 6, 6);
+                    g2.drawString("P" + puntoCounter++, x + 5, y - 5);
+                }
+            }
+        }
+    }
+
 
     public void drawLinesFGAnonima(Graphics2D g2) {
         if (isDarkMode) {

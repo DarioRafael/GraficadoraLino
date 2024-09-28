@@ -16,7 +16,7 @@ public class DrawingFrame extends JFrame {
 
     private PlanoCartesiano planoCartesiano;
     private Punto puntoActual;
-
+    private boolean figuraAnonima = false;
 
     private JButton drawPointButton;
 
@@ -158,9 +158,10 @@ public class DrawingFrame extends JFrame {
         optionsPanel.add(drawPointButton);
         optionsPanel.add(drawLineButton);
         optionsPanel.add(drawConicasButton);
+        optionsPanel.add(otrosButton);
         optionsPanel.add(clearButton);
         optionsPanel.add(menuButton);
-        optionsPanel.add(otrosButton);
+
 
         optionsPanel.add(creditosButton);
 
@@ -232,6 +233,9 @@ public class DrawingFrame extends JFrame {
     }
 
     public void drawFiguraAnonima() {
+        figuraAnonima = true; // Set the flag to true
+
+
         // Solicitar el punto de inicio
         JPanel panelInicio = new JPanel(new GridLayout(2, 2));
         JTextField xInicioField = new JTextField(5);
@@ -252,6 +256,7 @@ public class DrawingFrame extends JFrame {
 
                 // Definir los puntos de la figura anónima
                 Punto[] puntos = {
+                        new Punto(xInicio, yInicio),
                         new Punto(xInicio, yInicio + 2),
                         new Punto(xInicio + 2, yInicio + 2),
                         new Punto(xInicio + 2, yInicio + 1),
@@ -261,20 +266,26 @@ public class DrawingFrame extends JFrame {
                         new Punto(xInicio + 6, yInicio)
                 };
 
+                // Asignar etiquetas a los puntos
+                for (int i = 0; i < puntos.length; i++) {
+                    puntos[i].setNombrePunto("P" + (i+1));
+                }
+
                 // Dibujar la figura en el plano cartesiano
                 Punto puntoAnterior = puntoInicio;
                 planoCartesiano.addPunto(puntoInicio); // Agregar el punto inicial
 
                 for (Punto punto : puntos) {
                     planoCartesiano.addPunto(punto);
-                    planoCartesiano.addLinea(new Linea(puntoAnterior, punto)); // Dibujar línea entre puntos
+                    planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true)); // Dibujar línea entre puntos
                     puntoAnterior = punto;
                 }
 
+
                 // Actualizar la tabla con los puntos de la figura anónima
+                configurarColumnas(false);
                 tableModel.setRowCount(0); // Limpiar la tabla
                 int puntoNumero = 1;
-                tableModel.addRow(new Object[]{"P" + puntoNumero++, puntoInicio.getX(), puntoInicio.getY()}); // Agregar el punto de inicio
                 for (Punto punto : puntos) {
                     tableModel.addRow(new Object[]{"P" + puntoNumero++, punto.getX(), punto.getY()});
                 }
@@ -284,6 +295,10 @@ public class DrawingFrame extends JFrame {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
             }
         }
+    }
+
+    public boolean isFiguraAnonima() {
+        return figuraAnonima;
     }
 
     private void toggleDarkMode() {
@@ -307,6 +322,8 @@ public class DrawingFrame extends JFrame {
             menuButton.setForeground(Color.WHITE);
             creditosButton.setBackground(Color.GRAY);
             creditosButton.setForeground(Color.WHITE);
+            otrosButton.setBackground(Color.GRAY);
+            otrosButton.setForeground(Color.WHITE);
             // Tabla en modo oscuro
             infoTable.setBackground(Color.DARK_GRAY); // Fondo oscuro
             infoTable.setForeground(Color.WHITE);     // Texto blanco
@@ -342,6 +359,8 @@ public class DrawingFrame extends JFrame {
             // Tabla en modo claro (restablecer a valores predeterminados)
             infoTable.setBackground(null);
             infoTable.setForeground(null);
+            otrosButton.setBackground(null);
+            otrosButton.setForeground(null);
 
             // Cabeceras de la tabla en modo claro (restablecer a valores predeterminados)
             DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) infoTable.getTableHeader().getDefaultRenderer();
@@ -427,7 +446,7 @@ public class DrawingFrame extends JFrame {
                     puntoFin = new Punto(xFin, yFin);
 
                     // Crear y dibujar la línea
-                    Linea nuevaLinea = new Linea(puntoInicio, puntoFin);
+                    Linea nuevaLinea = new Linea(puntoInicio, puntoFin, false);
                     planoCartesiano.repaint();
                     configurarColumnas(false);
                     // Actualizar la tabla con los puntos de la nueva línea

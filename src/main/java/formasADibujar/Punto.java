@@ -42,4 +42,8 @@ public class Punto {
     public static List<Punto> getPuntos() {
         return puntos;
     }
+
+    public void setNombrePunto(String nombrePunto) {
+        this.nombrePunto = nombrePunto;
+    }
 }

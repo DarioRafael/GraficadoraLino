@@ -6,12 +6,14 @@ import java.util.List;
 public class Linea {
     private Punto puntoInicio;
     private Punto puntoFin;
-    private static List<Linea> lineas = new ArrayList<>(); // Lista de líneas
+    private static List<Linea> lineas = new ArrayList<>();
+    private boolean esParteDeFiguraAnonima;
 
-    public Linea(Punto puntoInicio, Punto puntoFin) {
+    public Linea(Punto puntoInicio, Punto puntoFin, boolean esParteDeFiguraAnonima) {
         this.puntoInicio = puntoInicio;
         this.puntoFin = puntoFin;
-        lineas.add(this); // Agregar la línea a la lista
+        this.esParteDeFiguraAnonima = esParteDeFiguraAnonima;
+        lineas.add(this);
     }
 
     public Punto getPuntoInicio() {
@@ -25,9 +27,30 @@ public class Linea {
     public static List<Linea> getLineas() {
         return lineas;
     }
+    public List<Punto> calcularPuntosAnonimos() {
+        List<Punto> puntos = new ArrayList<>();
 
-    // Método para calcular todos los puntos de la línea
+
+        int x1 = puntoInicio.getX();
+        int y1 = puntoInicio.getY();
+        int x2 = puntoFin.getX();
+        int y2 = puntoFin.getY();
+
+        for (int i = 0; i < 8; i++) {
+            double t = i / 7.0; // Distribuye los puntos entre 0 y 1
+            int x = (int) (x1 + t * (x2 - x1));
+            int y = (int) (y1 + t * (y2 - y1));
+            puntos.add(new Punto(x, y));
+        }
+
+        return puntos;
+    }
+
     public List<Punto> calcularPuntosIntermedios() {
+        if (esParteDeFiguraAnonima) {
+            return new ArrayList<>(); // Retornar una lista vacía si es parte de la figura anónima
+        }
+
         List<Punto> puntos = new ArrayList<>();
         int x1 = puntoInicio.getX();
         int y1 = puntoInicio.getY();
@@ -56,5 +79,13 @@ public class Linea {
         }
 
         return puntos;
+    }
+
+    public boolean isEsParteDeFiguraAnonima() {
+        return esParteDeFiguraAnonima;
+    }
+
+    public void setEsParteDeFiguraAnonima(boolean esParteDeFiguraAnonima) {
+        this.esParteDeFiguraAnonima = esParteDeFiguraAnonima;
     }
 }
