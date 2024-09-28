@@ -120,6 +120,7 @@ public class PlanoCartesiano extends JPanel {
         drawAxes(g2);
         drawPoints(g2);
         drawLines(g2);
+
         drawCircles(g2);
         drawElipses(g2);
         drawArcos(g2);
@@ -251,6 +252,7 @@ public class PlanoCartesiano extends JPanel {
             List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
             int puntoCounter = 1; // Contador para los nombres de los puntos
             for (Punto punto : puntosIntermedios) {
+
                 int x = punto.getX() * GRID_SIZE;
                 int y = -punto.getY() * GRID_SIZE;
                 g2.fillOval(x - 3, y - 3, 6, 6);
@@ -261,7 +263,26 @@ public class PlanoCartesiano extends JPanel {
         }
     }
 
+    public void drawLinesFGAnonima(Graphics2D g2) {
+        if (isDarkMode) {
+            g2.setColor(Color.CYAN);
+        } else {
+            g2.setColor(Color.BLUE);
+        }
+        g2.setStroke(new BasicStroke(2));
 
+        List<Linea> lineas = Linea.getLineas();
+        for (Linea linea : lineas) {
+            Punto inicio = linea.getPuntoInicio();
+            Punto fin = linea.getPuntoFin();
+            int x1 = inicio.getX() * GRID_SIZE;
+            int y1 = -inicio.getY() * GRID_SIZE;
+            int x2 = fin.getX() * GRID_SIZE;
+            int y2 = -fin.getY() * GRID_SIZE;
+
+            g2.drawLine(x1, y1, x2, y2);
+        }
+    }
     private void drawCircles(Graphics2D g2) {
         if (isDarkMode) {
             g2.setColor(Color.LIGHT_GRAY);
@@ -402,6 +423,13 @@ public class PlanoCartesiano extends JPanel {
         int y = (int) (yCentro - radio * Math.sin(anguloRadianes)); // Y invertido en gráficos
         return new Point(x, y);
     }
+
+    public void addLinea(Linea linea) {
+        Linea.getLineas().add(linea);
+        repaint(); // Redibujar el plano para reflejar los cambios
+    }
+
+
 
 
     public void addElipse(Elipse elipse) {

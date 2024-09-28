@@ -42,8 +42,8 @@ public class PaginaPrincipal extends JFrame {
         JPanel centerPanel = new JPanel(new GridBagLayout()); // GridBagLayout para centrar el botón
         centerPanel.setBackground(Color.decode("#f0f0f0"));
 
-        JButton goToDrawingButton = new JButton("Ir a DrawingFrame");
-        goToDrawingButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        JButton goToDrawingButton = new JButton("GRAFICADORA");
+        goToDrawingButton.setFont(new Font("Arial", Font.BOLD, 16));
         goToDrawingButton.setBackground(Color.decode("#007bff")); // Color de fondo azul
         goToDrawingButton.setForeground(Color.WHITE); // Texto en blanco
         goToDrawingButton.setFocusPainted(false); // Quitar el borde feo al hacer clic

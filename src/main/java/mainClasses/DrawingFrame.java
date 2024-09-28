@@ -45,6 +45,10 @@ public class DrawingFrame extends JFrame {
 
     private boolean isDarkMode = false;
 
+
+    private JButton otrosButton;
+    private JPopupMenu otrosMenu;
+
     // Constructor de la ventana
     public DrawingFrame() {
         setTitle("Graficación Básica Por Computadora");
@@ -65,7 +69,10 @@ public class DrawingFrame extends JFrame {
     }
 
     private void createComponents() {
-        // Crear botones
+        // Initialize optionsPanel
+        optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+
+        // Create buttons
         drawPointButton = new JButton("Dibujar Punto");
 
         drawLineButton = new JButton("Tipos de Lineas");
@@ -88,7 +95,7 @@ public class DrawingFrame extends JFrame {
 
         clearButton = new JButton("Limpiar");
 
-        // Crear el botón del menú y el menú emergente
+        // Create the menu button and popup menu
         menuButton = new JButton("Menú");
         popupMenu = new JPopupMenu();
         JMenuItem changeScaleItem = new JMenuItem("Cambiar escala");
@@ -98,30 +105,40 @@ public class DrawingFrame extends JFrame {
         darkModeItem.addActionListener(e -> toggleDarkMode());
         popupMenu.add(darkModeItem);
 
-        // Crear el panel del plano cartesiano
+        // Create the Cartesian plane panel
         planoCartesiano = new PlanoCartesiano();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
-        // Crear la tabla y el modelo de tabla
-        String[] columnNames = {"Punto","X", "Y"};
+        // Create the table and table model
+        String[] columnNames = {"Punto", "X", "Y"};
         tableModel = new DefaultTableModel(columnNames, 0);
         infoTable = new JTable(tableModel);
 
-        // Ajustar el tamaño de la fuente y aplicar negritas a las cabeceras
+        // Adjust font size and apply bold to headers
         Font font = new Font("Arial", Font.BOLD, 16);
-        infoTable.setFont(new Font("Arial", Font.PLAIN, 14)); // Tamaño de la fuente de las celdas
+        infoTable.setFont(new Font("Arial", Font.PLAIN, 14)); // Cell font size
 
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
         headerRenderer.setFont(font);
         infoTable.getTableHeader().setDefaultRenderer(headerRenderer);
-        infoTable.getTableHeader().setFont(font); // Negritas en las cabeceras
+        infoTable.getTableHeader().setFont(font); // Bold headers
 
-        // Ajustar el tamaño de la columna si es necesario
+        // Adjust column width if necessary
         infoTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
         creditosButton = new JButton("Créditos");
+
+        // Create the "Otros" button and popup menu
+        otrosButton = new JButton("Otros");
+        otrosMenu = new JPopupMenu();
+        JMenuItem figuraAnonimaItem = new JMenuItem("FiguraAnonima");
+        figuraAnonimaItem.addActionListener(e -> drawFiguraAnonima());
+        otrosMenu.add(figuraAnonimaItem);
+
+        // Add the "Otros" button to the options panel
+        optionsPanel.add(otrosButton);
     }
 
     private void configureLayout() {
@@ -143,7 +160,10 @@ public class DrawingFrame extends JFrame {
         optionsPanel.add(drawConicasButton);
         optionsPanel.add(clearButton);
         optionsPanel.add(menuButton);
+        optionsPanel.add(otrosButton);
+
         optionsPanel.add(creditosButton);
+
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
@@ -206,8 +226,65 @@ public class DrawingFrame extends JFrame {
 
             }
         });
+
+        otrosButton.addActionListener(e -> otrosMenu.show(otrosButton, 0, otrosButton.getHeight()));
+
     }
 
+    public void drawFiguraAnonima() {
+        // Solicitar el punto de inicio
+        JPanel panelInicio = new JPanel(new GridLayout(2, 2));
+        JTextField xInicioField = new JTextField(5);
+        JTextField yInicioField = new JTextField(5);
+        panelInicio.add(new JLabel("X origen:"));
+        panelInicio.add(xInicioField);
+        panelInicio.add(new JLabel("Y origen:"));
+        panelInicio.add(yInicioField);
+
+        int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
+                "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
+
+        if (resultInicio == JOptionPane.OK_OPTION) {
+            try {
+                int xInicio = Integer.parseInt(xInicioField.getText());
+                int yInicio = Integer.parseInt(yInicioField.getText());
+                Punto puntoInicio = new Punto(xInicio, yInicio);
+
+                // Definir los puntos de la figura anónima
+                Punto[] puntos = {
+                        new Punto(xInicio, yInicio + 2),
+                        new Punto(xInicio + 2, yInicio + 2),
+                        new Punto(xInicio + 2, yInicio + 1),
+                        new Punto(xInicio + 4, yInicio + 1),
+                        new Punto(xInicio + 4, yInicio + 2),
+                        new Punto(xInicio + 6, yInicio + 2),
+                        new Punto(xInicio + 6, yInicio)
+                };
+
+                // Dibujar la figura en el plano cartesiano
+                Punto puntoAnterior = puntoInicio;
+                planoCartesiano.addPunto(puntoInicio); // Agregar el punto inicial
+
+                for (Punto punto : puntos) {
+                    planoCartesiano.addPunto(punto);
+                    planoCartesiano.addLinea(new Linea(puntoAnterior, punto)); // Dibujar línea entre puntos
+                    puntoAnterior = punto;
+                }
+
+                // Actualizar la tabla con los puntos de la figura anónima
+                tableModel.setRowCount(0); // Limpiar la tabla
+                int puntoNumero = 1;
+                tableModel.addRow(new Object[]{"P" + puntoNumero++, puntoInicio.getX(), puntoInicio.getY()}); // Agregar el punto de inicio
+                for (Punto punto : puntos) {
+                    tableModel.addRow(new Object[]{"P" + puntoNumero++, punto.getX(), punto.getY()});
+                }
+
+                planoCartesiano.repaint(); // Repintar el plano cartesiano
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
+            }
+        }
+    }
 
     private void toggleDarkMode() {
         isDarkMode = !isDarkMode;
