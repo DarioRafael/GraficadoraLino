@@ -8,9 +8,17 @@ import formasADibujar.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.*;
+import java.util.List;
 
 public class DrawingFrame extends JFrame {
 
@@ -46,8 +54,24 @@ public class DrawingFrame extends JFrame {
     private boolean isDarkMode = false;
 
 
+    private JComboBox<String> figurasComboBox;
+    private Map<String, List<Punto>> figurasMap = new HashMap<>();
+
     private JButton otrosButton;
     private JPopupMenu otrosMenu;
+
+
+    private int figuraAnonimaCounter = 1; // Counter for anonymous figures
+    private int circuloPolinomialCounter = 1; // Counter for anonymous figures
+    private int circuloTrigonometricoCounter = 1; // Counter for anonymous figures
+    private int elipsePolinomialCounter = 1; // Counter for anonymous figures
+    private int elipseTrigonometricoCounter = 1; // Counter for anonymous figures
+    private int lineaVerticalCounter = 1; // Counter for anonymous figures
+    private int lineaHorizontalCounter = 1; // Counter for anonymous figures
+
+
+
+
 
     // Constructor de la ventana
     public DrawingFrame() {
@@ -60,6 +84,9 @@ public class DrawingFrame extends JFrame {
 
 
         configureLayout();
+
+        // Apply numeric-only listener to all text fields
+        addNumericOnlyFilterToAll(this.getContentPane());
 
         // Añadir ActionListeners
         addActionListeners();
@@ -137,8 +164,18 @@ public class DrawingFrame extends JFrame {
         figuraAnonimaItem.addActionListener(e -> drawFiguraAnonima());
         otrosMenu.add(figuraAnonimaItem);
 
+
         // Add the "Otros" button to the options panel
         optionsPanel.add(otrosButton);
+
+
+
+        // Inicializar el mapa de figuras
+        figurasMap = new HashMap<>();
+        figurasComboBox = new JComboBox<>();
+        figurasComboBox.addActionListener(e -> mostrarPuntosFiguraSeleccionada());
+
+
     }
 
     private void configureLayout() {
@@ -161,10 +198,7 @@ public class DrawingFrame extends JFrame {
         optionsPanel.add(otrosButton);
         optionsPanel.add(clearButton);
         optionsPanel.add(menuButton);
-
-
         optionsPanel.add(creditosButton);
-
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
@@ -173,40 +207,26 @@ public class DrawingFrame extends JFrame {
         add(topPanel, BorderLayout.NORTH);
         add(planoCartesiano, BorderLayout.CENTER);
 
+        // Panel para la tabla y el JComboBox
+        JPanel rightPanel = new JPanel(new BorderLayout());
         scrollPane = new JScrollPane(infoTable);
         scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
-        add(scrollPane, BorderLayout.EAST);
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
 
+        // Panel para el JComboBox
+        JPanel comboBoxPanel = new JPanel();
+        comboBoxPanel.add(figurasComboBox);
+        rightPanel.add(comboBoxPanel, BorderLayout.SOUTH);
+
+        add(rightPanel, BorderLayout.EAST);
     }
 
     private void addActionListeners() {
         drawPointButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Crear un panel para solicitar las coordenadas X e Y
-                JPanel panel = new JPanel(new GridLayout(2, 2));
-                panel.add(new JLabel("Coordenada X:"));
-                JTextField xField = new JTextField(5);
-                panel.add(xField);
-                panel.add(new JLabel("Coordenada Y:"));
-                JTextField yField = new JTextField(5);
-                panel.add(yField);
+                handleDrawPointAction();
 
-                int result = JOptionPane.showConfirmDialog(null, panel, "Ingrese las coordenadas", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    try {
-                        int x = Integer.parseInt(xField.getText());
-                        int y = Integer.parseInt(yField.getText());
-                        puntoActual = new Punto(x, y);
-
-
-
-                        // Pasar el punto al plano cartesiano
-                        planoCartesiano.addPunto(puntoActual); // Agregar el punto
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
-                    }
-                }
             }
         });
         drawLineButton.addActionListener(e -> lineTypeMenu.show(drawLineButton, 0, drawLineButton.getHeight()));
@@ -218,7 +238,6 @@ public class DrawingFrame extends JFrame {
                 JOptionPane.showMessageDialog(null, "Créditos:\n\nDesarrollado por: Dario Rafael García Bárcenas y Juan Carlos Torres Reyna\nVersión: 1.0", "Créditos", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -227,14 +246,108 @@ public class DrawingFrame extends JFrame {
 
             }
         });
-
         otrosButton.addActionListener(e -> otrosMenu.show(otrosButton, 0, otrosButton.getHeight()));
 
     }
 
+    private void handleDrawPointAction() {
+        tableModel.setRowCount(0); // Limpiar la tabla
+        // Crear un panel para solicitar las coordenadas X e Y
+        JPanel panel = new JPanel(new GridLayout(2, 2));
+        panel.add(new JLabel("Coordenada X:"));
+        JTextField xField = new JTextField(5);
+        panel.add(xField);
+        panel.add(new JLabel("Coordenada Y:"));
+        JTextField yField = new JTextField(5);
+        panel.add(yField);
+        addNumericOnlyFilter(xField);
+        addNumericOnlyFilter(yField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Ingrese las coordenadas", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int x = Integer.parseInt(xField.getText());
+                int y = Integer.parseInt(yField.getText());
+                puntoActual = new Punto(x, y);
+
+                tableModel.addRow(new Object[]{"P1",  x, y});
+
+                // Pasar el punto al plano cartesiano
+                planoCartesiano.addPunto(puntoActual); // Agregar el punto
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
+            }
+        }
+    }
+
+    private void mostrarPuntosFiguraSeleccionada() {
+        String figuraSeleccionada = (String) figurasComboBox.getSelectedItem();
+        if (figuraSeleccionada != null) {
+            List<Punto> puntos = figurasMap.get(figuraSeleccionada);
+            if (puntos != null) {
+                DefaultTableModel tableModel = (DefaultTableModel) infoTable.getModel();
+                tableModel.setRowCount(0); // Limpiar la tabla
+                for (Punto punto : puntos) {
+                    tableModel.addRow(new Object[]{punto.getNombrePunto(), punto.getX(), punto.getY()});
+                }
+            }
+        }
+    }
+
+    // Ejemplo de cómo agregar una figura al mapa y al JComboBox
+    public void addFigura(String nombreFigura, List<Punto> puntos) {
+        figurasMap.put(nombreFigura, puntos);
+        figurasComboBox.addItem(nombreFigura);
+    }
+    private void addNumericOnlyFilterToAll(Container container) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JTextField) {
+                addNumericOnlyFilter((JTextField) component);
+            } else if (component instanceof Container) {
+                addNumericOnlyFilterToAll((Container) component);
+            }
+        }
+    }
+
+    private void addNumericOnlyFilter(JTextField textField) {
+        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string == null) return;
+                if (isValid(string)) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text == null) return;
+                if (isValid(text)) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+
+            private boolean isValid(String text) {
+                return text.matches("^-?\\d*$");
+            }
+        });
+
+        // Agregar un KeyListener para mayor seguridad
+        textField.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE) && (c != '-')) {
+                    e.consume();  // Ignora el evento si no es un número
+                }
+                if (c == '-' && textField.getCaretPosition() != 0) {
+                    e.consume();  // Solo permite '-' al principio
+                }
+            }
+        });
+    }
     public void drawFiguraAnonima() {
         figuraAnonima = true; // Set the flag to true
-
+        String nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;
 
         // Solicitar el punto de inicio
         JPanel panelInicio = new JPanel(new GridLayout(2, 2));
@@ -244,6 +357,9 @@ public class DrawingFrame extends JFrame {
         panelInicio.add(xInicioField);
         panelInicio.add(new JLabel("Y origen:"));
         panelInicio.add(yInicioField);
+        addNumericOnlyFilter(xInicioField);
+        addNumericOnlyFilter(yInicioField);
+
 
         int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
                 "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
@@ -255,7 +371,7 @@ public class DrawingFrame extends JFrame {
                 Punto puntoInicio = new Punto(xInicio, yInicio);
 
                 // Definir los puntos de la figura anónima
-                Punto[] puntos = {
+                Punto[] puntosArray = {
                         new Punto(xInicio, yInicio),
                         new Punto(xInicio, yInicio + 2),
                         new Punto(xInicio + 2, yInicio + 2),
@@ -266,37 +382,40 @@ public class DrawingFrame extends JFrame {
                         new Punto(xInicio + 6, yInicio)
                 };
 
+                // Convertir el array a una lista
+                List<Punto> puntosList = Arrays.asList(puntosArray);
+
                 // Asignar etiquetas a los puntos
-                for (int i = 0; i < puntos.length; i++) {
-                    puntos[i].setNombrePunto("P" + (i+1));
+                for (int i = 0; i < puntosList.size(); i++) {
+                    puntosList.get(i).setNombrePunto("P" + (i + 1));
                 }
 
                 // Dibujar la figura en el plano cartesiano
                 Punto puntoAnterior = puntoInicio;
                 planoCartesiano.addPunto(puntoInicio); // Agregar el punto inicial
 
-                for (Punto punto : puntos) {
+                for (Punto punto : puntosList) {
                     planoCartesiano.addPunto(punto);
                     planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true)); // Dibujar línea entre puntos
                     puntoAnterior = punto;
                 }
 
-
                 // Actualizar la tabla con los puntos de la figura anónima
                 configurarColumnas(false);
                 tableModel.setRowCount(0); // Limpiar la tabla
                 int puntoNumero = 1;
-                for (Punto punto : puntos) {
+                for (Punto punto : puntosList) {
                     tableModel.addRow(new Object[]{"P" + puntoNumero++, punto.getX(), punto.getY()});
                 }
 
+                // Agregar la figura al mapa y al JComboBox
+                addFigura(nombreFiguraAnonima, puntosList);
                 planoCartesiano.repaint(); // Repintar el plano cartesiano
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
             }
         }
     }
-
     public boolean isFiguraAnonima() {
         return figuraAnonima;
     }
@@ -396,6 +515,8 @@ public class DrawingFrame extends JFrame {
         panelInicio.add(xInicioField);
         panelInicio.add(new JLabel("Y inicial:"));
         panelInicio.add(yInicioField);
+        addNumericOnlyFilter(xInicioField);
+        addNumericOnlyFilter(yInicioField);
 
         int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
                 "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
@@ -410,6 +531,8 @@ public class DrawingFrame extends JFrame {
                 JPanel panelFin = new JPanel(new GridLayout(2, 2));
                 JTextField xFinField = new JTextField(5);
                 JTextField yFinField = new JTextField(5);
+                addNumericOnlyFilter(xFinField);
+                addNumericOnlyFilter(yFinField);
 
                 switch (lineType) {
                     case "Vertical":
@@ -451,12 +574,55 @@ public class DrawingFrame extends JFrame {
                     configurarColumnas(false);
                     // Actualizar la tabla con los puntos de la nueva línea
                     updateTableWithLinePoints(nuevaLinea);
+
+
+
+                    // Agregar la línea al mapa de figuras y al JComboBox
+                    List<Punto> puntosLinea = calcularPuntosIntermedios(puntoInicio, puntoFin);
+                    String nombreFigura = lineType + " Linea " + (lineType.equals("Vertical") ? lineaVerticalCounter++ : lineaHorizontalCounter++);
+                    addFigura(nombreFigura, puntosLinea);
+
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
             }
         }
     }
+
+    // Method to calculate intermediate points of a line
+    public List<Punto> calcularPuntosIntermedios(Punto inicio, Punto fin) {
+        List<Punto> puntosIntermedios = new ArrayList<>();
+        int x1 = inicio.getX();
+        int y1 = inicio.getY();
+        int x2 = fin.getX();
+        int y2 = fin.getY();
+
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+        int sx = x1 < x2 ? 1 : -1;
+        int sy = y1 < y2 ? 1 : -1;
+        int err = dx - dy;
+        int puntoNumero = 1;
+
+        while (true) {
+            Punto punto = new Punto(x1, y1);
+            punto.setNombrePunto("P" + puntoNumero++);
+            puntosIntermedios.add(punto);
+            if (x1 == x2 && y1 == y2) break;
+            int e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                x1 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y1 += sy;
+            }
+        }
+        return puntosIntermedios;
+    }
+
+// Update the drawLineBasedOnType method
 
     public void updateTableWithLinePoints(Linea linea) {
         DefaultTableModel tableModel = (DefaultTableModel) infoTable.getModel();
@@ -496,6 +662,9 @@ public class DrawingFrame extends JFrame {
         panelInicio.add(new JLabel("Y origen:"));
         panelInicio.add(yInicioField);
 
+        addNumericOnlyFilter(xInicioField);
+        addNumericOnlyFilter(yInicioField);
+
         int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
                 "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
 
@@ -524,17 +693,21 @@ public class DrawingFrame extends JFrame {
                                 configurarColumnas(false);
                                 calcularPuntosCirculoPolinomio(xInicio, yInicio, radio);
                                 Circulo nuevoCirculoPolinomial = new Circulo(puntoInicio, radio);
+
                                 planoCartesiano.repaint();
 
 
                             }
-                        } else { // Método trigonométrico
+                        } else {
+                            // Método trigonométrico
 
                             // Pedir radio para el método trigonométrico
                             JTextField radioField = new JTextField(5);
                             JPanel panelRadio = new JPanel(new GridLayout(1, 2));
                             panelRadio.add(new JLabel("Radio:"));
                             panelRadio.add(radioField);
+                            addNumericOnlyFilter(radioField);
+
 
                             int resultRadio = JOptionPane.showConfirmDialog(null, panelRadio,
                                     "Ingrese el radio del círculo", JOptionPane.OK_CANCEL_OPTION);
@@ -645,16 +818,18 @@ public class DrawingFrame extends JFrame {
         }
     }
 
-
     private void calcularPuntosCirculoPolinomio(double centerX, double centerY, double radius) {
+
+
         int numSteps = 8; // Puedes ajustar este valor según necesites
         for (int i = 0; i < numSteps; i++) {
             double t = 2 * Math.PI * i / numSteps;
             double x = centerX + radius * Math.cos(t);
             double y = centerY + radius * Math.sin(t);
-            //puntosFigura.add(new Point2D.Double(x, y));
+
             tableModel.addRow(new Object[]{"P" + (i + 1), String.format("%.2f", x), String.format("%.2f", y)});
         }
+
     }
 
     private void calcularPuntosCirculoTrigonometrico(double centerX, double centerY, double radius) {

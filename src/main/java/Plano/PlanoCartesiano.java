@@ -262,7 +262,6 @@ public class PlanoCartesiano extends JPanel {
                     int y = -punto.getY() * GRID_SIZE;
 
                     g2.fillOval(x - 3, y - 3, 6, 6);
-                   // g2.drawString("P" + 1, x1 + 5, y1 - 5);
 
                     // Verificar si el nombre no es null antes de dibujar
                     String nombrePunto = punto.getNombrePunto();
