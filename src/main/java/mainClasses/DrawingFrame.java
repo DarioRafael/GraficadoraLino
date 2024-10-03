@@ -74,12 +74,9 @@ public class DrawingFrame extends JFrame {
     private int lineaHorizontalCounter = 1; // Counter for anonymous figures
 
 
-
-
-
     // Constructor de la ventana
     public DrawingFrame() {
-        setTitle("Graficación Básica Por Computadora");
+        setTitle("Graficación Básica por Computadora");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
@@ -192,7 +189,7 @@ public class DrawingFrame extends JFrame {
 
         // Panel para el título
         titlePanel = new JPanel();
-        titleLabel = new JLabel("Graficación Básica Por Computadora");
+        titleLabel = new JLabel("Graficación Básica por Computadora");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titlePanel.add(titleLabel);
 
@@ -213,21 +210,27 @@ public class DrawingFrame extends JFrame {
         add(topPanel, BorderLayout.NORTH);
         add(planoCartesiano, BorderLayout.CENTER);
 
-        // Panel para la tabla y el JComboBox
-        JPanel rightPanel = new JPanel(new BorderLayout());
-        scrollPane = new JScrollPane(infoTable);
-        scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
-        rightPanel.add(scrollPane, BorderLayout.NORTH);
 
-        // Add the infoPanel to the rightPanel
-        infoPanel = new JPanel();
-        infoPanel.add(new JLabel("Coordenada X:"));
-        rightPanel.add(infoPanel, BorderLayout.CENTER);
+
+        // Panel para la tabla y el JComboBox
+
+
+        JPanel rightPanel = new JPanel(new BorderLayout());
 
         // Panel para el JComboBox
+        // Add the infoPanel to the rightPanel
+        infoPanel = new JPanel();
+        rightPanel.add(infoPanel, BorderLayout.NORTH);
+
         comboBoxPanel = new JPanel();
         comboBoxPanel.add(figurasComboBox);
-        rightPanel.add(comboBoxPanel, BorderLayout.SOUTH);
+        rightPanel.add(comboBoxPanel, BorderLayout.CENTER);
+
+        scrollPane = new JScrollPane(infoTable);
+        scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
+        rightPanel.add(scrollPane, BorderLayout.SOUTH);
+
+
 
         add(rightPanel, BorderLayout.EAST);
     }
@@ -260,6 +263,9 @@ public class DrawingFrame extends JFrame {
             String metodo = tipoFigura.contains("Trigonometrico") ? "Trigonométrico" : "Polinomial";
             metodoLabel.setText("<html><b>" + metodo + "</b></html>");
             infoPanel.add(metodoLabel);
+        } else if(tipoFigura.contains("figuraAnonimaCartesiana")){
+            // Añadir el label del método al principio del panel
+            infoPanel.add(new JLabel("Método:"));
         }
 
         switch (tipoFigura) {
@@ -392,8 +398,15 @@ public class DrawingFrame extends JFrame {
                 JTextField anguloFinField = new JTextField(datos.get("anguloFin"), 10);
                 infoPanel.add(anguloFinField);
                 break;
+            case "figuraAnonima":
+                //infoPanel.add(centroXArcoTrigField);
+
+                break;
 
         }
+
+
+
 
         // Aplica el filtro numérico a todos los JTextField
         for (Component comp : infoPanel.getComponents()) {
