@@ -9,6 +9,9 @@ public class Punto {
     private String nombrePunto; // Nombre del punto, solo si es parte de una línea
     private static List<Punto> puntos = new ArrayList<>(); // Lista de puntos
     private static int contadorPunto = 1;
+    private int puntoNumero; // Nuevo campo para el número del punto
+
+
 
     // Constructor para un punto que no tiene nombre
     public Punto(int x, int y) {
@@ -26,6 +29,12 @@ public class Punto {
         }
     }
 
+    public Punto(int x, int y, int puntoNumero) {
+        this.x = x;
+        this.y = y;
+        this.puntoNumero = puntoNumero; // Asignar el número del punto
+        puntos.add(this);
+    }
     // Métodos getters
     public int getX() {
         return x;
@@ -46,4 +55,8 @@ public class Punto {
     public void setNombrePunto(String nombrePunto) {
         this.nombrePunto = nombrePunto;
     }
+    public int getPuntoNumero() {
+        return puntoNumero;
+    }
+
 }

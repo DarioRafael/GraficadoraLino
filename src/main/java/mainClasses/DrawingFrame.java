@@ -445,7 +445,7 @@ public class DrawingFrame extends JFrame {
                 int y = Integer.parseInt(yField.getText());
                 puntoActual = new Punto(x, y);
 
-                tableModel.addRow(new Object[]{"P1",  x, y});
+                tableModel.addRow(new Object[]{"P1", (Object) x, (Object) y});
 
                 // Pasar el punto al plano cartesiano
                 planoCartesiano.addPunto(puntoActual); // Agregar el punto
@@ -463,7 +463,7 @@ public class DrawingFrame extends JFrame {
                 DefaultTableModel tableModel = (DefaultTableModel) infoTable.getModel();
                 tableModel.setRowCount(0); // Limpiar la tabla
                 for (Punto punto : puntos) {
-                    tableModel.addRow(new Object[]{punto.getNombrePunto(), punto.getX(), punto.getY()});
+                    tableModel.addRow(new Object[]{punto.getNombrePunto(), (Object) punto.getX(), (Object) punto.getY()});
                 }
             }
         }
@@ -580,7 +580,7 @@ public class DrawingFrame extends JFrame {
                 tableModel.setRowCount(0); // Limpiar la tabla
                 int puntoNumero = 1;
                 for (Punto punto : puntosList) {
-                    tableModel.addRow(new Object[]{"P" + puntoNumero++, punto.getX(), punto.getY()});
+                    tableModel.addRow(new Object[]{"P" + puntoNumero++, (Object) punto.getX(), (Object) punto.getY()});
                 }
 
                 // Agregar la figura al mapa y al JComboBox
@@ -839,7 +839,7 @@ public class DrawingFrame extends JFrame {
         tableModel.setRowCount(0); // Limpiar la tabla
         int puntoNumero = 1; // Inicializar el número del punto
         for (Punto punto : linea.calcularPuntosIntermedios()) {
-            tableModel.addRow(new Object[]{"P" + puntoNumero++, punto.getX(), punto.getY()});
+            tableModel.addRow(new Object[]{"P" + puntoNumero++, (Object) punto.getX(), (Object) punto.getY()});
         }
     }
 
@@ -1143,7 +1143,7 @@ public class DrawingFrame extends JFrame {
                 int xRounded = (int) Math.round(x);
                 int yRounded = (int) Math.round(y);
 
-                tableModel.addRow(new Object[]{"P" + (i + 1), xRounded, yRounded});
+                tableModel.addRow(new Object[]{"P" + (i + 1), (Object) xRounded, (Object) yRounded});
             }
         }
     }
@@ -1168,7 +1168,7 @@ public class DrawingFrame extends JFrame {
                 int xRounded = (int) Math.round(x);
                 int yRounded = (int) Math.round(y);
 
-                tableModel.addRow(new Object[]{"P" + (i + 1), radio, Math.toDegrees(angle)});
+                tableModel.addRow(new Object[]{"P" + (i + 1), (Object) radio, (Object) Math.toDegrees(angle)});
             }
         }
     }

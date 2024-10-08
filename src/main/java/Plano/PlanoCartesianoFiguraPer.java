@@ -11,7 +11,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlanoCartesiano extends JPanel {
+public class PlanoCartesianoFiguraPer extends JPanel {
 
     private double offsetX = 0, offsetY = 0;
     private int gridSize = 50;
@@ -25,10 +25,9 @@ public class PlanoCartesiano extends JPanel {
 
     private CoordinateSystem.Type currentCoordSystem = CoordinateSystem.Type.CARTESIAN_ABSOLUTE;
     private boolean isDarkMode = false; // Flag to track dark mode status
-    private List<Punto> puntos = new ArrayList<>();
-    private List<Linea> lineas = new ArrayList<>();
 
-    public PlanoCartesiano() {
+
+    public PlanoCartesianoFiguraPer() {
         setupMouseListeners();
     }
 
@@ -69,14 +68,6 @@ public class PlanoCartesiano extends JPanel {
             repaint();
         }
     }
-    // Métodos para eliminar puntos y líneas
-    public void removePuntos(List<Punto> puntos) {
-        this.puntos.removeAll(puntos);
-    }
-
-    public void removeLineasConPuntos(List<Punto> puntos) {
-        lineas.removeIf(linea -> puntos.contains(linea.getPuntoInicio()) || puntos.contains(linea.getPuntoFin()));
-    }
 
     private void handleMouseWheel(MouseWheelEvent e) {
         double oldZoom = zoomFactor;
@@ -103,7 +94,7 @@ public class PlanoCartesiano extends JPanel {
         applyTransformation(g2);
 
         drawComponents(g2);
-
+        drawPolarLines(g2);
         g2.setTransform(originalTransform);
     }
 
@@ -136,8 +127,6 @@ public class PlanoCartesiano extends JPanel {
 
         drawPoints(g2);
         drawLines(g2);
-        drawCircles(g2);
-        drawElipses(g2);
         drawArcos(g2);
     }
 
@@ -379,102 +368,6 @@ public class PlanoCartesiano extends JPanel {
             g2.drawLine(x1, y1, x2, y2);
         }
     }
-    private void drawCircles(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.LIGHT_GRAY);
-        } else {
-            g2.setColor(Color.GREEN);
-        }
-        for (Circulo circulo : Circulo.getCirculos()) {
-            int xCentro = circulo.getCentro().getX() * GRID_SIZE;
-            int yCentro = -circulo.getCentro().getY() * GRID_SIZE;
-            int radio = circulo.getRadio() * GRID_SIZE;
-
-            // Dibujar el círculo completo
-            g2.drawOval(xCentro - radio, yCentro - radio, radio * 2, radio * 2);
-
-            // Dibujar los puntos usando simetría polinomial
-            drawCirclePoints(g2, xCentro, yCentro, radio);
-
-
-        }
-    }
-
-    // Add this method to the PlanoCartesiano class
-    public List<Punto> calcularPuntosCirculo(int xCentro, int yCentro, int radio) {
-        List<Punto> puntos = new ArrayList<>();
-        puntos.add(new Punto(xCentro + radio, yCentro));        // P₁ (derecha)
-        puntos.add(new Punto((int) (xCentro + radio / Math.sqrt(2)), (int) (yCentro - radio / Math.sqrt(2)))); // P₇ (diagonal arriba derecha)
-        puntos.add(new Punto(xCentro, yCentro - radio));        // P₄ (arriba)
-        puntos.add(new Punto((int) (xCentro - radio / Math.sqrt(2)), (int) (yCentro - radio / Math.sqrt(2)))); // P₈ (diagonal arriba izquierda)
-        puntos.add(new Punto(xCentro - radio, yCentro));        // P₂ (izquierda)
-        puntos.add(new Punto((int) (xCentro - radio / Math.sqrt(2)), (int) (yCentro + radio / Math.sqrt(2)))); // P₆ (diagonal abajo izquierda)
-        puntos.add(new Punto(xCentro, yCentro + radio));        // P₃ (abajo)
-        puntos.add(new Punto((int) (xCentro + radio / Math.sqrt(2)), (int) (yCentro + radio / Math.sqrt(2)))); // P₅ (diagonal abajo derecha)
-
-
-        return puntos;
-    }
-
-    // Update the drawCirclePoints method in the PlanoCartesiano class
-    private void drawCirclePoints(Graphics2D g2, int xCentro, int yCentro, int radio) {
-        List<Punto> puntos = calcularPuntosCirculo(xCentro, yCentro, radio);
-        g2.setColor(Color.RED); // Color para los puntos
-        String[] etiquetas = {"P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"};
-
-        for (int i = 0; i < puntos.size(); i++) {
-            Punto punto = puntos.get(i);
-            int x = punto.getX();
-            int y = punto.getY();
-            g2.fillOval(x - 2, y - 2, 8, 8); // Ajuste para centrar el punto
-
-            // Dibujar la etiqueta del punto
-            g2.drawString(etiquetas[i], x + 5, y - 5); // Etiquetar el punto
-        }
-    }
-
-    private List<int[]> calcularPuntosElipse(int xCentro, int yCentro, int semiEjeMayor, int semiEjeMenor) {
-        List<int[]> puntos = new ArrayList<>();
-        puntos.add(new int[]{xCentro + semiEjeMayor, yCentro, 0}); // Punto derecho
-        puntos.add(new int[]{xCentro + (int)(semiEjeMayor / Math.sqrt(2)), yCentro - (int)(semiEjeMenor / Math.sqrt(2)), 45}); // Diagonal derecha arriba
-        puntos.add(new int[]{xCentro, yCentro - semiEjeMenor, 90}); // Punto superior
-        puntos.add(new int[]{xCentro - (int)(semiEjeMayor / Math.sqrt(2)), yCentro - (int)(semiEjeMenor / Math.sqrt(2)), 135}); // Diagonal izquierda arriba
-        puntos.add(new int[]{xCentro - semiEjeMayor, yCentro, 180}); // Punto izquierdo
-        puntos.add(new int[]{xCentro - (int)(semiEjeMayor / Math.sqrt(2)), yCentro + (int)(semiEjeMenor / Math.sqrt(2)), 225}); // Diagonal izquierda abajo
-        puntos.add(new int[]{xCentro, yCentro + semiEjeMenor, 270}); // Punto inferior
-        puntos.add(new int[]{xCentro + (int)(semiEjeMayor / Math.sqrt(2)), yCentro + (int)(semiEjeMenor / Math.sqrt(2)), 315}); // Diagonal derecha abajo
-        return puntos;
-    }
-
-    private void drawElipses(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.PINK);
-        } else {
-            g2.setColor(Color.MAGENTA);
-        }
-        for (Elipse elipse : Elipse.getElipses()) {
-            int xCentro = elipse.getCentro().getX() * GRID_SIZE;
-            int yCentro = -elipse.getCentro().getY() * GRID_SIZE;
-            int semiEjeMayor = elipse.getSemiEjeMayor() * GRID_SIZE;
-            int semiEjeMenor = elipse.getSemiEjeMenor() * GRID_SIZE;
-
-            g2.drawOval(xCentro - semiEjeMayor, yCentro - semiEjeMenor, semiEjeMayor * 2, semiEjeMenor * 2);
-
-            // Dibujar puntos característicos de la elipse
-            g2.setColor(Color.RED);
-            int puntoCounter = 1; // Contador para los nombres de los puntos
-
-            List<int[]> puntos = calcularPuntosElipse(xCentro, yCentro, semiEjeMayor, semiEjeMenor);
-            for (int[] punto : puntos) {
-                int x = punto[0];
-                int y = punto[1];
-                int angulo = punto[2];
-                g2.fillOval(x - 3, y - 3, 6, 6);
-                //g2.drawString("P" + puntoCounter++ + " (" + angulo + "°)", x + 5, y - 5);
-                g2.drawString("P" + puntoCounter++, x + 5, y - 5);
-            }
-        }
-    }
 
 
 
@@ -528,16 +421,6 @@ public class PlanoCartesiano extends JPanel {
 
 
 
-    public void addElipse(Elipse elipse) {
-        Elipse.getElipses().add(elipse);
-        repaint();
-    }
-
-    public void addArco(Arco arco) {
-        Arco.getArcos().add(arco);
-        repaint();
-    }
-
 
     public void setDarkMode(boolean darkMode) {
         isDarkMode = darkMode;
@@ -545,10 +428,7 @@ public class PlanoCartesiano extends JPanel {
     }
 
 
-    public void addCirculo(Circulo circulo) {
-        Circulo.getCirculos().add(circulo);
-        repaint();
-    }
+
 
     public int getGridSize() {
         return gridSize;
@@ -562,89 +442,99 @@ public class PlanoCartesiano extends JPanel {
     public void clear() {
         Punto.getPuntos().clear();
         Linea.getLineas().clear();
-        Circulo.getCirculos().clear();
-        Elipse.getElipses().clear();
         Arco.getArcos().clear();
         repaint(); // Redibujar el plano para reflejar los cambios
     }
 
 
-
     private void drawPolarLines(Graphics2D g2) {
-        if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE) {
+        if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE ||
+                currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
+
             // Guardar el stroke original
-            Stroke originalStroke = g2.getStroke();
+            Stroke strokeOriginal = g2.getStroke();
+            Color colorOriginal = g2.getColor();
 
-            // Establecer línea punteada
-            g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                    0, new float[]{5}, 0));
+            // Configurar el estilo para las líneas punteadas
+            g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+            float[] guiones = {10.0f, 10.0f}; // Define el patrón de la línea punteada
+            g2.setStroke(new BasicStroke(
+                    2.0f,                  // Grosor de la línea
+                    BasicStroke.CAP_ROUND, // Terminación redondeada
+                    BasicStroke.JOIN_ROUND,// Uniones redondeadas
+                    0,                     // Límite de inglete
+                    guiones,               // Patrón de guiones
+                    0                      // Fase inicial
+            ));
 
-            // Color para las líneas polares
-            Color originalColor = g2.getColor();
-            g2.setColor(isDarkMode ? new Color(150, 150, 150) : new Color(100, 100, 100));
+            List<Punto> puntos = Punto.getPuntos();
 
-            Font originalFont = g2.getFont();
-            g2.setFont(new Font("Arial", Font.PLAIN, 12));
+            // Para coordenadas polares
+            Point origenActual = new Point(0, 0);
 
-            for (Punto punto : Punto.getPuntos()) {
+            for (int i = 0; i < puntos.size(); i++) {
+                Punto punto = puntos.get(i);
                 int x = punto.getX() * GRID_SIZE;
                 int y = -punto.getY() * GRID_SIZE;
 
-                // Dibujar línea punteada desde origen al punto
-                g2.drawLine(0, 0, x, y);
+                // Generar el radio label para este punto específico
+                String radioTexto = "r" + (i + 1);
 
-                // Calcular el radio (distancia desde el origen)
-                double radio = Math.sqrt(punto.getX() * punto.getX() + punto.getY() * punto.getY());
-
-                // Calcular el punto medio de la línea para colocar el texto
-                int xMedio = x / 2;
-                int yMedio = y / 2;
-
-                // Calcular el ángulo para rotar el texto
-                double angulo = Math.atan2(-y, x);
-
-                // Guardar la transformación actual
-                AffineTransform original = g2.getTransform();
-
-                // Trasladar al punto medio y rotar para dibujar el texto
-                g2.translate(xMedio, yMedio);
-                g2.rotate(angulo);
-
-                // Dibujar el valor del radio
-                String radioText = "" +radio;
-                g2.drawString(radioText, -20, -5);
-
-                // Restaurar la transformación original
-                g2.setTransform(original);
-            }
-
-            // Restaurar los atributos originales
-            g2.setStroke(originalStroke);
-            g2.setColor(originalColor);
-            g2.setFont(originalFont);
-
-        } else if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
-            // Código existente para coordenadas polares relativas
-            g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                    0, new float[]{5}, 0));
-            Punto puntoAnterior = null;
-            for (Punto punto : Punto.getPuntos()) {
-                int x = punto.getX() * GRID_SIZE;
-                int y = -punto.getY() * GRID_SIZE;
-                if (puntoAnterior == null) {
+                if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE) {
+                    // En modo absoluto, siempre dibujamos desde el origen (0,0)
                     g2.drawLine(0, 0, x, y);
-                } else {
-                    int xAnt = puntoAnterior.getX() * GRID_SIZE;
-                    int yAnt = -puntoAnterior.getY() * GRID_SIZE;
-                    g2.drawLine(xAnt, yAnt, x, y);
-                }
-                puntoAnterior = punto;
-            }
-        }
-        // Restaurar el trazo normal
-        g2.setStroke(new BasicStroke());
-    }
+                    drawArrowHead(g2, 0, 0, x, y);
 
+                    // Calcular el punto medio para la etiqueta del radio
+                    int xMedio = x / 2;
+                    int yMedio = y / 2;
+                    g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
+                }
+                else if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
+                    // En modo relativo, dibujamos las líneas entre puntos consecutivos
+                    if (i > 0) {
+                        // Obtener el punto anterior como origen
+                        Punto puntoAnterior = puntos.get(i - 1);
+                        origenActual.x = puntoAnterior.getX() * GRID_SIZE;
+                        origenActual.y = -puntoAnterior.getY() * GRID_SIZE;
+
+                        // Dibujar la línea desde el punto anterior al actual
+                        g2.drawLine(origenActual.x, origenActual.y, x, y);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x, y);
+
+                        // Calcular el punto medio para la etiqueta del radio
+                        int xMedio = (origenActual.x + x) / 2;
+                        int yMedio = (origenActual.y + y) / 2;
+                        g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
+                    }
+                }
+            }
+
+            g2.setStroke(strokeOriginal);
+            g2.setColor(colorOriginal);
+        }
+    }    private void drawArrowHead(Graphics2D g2, int x1, int y1, int x2, int y2) {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double angle = Math.atan2(dy, dx);
+        int len = 15; // Longitud de la flecha
+
+        // Calcular los puntos de la flecha
+        int[] xPoints = new int[3];
+        int[] yPoints = new int[3];
+
+        xPoints[0] = x2;
+        yPoints[0] = y2;
+
+        xPoints[1] = (int) (x2 - len * Math.cos(angle - Math.PI/6));
+        yPoints[1] = (int) (y2 - len * Math.sin(angle - Math.PI/6));
+
+        xPoints[2] = (int) (x2 - len * Math.cos(angle + Math.PI/6));
+        yPoints[2] = (int) (y2 - len * Math.sin(angle + Math.PI/6));
+
+        // Dibujar la flecha como un triángulo relleno
+        g2.fillPolygon(xPoints, yPoints, 3);
+    }
 
     public CoordinateSystem.Type getCurrentCoordSystem() {
         return currentCoordSystem;
