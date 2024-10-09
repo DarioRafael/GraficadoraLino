@@ -450,7 +450,80 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     private void drawPolarLines(Graphics2D g2) {
         if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE ||
                 currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
+            if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
 
+                // Guardar el stroke original
+                Stroke strokeOriginal = g2.getStroke();
+                Color colorOriginal = g2.getColor();
+
+                // Configurar el estilo para las líneas punteadas
+                g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+                float[] guiones = {10.0f, 10.0f}; // Define el patrón de la línea punteada
+                g2.setStroke(new BasicStroke(
+                        2.0f,                  // Grosor de la línea
+                        BasicStroke.CAP_ROUND, // Terminación redondeada
+                        BasicStroke.JOIN_ROUND,// Uniones redondeadas
+                        0,                     // Límite de inglete
+                        guiones,               // Patrón de guiones
+                        0                      // Fase inicial
+                ));
+
+                List<Punto> puntos = Punto.getPuntos();
+
+                // Para coordenadas polares relativas
+                Point origenActual = new Point(0, 0);
+
+                for (int i = 0; i < puntos.size(); i++) {
+                    Punto punto = puntos.get(i);
+                    int x = punto.getX() * GRID_SIZE;
+                    int y = -punto.getY() * GRID_SIZE;
+
+                    // Generar el radio label para este punto específico
+                    String radioTexto = "r" + (i + 1);
+
+                    if (i == 0) {
+                        // Siempre dibujar el primer radio desde el origen (0,0) al primer punto
+                        g2.drawLine(0, 0, x, y);
+                        drawArrowHead(g2, 0, 0, x, y);
+
+                        // Calcular el punto medio para la etiqueta del radio
+                        int xMedio = x / 2;
+                        int yMedio = y / 2;
+                        g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
+                    } else {
+                        // En modo relativo, dibujamos las líneas entre puntos consecutivos
+                        Punto puntoAnterior = puntos.get(i - 1);
+                        origenActual.x = puntoAnterior.getX() * GRID_SIZE;
+                        origenActual.y = -puntoAnterior.getY() * GRID_SIZE;
+
+                        // Dibujar la línea desde el punto anterior al actual
+                        g2.drawLine(origenActual.x, origenActual.y, x, y);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x, y);
+
+                        // Calcular el punto medio para la etiqueta del radio
+                        int xMedio = (origenActual.x + x) / 2;
+                        int yMedio = (origenActual.y + y) / 2;
+                        g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
+                    }
+                }
+
+                // Dibujar las flechas manualmente para las 8 direcciones (modificado)
+
+                int radius = getWidth() / 2 - (AXIS_THICKNESS + TICK_SIZE + LABEL_OFFSET); // Calcular radio máximo
+                double angleStep = Math.PI * 2 / 8; // Ángulo entre cada flecha (45 grados)
+
+                for (int i = 0; i < 8; i++) {
+                    double angle = i * angleStep;
+                    int xArrow = (int) (origenActual.x + radius * Math.cos(angle));
+                    int yArrow = (int) (origenActual.y - radius * Math.sin(angle)); // Y invertido
+
+                    drawArrowHead(g2, origenActual.x, origenActual.y, xArrow, yArrow);
+                }
+
+                // Restaurar el stroke y color original
+                g2.setStroke(strokeOriginal);
+                g2.setColor(colorOriginal);
+            }
             // Guardar el stroke original
             Stroke strokeOriginal = g2.getStroke();
             Color colorOriginal = g2.getColor();
@@ -480,7 +553,16 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                 // Generar el radio label para este punto específico
                 String radioTexto = "r" + (i + 1);
 
-                if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE) {
+                if (i == 0) {
+                    // Siempre dibujar el primer radio desde el origen (0,0) al primer punto
+                    g2.drawLine(0, 0, x, y);
+                    drawArrowHead(g2, 0, 0, x, y);
+
+                    // Calcular el punto medio para la etiqueta del radio
+                    int xMedio = x / 2;
+                    int yMedio = y / 2;
+                    g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
+                } else if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE) {
                     // En modo absoluto, siempre dibujamos desde el origen (0,0)
                     g2.drawLine(0, 0, x, y);
                     drawArrowHead(g2, 0, 0, x, y);
@@ -489,31 +571,32 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                     int xMedio = x / 2;
                     int yMedio = y / 2;
                     g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
-                }
-                else if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
+                } else if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
                     // En modo relativo, dibujamos las líneas entre puntos consecutivos
-                    if (i > 0) {
-                        // Obtener el punto anterior como origen
-                        Punto puntoAnterior = puntos.get(i - 1);
-                        origenActual.x = puntoAnterior.getX() * GRID_SIZE;
-                        origenActual.y = -puntoAnterior.getY() * GRID_SIZE;
+                    Punto puntoAnterior = puntos.get(i - 1);
+                    origenActual.x = puntoAnterior.getX() * GRID_SIZE;
+                    origenActual.y = -puntoAnterior.getY() * GRID_SIZE;
 
-                        // Dibujar la línea desde el punto anterior al actual
+                    // Dibujar la línea desde el punto anterior al actual
+                    if (i == puntos.size() - 1) {
                         g2.drawLine(origenActual.x, origenActual.y, x, y);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x, y);
-
-                        // Calcular el punto medio para la etiqueta del radio
-                        int xMedio = (origenActual.x + x) / 2;
-                        int yMedio = (origenActual.y + y) / 2;
-                        g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
                     }
+
+                    // Calcular el punto medio para la etiqueta del radio
+                    int xMedio = (origenActual.x + x) / 2;
+                    int yMedio = (origenActual.y + y) / 2;
+                    g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
                 }
             }
 
+            // Restaurar el stroke y color original
             g2.setStroke(strokeOriginal);
             g2.setColor(colorOriginal);
         }
-    }    private void drawArrowHead(Graphics2D g2, int x1, int y1, int x2, int y2) {
+    }
+
+    private void drawArrowHead(Graphics2D g2, int x1, int y1, int x2, int y2) {
         double dx = x2 - x1;
         double dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
@@ -526,7 +609,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         xPoints[0] = x2;
         yPoints[0] = y2;
 
-        xPoints[1] = (int) (x2 - len * Math.cos(angle - Math.PI/6));
+        xPoints[1] = (int) (x2 - len * Math .cos(angle - Math.PI/6));
         yPoints[1] = (int) (y2 - len * Math.sin(angle - Math.PI/6));
 
         xPoints[2] = (int) (x2 - len * Math.cos(angle + Math.PI/6));

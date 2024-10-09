@@ -38,10 +38,11 @@ public class PaginaPrincipal extends JFrame {
 
         add(topPanel, BorderLayout.NORTH); // Añadir el panel superior a la ventana
 
-        // Panel central: Aquí irá el botón principal
-        JPanel centerPanel = new JPanel(new GridBagLayout()); // GridBagLayout para centrar el botón
+        // Panel central: Aquí irán los botones principales
+        JPanel centerPanel = new JPanel(new GridBagLayout()); // GridBagLayout para centrar los botones
         centerPanel.setBackground(Color.decode("#f0f0f0"));
 
+        // Botón para ir a DrawingFrame
         JButton goToDrawingButton = new JButton("GRAFICADORA");
         goToDrawingButton.setFont(new Font("Arial", Font.BOLD, 16));
         goToDrawingButton.setBackground(Color.decode("#007bff")); // Color de fondo azul
@@ -55,11 +56,28 @@ public class PaginaPrincipal extends JFrame {
             }
         });
 
+        // Botón para ir a FiguraAnonimaDrawMenu
+        JButton goToFiguraAnonimaButton = new JButton("FIGURA ANÓNIMA");
+        goToFiguraAnonimaButton.setFont(new Font("Arial", Font.BOLD, 16));
+        goToFiguraAnonimaButton.setBackground(Color.decode("#28a745")); // Color de fondo verde
+        goToFiguraAnonimaButton.setForeground(Color.WHITE); // Texto en blanco
+        goToFiguraAnonimaButton.setFocusPainted(false); // Quitar el borde feo al hacer clic
+        goToFiguraAnonimaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new FiguraAnonimaDrawMenu().setVisible(true);
+                dispose();
+            }
+        });
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 20, 0); // Margen superior e inferior
         centerPanel.add(goToDrawingButton, gbc);
+
+        gbc.gridy = 1; // Cambiar la posición para el segundo botón
+        centerPanel.add(goToFiguraAnonimaButton, gbc);
 
         add(centerPanel, BorderLayout.CENTER); // Añadir el panel central a la ventana
 

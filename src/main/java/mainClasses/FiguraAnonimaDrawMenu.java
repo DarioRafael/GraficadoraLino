@@ -1,7 +1,6 @@
 package mainClasses;
 
 import Plano.CoordinateSystem;
-import Plano.PlanoCartesiano;
 import Plano.PlanoCartesianoFiguraPer;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
@@ -36,6 +35,7 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     JTextField xInicialFieldNuevo;
     JTextField yInicialFieldNuevo;
     JButton regenerarFigura;
+    private JButton backButton; // New button to go back to PaginaPrincipal
 
     public FiguraAnonimaDrawMenu() {
         setTitle("Graficación Básica por Computadora");
@@ -72,6 +72,9 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         // Create combo box for figures
         figurasComboBox = new JComboBox<>();
         figurasComboBox.addActionListener(e -> mostrarPuntosFiguraSeleccionada());
+
+        // Create the back button
+        backButton = new JButton("Regresar a Página Principal");
     }
 
     private void updateTableModel() {
@@ -110,6 +113,7 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         topPanel.add(new JLabel("Sistema de coordenadas: "));
         topPanel.add(coordSystemComboBox);
         topPanel.add(coordSystemLabel);
+        topPanel.add(backButton); // Add the back button to the top panel
         add(topPanel, BorderLayout.NORTH);
 
         // Center panel with plano cartesiano
@@ -134,8 +138,6 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         bottomPanel.add(aumentoComboBox); // Add the combo box
         regenerarFigura = new JButton("Generar en nuevo origen");
         bottomPanel.add(regenerarFigura);
-
-
 
         rightPanel.add(bottomPanel, BorderLayout.SOUTH);
         add(rightPanel, BorderLayout.EAST);
@@ -165,6 +167,11 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         regenerarFigura.addActionListener(e -> {
             planoCartesiano.clear();
             regenerarDrawAnonima();
+        });
+
+        backButton.addActionListener(e -> {
+            new PaginaPrincipal().setVisible(true);
+            dispose();
         });
     }
 
@@ -314,8 +321,6 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     }
 
     public void regenerarDrawAnonima() {
-
-
         try {
             xInicio = Integer.parseInt(xInicialFieldNuevo.getText());
             yInicio = Integer.parseInt(yInicialFieldNuevo.getText());
@@ -363,7 +368,6 @@ public class FiguraAnonimaDrawMenu extends JFrame {
             JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
         }
     }
-
 
     private void mostrarPuntosFiguraSeleccionada() {
         String figuraSeleccionada = (String) figurasComboBox.getSelectedItem();
