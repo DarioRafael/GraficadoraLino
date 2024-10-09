@@ -11,10 +11,21 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+
+import Plano.CoordinateSystem;
+import Plano.PlanoCartesianoFiguraPer;
+import formasADibujar.Linea;
+import formasADibujar.Punto;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
 public class FiguraAnonimaDrawMenu extends JFrame {
     private PlanoCartesianoFiguraPer planoCartesiano;
     private JButton otrosButton;
-    private JPopupMenu otrosMenu;
     private JTable infoTable;
     private DefaultTableModel tableModel;
     private int figuraAnonimaCounter = 1;
@@ -25,16 +36,18 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     private JLabel coordSystemLabel;
     private JButton clearButton;
     private String nombreFiguraAnonima;
+    JLabel titleLabel;
 
-    JComboBox<Integer> aumentoComboBox = new JComboBox<>(new Integer[]{1, 2, 4, 8, 16});
+    JComboBox<Integer> aumentoComboBox;
+
     int aumento = 1;
-    // X y Y ORIGEN
-    int xInicio;
-    int yInicio;
+    static int xInicio;
+    static int yInicio;
 
-    JTextField xInicialFieldNuevo;
-    JTextField yInicialFieldNuevo;
+    static JTextField xInicialFieldNuevo;
+    static JTextField yInicialFieldNuevo;
     JButton regenerarFigura;
+
     private JButton backButton; // New button to go back to PaginaPrincipal
 
     public FiguraAnonimaDrawMenu() {
@@ -54,12 +67,13 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         planoCartesiano = new PlanoCartesianoFiguraPer();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
-        // Create the "Otros" button and popup menu
-        otrosButton = new JButton("Generar");
-        otrosMenu = new JPopupMenu();
+        // Create the "Generar" button and its menu
+
+        titleLabel = new JLabel("Figura de ocho puntos");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Set larger font size
+
         JMenuItem figuraAnonimaItem = new JMenuItem("Figura de 8 puntos");
-        figuraAnonimaItem.addActionListener(e -> drawFiguraAnonima());
-        otrosMenu.add(figuraAnonimaItem);
+        figuraAnonimaItem.addActionListener(e -> regenerarDrawAnonima());
 
         // Coordinate system components
         coordSystemComboBox = new JComboBox<>(CoordinateSystem.Type.values());
@@ -75,6 +89,46 @@ public class FiguraAnonimaDrawMenu extends JFrame {
 
         // Create the back button
         backButton = new JButton("Regresar a Página Principal");
+
+        coordSystemComboBox.setFont(new Font("Arial", Font.BOLD, 14));
+
+        coordSystemComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                label.setFont(new Font("Arial", Font.BOLD, 14)); // Set the larger font
+                if (value instanceof CoordinateSystem.Type) {
+                    CoordinateSystem.Type type = (CoordinateSystem.Type) value;
+                    switch (type) {
+                        case CARTESIAN_ABSOLUTE:
+                            label.setText("Cartesianas absolutas");
+                            break;
+                        case CARTESIAN_RELATIVE:
+                            label.setText("Cartesianas relativas");
+                            break;
+                        case POLAR_ABSOLUTE:
+                            label.setText("Polares absolutas");
+                            break;
+                        case POLAR_RELATIVE:
+                            label.setText("Polares relativas");
+                            break;
+                    }
+                }
+                return label;
+            }
+        });
+
+        aumentoComboBox = new JComboBox<>(new Integer[]{1, 2, 4, 8, 16});
+        aumentoComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (c instanceof JLabel && value instanceof Integer) {
+                    ((JLabel) c).setText("x" + value);
+                }
+                return c;
+            }
+        });
     }
 
     private void updateTableModel() {
@@ -106,14 +160,19 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     private void configureLayout() {
         setLayout(new BorderLayout());
 
-        // Top panel with buttons and coordinate system selector
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topPanel.add(otrosButton);
-        topPanel.add(clearButton);
-        topPanel.add(new JLabel("Sistema de coordenadas: "));
-        topPanel.add(coordSystemComboBox);
-        topPanel.add(coordSystemLabel);
-        topPanel.add(backButton); // Add the back button to the top panel
+        // Top panel with the back button and title label
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        // Panel for the back button on the left
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.add(backButton);
+
+        // Panel for the title label in the center
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        centerPanel.add(titleLabel);
+
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(centerPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);
 
         // Center panel with plano cartesiano
@@ -123,44 +182,61 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.add(figurasComboBox, BorderLayout.NORTH);
         JScrollPane scrollPane = new JScrollPane(infoTable);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
+        scrollPane.setPreferredSize(new Dimension(300, 200)); // Adjusted height to 200
         rightPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel for initial coordinates and button
-        JPanel bottomPanel = new JPanel(new GridLayout(4, 2)); // Adjusted to 4 rows
-        bottomPanel.add(new JLabel("X inicial:"));
+        // Panel for initial coordinates, combo box, and buttons
+        JPanel bottomPanel = new JPanel(new GridLayout(6, 2)); // Adjusted for 6 rows
+
+        JLabel coordLabel = new JLabel("Sistema de coordenadas:");
+        coordLabel.setFont(new Font("Arial", Font.BOLD, 17));
+        bottomPanel.add(coordLabel);
+        bottomPanel.add(coordSystemComboBox);
+
+        JLabel xInicialLabel = new JLabel("X inicial:");
+        xInicialLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+        bottomPanel.add(xInicialLabel);
         xInicialFieldNuevo = new JTextField(5);
         bottomPanel.add(xInicialFieldNuevo);
-        bottomPanel.add(new JLabel("Y inicial:"));
+
+        JLabel yInicialLabel = new JLabel("Y inicial:");
+        yInicialLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+        bottomPanel.add(yInicialLabel);
         yInicialFieldNuevo = new JTextField(5);
         bottomPanel.add(yInicialFieldNuevo);
-        bottomPanel.add(new JLabel("Aumento:")); // Label for the combo box
-        bottomPanel.add(aumentoComboBox); // Add the combo box
-        regenerarFigura = new JButton("Generar en nuevo origen");
+
+        JLabel aumentoLabel = new JLabel("Aumento:");
+        aumentoLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+        bottomPanel.add(aumentoLabel);
+        bottomPanel.add(aumentoComboBox);
+        bottomPanel.add(clearButton);
+        //bottomPanel.add(otrosButton);
+
+
+        regenerarFigura = new JButton("Generar figura");
         bottomPanel.add(regenerarFigura);
 
-        rightPanel.add(bottomPanel, BorderLayout.SOUTH);
+        rightPanel.add(bottomPanel, BorderLayout.NORTH);
         add(rightPanel, BorderLayout.EAST);
     }
 
     private void addActionListeners() {
-        otrosButton.addActionListener(e -> otrosMenu.show(otrosButton, 0, otrosButton.getHeight()));
         coordSystemComboBox.addActionListener(e -> {
             currentCoordSystem = (CoordinateSystem.Type) coordSystemComboBox.getSelectedItem();
             coordSystemLabel.setText("Sistema actual: " + currentCoordSystem.toString());
-            planoCartesiano.setCurrentCoordSystem(currentCoordSystem); // Actualiza el sistema de coordenadas en el plano
+            planoCartesiano.setCurrentCoordSystem(currentCoordSystem); // Update system in plane
             updateTableModel();
             mostrarPuntosFiguraSeleccionada();
-            planoCartesiano.repaint(); // Asegúrate de repintar el plano
-
+            planoCartesiano.repaint();
         });
+
         clearButton.addActionListener(e -> {
-            planoCartesiano.clear(); // Método para limpiar el plano cartesiano
-            tableModel.setRowCount(0); // Limpiar la tabla de información
+            planoCartesiano.clear(); // Method to clear the Cartesian plane
+            tableModel.setRowCount(0); // Clear the information table
             String selectedItem = (String) figurasComboBox.getSelectedItem();
             if (selectedItem != null) {
-                figurasComboBox.removeItem(selectedItem); // Limpiar solo la figura actual
-                figurasMap.remove(selectedItem); // Remover la figura del mapa
+                figurasComboBox.removeItem(selectedItem); // Remove only current figure
+                figurasMap.remove(selectedItem); // Remove figure from map
             }
         });
 
@@ -254,74 +330,59 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         }
     }
 
-    public void drawFiguraAnonima() {
+    public void drawFiguraAnonima(int xInicio, int yInicio) {
         nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;
 
-        // Request starting point
-        JPanel panelInicio = new JPanel(new GridLayout(2, 2));
-        JTextField xInicioField = new JTextField(5);
-        JTextField yInicioField = new JTextField(5);
-        panelInicio.add(new JLabel("X origen:"));
-        panelInicio.add(xInicioField);
-        panelInicio.add(new JLabel("Y origen:"));
-        panelInicio.add(yInicioField);
+        try {
+            Punto puntoInicio = new Punto(xInicio, yInicio);
 
-        int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
-                "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
+            // Define anonymous figure points
+            Punto[] puntosArray = {
+                    new Punto(xInicio, yInicio),
+                    new Punto(xInicio, yInicio + (2 * aumento)),
+                    new Punto(xInicio + (2 * aumento), yInicio + (2 * aumento)),
+                    new Punto(xInicio + (2 * aumento), yInicio + (1 * aumento)),
+                    new Punto(xInicio + (4 * aumento), yInicio + (1 * aumento)),
+                    new Punto(xInicio + (4 * aumento), yInicio + (2 * aumento)),
+                    new Punto(xInicio + (6 * aumento), yInicio + (2 * aumento)),
+                    new Punto(xInicio + (6 * aumento), yInicio)
+            };
 
-        if (resultInicio == JOptionPane.OK_OPTION) {
-            try {
-                xInicio = Integer.parseInt(xInicioField.getText());
-                yInicio = Integer.parseInt(yInicioField.getText());
-                Punto puntoInicio = new Punto(xInicio, yInicio);
+            List<Punto> puntosList = Arrays.asList(puntosArray);
 
-                // Define anonymous figure points
-                Punto[] puntosArray = {
-                        new Punto(xInicio, yInicio),
-                        new Punto(xInicio, yInicio + (2 * aumento)),
-                        new Punto(xInicio + (2 * aumento), yInicio + (2 * aumento)),
-                        new Punto(xInicio + (2 * aumento), yInicio + (1 * aumento)),
-                        new Punto(xInicio + (4 * aumento), yInicio + (1 * aumento)),
-                        new Punto(xInicio + (4 * aumento), yInicio + (2 * aumento)),
-                        new Punto(xInicio + (6 * aumento), yInicio + (2 * aumento)),
-                        new Punto(xInicio + (6 * aumento), yInicio)
-                };
-
-                List<Punto> puntosList = Arrays.asList(puntosArray);
-
-                // Label points
-                for (int i = 0; i < puntosList.size(); i++) {
-                    puntosList.get(i).setNombrePunto("P" + (i + 1));
-                }
-
-
-                // Draw figure
-                Punto puntoAnterior = puntoInicio;
-                planoCartesiano.addPunto(puntoInicio);
-
-                for (int i = 0; i < puntosList.size(); i++) {
-                    Punto punto = puntosList.get(i);
-                    planoCartesiano.addPunto(punto);
-                    planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true, i + 1)); // Enviar el número del punto
-                    puntoAnterior = punto;
-                }
-
-                xInicialFieldNuevo.setText(xInicioField.getText());
-                yInicialFieldNuevo.setText(yInicioField.getText());
-                // Update table with points in current coordinate system
-                updateTableWithPoints(puntosList);
-
-                // Add figure to map and combo box
-                addFigura(nombreFiguraAnonima, puntosList);
-                planoCartesiano.repaint();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
+            // Label points
+            for (int i = 0; i < puntosList.size(); i++) {
+                puntosList.get(i).setNombrePunto("P" + (i + 1));
             }
+
+            // Draw figure
+            Punto puntoAnterior = puntoInicio;
+            planoCartesiano.addPunto(puntoInicio);
+
+            for (int i = 0; i < puntosList.size(); i++) {
+                Punto punto = puntosList.get(i);
+                planoCartesiano.addPunto(punto);
+                planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true, i + 1));
+                puntoAnterior = punto;
+            }
+
+            // Update table with points in current coordinate system
+            updateTableWithPoints(puntosList);
+
+            // Add figure to map and combo box
+            addFigura(nombreFiguraAnonima, puntosList);
+            planoCartesiano.repaint();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
         }
     }
 
     public void regenerarDrawAnonima() {
+        nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;
+
         try {
+            planoCartesiano.clear(); // Clear the plane before drawing new figure
+
             xInicio = Integer.parseInt(xInicialFieldNuevo.getText());
             yInicio = Integer.parseInt(yInicialFieldNuevo.getText());
             aumento = (Integer) aumentoComboBox.getSelectedItem();
@@ -350,19 +411,18 @@ public class FiguraAnonimaDrawMenu extends JFrame {
             Punto puntoAnterior = puntoInicio;
             planoCartesiano.addPunto(puntoInicio);
 
-            for (Punto punto : puntosList) {
-                if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE) {
-                }
-
+            for (int i = 0; i < puntosList.size(); i++) {
+                Punto punto = puntosList.get(i);
                 planoCartesiano.addPunto(punto);
-                planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true));
+                planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true, i + 1));
                 puntoAnterior = punto;
             }
 
             // Update table with points in current coordinate system
             updateTableWithPoints(puntosList);
-            addFigura(nombreFiguraAnonima, puntosList);
+
             // Add figure to map and combo box
+            addFigura(nombreFiguraAnonima, puntosList);
             planoCartesiano.repaint();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
@@ -389,6 +449,21 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FiguraAnonimaDrawMenu());
+
+        SwingUtilities.invokeLater(() -> {
+            FiguraAnonimaDrawMenu frame = new FiguraAnonimaDrawMenu();
+
+            xInicialFieldNuevo.setText("2");
+            yInicialFieldNuevo.setText("2");
+            xInicio = Integer.parseInt(xInicialFieldNuevo.getText());
+            yInicio = Integer.parseInt(yInicialFieldNuevo.getText());
+
+            frame.drawFiguraAnonima(xInicio, yInicio);
+
+            frame.setVisible(true);
+        });
+
     }
+
+
 }

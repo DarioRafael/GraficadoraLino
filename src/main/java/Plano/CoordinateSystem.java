@@ -36,7 +36,7 @@ public class CoordinateSystem {
         double radius = Math.sqrt(x * x + y * y);
         double angle = Math.toDegrees(Math.atan2(y, x));
         if (angle < 0) {
-            angle += 360;
+            //angle += 360;
         }
         return new PolarCoordinate(radius, angle);
     }

@@ -451,150 +451,442 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE ||
                 currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
             if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
-
                 // Guardar el stroke original
                 Stroke strokeOriginal = g2.getStroke();
                 Color colorOriginal = g2.getColor();
 
                 // Configurar el estilo para las líneas punteadas
                 g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
-                float[] guiones = {10.0f, 10.0f}; // Define el patrón de la línea punteada
+                float[] guiones = {10.0f, 10.0f};
                 g2.setStroke(new BasicStroke(
-                        2.0f,                  // Grosor de la línea
-                        BasicStroke.CAP_ROUND, // Terminación redondeada
-                        BasicStroke.JOIN_ROUND,// Uniones redondeadas
-                        0,                     // Límite de inglete
-                        guiones,               // Patrón de guiones
-                        0                      // Fase inicial
+                        2.0f,
+                        BasicStroke.CAP_ROUND,
+                        BasicStroke.JOIN_ROUND,
+                        0,
+                        guiones,
+                        0
                 ));
 
                 List<Punto> puntos = Punto.getPuntos();
 
-                // Para coordenadas polares relativas
-                Point origenActual = new Point(0, 0);
+                // Solo proceder si hay puntos
+                if (puntos.size() > 0) {
+                    // Primera línea: desde origen al primer punto
+                    Punto primerPunto = puntos.get(0);
+                    int x1 = primerPunto.getX() * GRID_SIZE;
+                    int y1 = -primerPunto.getY() * GRID_SIZE;
 
-                for (int i = 0; i < puntos.size(); i++) {
-                    Punto punto = puntos.get(i);
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
+                    g2.drawLine(0, 0, x1, y1);
+                    drawArrowHead(g2, 0, 0, x1, y1);
+                    g2.drawString("r1", x1/2 - 10, y1/2 - 5);
 
-                    // Generar el radio label para este punto específico
-                    String radioTexto = "r" + (i + 1);
+                    // Punto de origen actual inicia en el primer punto
+                    Point origenActual = new Point(x1, y1);
 
-                    if (i == 0) {
-                        // Siempre dibujar el primer radio desde el origen (0,0) al primer punto
-                        g2.drawLine(0, 0, x, y);
-                        drawArrowHead(g2, 0, 0, x, y);
+                    drawAngle(g2,0,0,x1,y1,"01", 30);
 
-                        // Calcular el punto medio para la etiqueta del radio
-                        int xMedio = x / 2;
-                        int yMedio = y / 2;
-                        g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
-                    } else {
-                        // En modo relativo, dibujamos las líneas entre puntos consecutivos
-                        Punto puntoAnterior = puntos.get(i - 1);
-                        origenActual.x = puntoAnterior.getX() * GRID_SIZE;
-                        origenActual.y = -puntoAnterior.getY() * GRID_SIZE;
 
-                        // Dibujar la línea desde el punto anterior al actual
-                        g2.drawLine(origenActual.x, origenActual.y, x, y);
-                        drawArrowHead(g2, origenActual.x, origenActual.y, x, y);
+                    // Tercera línea
+                    if (puntos.size() > 2) {
+                        Punto tercerPunto = puntos.get(2);
+                        int x3 = tercerPunto.getX() * GRID_SIZE;
+                        int y3 = -tercerPunto.getY() * GRID_SIZE;
 
-                        // Calcular el punto medio para la etiqueta del radio
-                        int xMedio = (origenActual.x + x) / 2;
-                        int yMedio = (origenActual.y + y) / 2;
-                        g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
+                        g2.drawLine(origenActual.x, origenActual.y, x3, y3);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x3, y3);
+                        g2.drawString("r2", (origenActual.x + x3)/2 - 10, (origenActual.y + y3)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x3, y3, "θ2", 30);
+
+
+                        origenActual = new Point(x3, y3);
+                        //drawAngle(g2,origenActual.x, origenActual.y, x3,y3,"02", 0);
+
                     }
+
+                    // Cuarta línea
+                    if (puntos.size() > 3) {
+                        Punto cuartoPunto = puntos.get(3);
+                        int x4 = cuartoPunto.getX() * GRID_SIZE;
+                        int y4 = -cuartoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(origenActual.x, origenActual.y, x4, y4);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x4, y4);
+                        g2.drawString("r3", (origenActual.x + x4)/2 - 10, (origenActual.y + y4)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x4, y4, "θ3", 30);
+
+
+                        origenActual = new Point(x4, y4);
+                    }
+
+                    // Quinta línea
+                    if (puntos.size() > 4) {
+                        Punto quintoPunto = puntos.get(4);
+                        int x5 = quintoPunto.getX() * GRID_SIZE;
+                        int y5 = -quintoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(origenActual.x, origenActual.y, x5, y5);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x5, y5);
+                        g2.drawString("r4", (origenActual.x + x5)/2 - 10, (origenActual.y + y5)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x5, y5, "θ4", 30);
+
+
+                        origenActual = new Point(x5, y5);
+                    }
+
+                    // Sexta línea
+                    if (puntos.size() > 5) {
+                        Punto sextoPunto = puntos.get(5);
+                        int x6 = sextoPunto.getX() * GRID_SIZE;
+                        int y6 = -sextoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(origenActual.x, origenActual.y, x6, y6);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x6, y6);
+                        g2.drawString("r5", (origenActual.x + x6)/2 - 10, (origenActual.y + y6)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x6, y6, "θ5", 30);
+
+
+                        origenActual = new Point(x6, y6);
+                    }
+
+                    // Séptima línea
+                    if (puntos.size() > 6) {
+                        Punto septimoPunto = puntos.get(6);
+                        int x7 = septimoPunto.getX() * GRID_SIZE;
+                        int y7 = -septimoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(origenActual.x, origenActual.y, x7, y7);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x7, y7);
+                        g2.drawString("r6", (origenActual.x + x7)/2 - 10, (origenActual.y + y7)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x7, y7, "θ6", 30);
+
+
+                        origenActual = new Point(x7, y7);
+                    }
+
+                    // Octava línea
+                    if (puntos.size() > 7) {
+                        Punto octavoPunto = puntos.get(7);
+                        int x8 = octavoPunto.getX() * GRID_SIZE;
+                        int y8 = -octavoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(origenActual.x, origenActual.y, x8, y8);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x8, y8);
+                        g2.drawString("r7", (origenActual.x + x8)/2 - 10, (origenActual.y + y8)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x8, y8, "θ7", 30);
+
+
+                        origenActual = new Point(x8, y8);
+                    }
+
+                    // Octava línea
+                    if (puntos.size() > 8) {
+                        Punto novenoPunto = puntos.get(8);
+                        int x9 = novenoPunto.getX() * GRID_SIZE;
+                        int y9 = -novenoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(origenActual.x, origenActual.y, x9, y9);
+                        drawArrowHead(g2, origenActual.x, origenActual.y, x9, y9);
+                        g2.drawString("r8", (origenActual.x + x9)/2 - 10, (origenActual.y + y9)/2 - 5);
+
+                        drawAngleRelativo(g2, origenActual, x9, y9, "θ8", 30);
+
+
+                        origenActual = new Point(x9, x9);
+                    }
+
                 }
 
-                // Dibujar las flechas manualmente para las 8 direcciones (modificado)
+                // Restaurar el stroke y color original
+                g2.setStroke(strokeOriginal);
+                g2.setColor(colorOriginal);
+            } else {
+                // Guardar el stroke original
+                Stroke strokeOriginal = g2.getStroke();
+                Color colorOriginal = g2.getColor();
 
-                int radius = getWidth() / 2 - (AXIS_THICKNESS + TICK_SIZE + LABEL_OFFSET); // Calcular radio máximo
-                double angleStep = Math.PI * 2 / 8; // Ángulo entre cada flecha (45 grados)
+                // Configurar el estilo para las líneas punteadas
+                g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+                float[] guiones = {10.0f, 10.0f};
+                g2.setStroke(new BasicStroke(
+                        2.0f,
+                        BasicStroke.CAP_ROUND,
+                        BasicStroke.JOIN_ROUND,
+                        0,
+                        guiones,
+                        0
+                ));
 
-                for (int i = 0; i < 8; i++) {
-                    double angle = i * angleStep;
-                    int xArrow = (int) (origenActual.x + radius * Math.cos(angle));
-                    int yArrow = (int) (origenActual.y - radius * Math.sin(angle)); // Y invertido
+                List<Punto> puntos = Punto.getPuntos();
 
-                    drawArrowHead(g2, origenActual.x, origenActual.y, xArrow, yArrow);
+                // Solo proceder si hay puntos
+                if (puntos.size() > 0) {
+                    // Primera línea: desde el origen al primer punto
+                    Punto primerPunto = puntos.get(0);
+                    int x1 = primerPunto.getX() * GRID_SIZE;
+                    int y1 = -primerPunto.getY() * GRID_SIZE;
+
+                    g2.drawLine(0, 0, x1, y1);
+                    drawArrowHead(g2, 0, 0, x1, y1);
+                    g2.drawString("", x1/2 - 10, y1/2 - 5);
+
+                    drawAngle(g2,0,0,x1,y1,"01", 30);
+
+                    // Segunda línea
+                    if (puntos.size() > 1) {
+                        Punto segundoPunto = puntos.get(1);
+                        int x2 = segundoPunto.getX() * GRID_SIZE;
+                        int y2 = -segundoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x2, y2);
+                        drawArrowHead(g2, 0, 0, x2, y2);
+                        g2.drawString("r1", x2/2 - 10, y2/2 - 5);
+
+                        drawAngle(g2,0,0,x2,y2,"02",60);
+                    }
+
+                    // Tercera línea
+                    if (puntos.size() > 2) {
+                        Punto tercerPunto = puntos.get(2);
+                        int x3 = tercerPunto.getX() * GRID_SIZE;
+                        int y3 = -tercerPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x3, y3);
+                        drawArrowHead(g2, 0, 0, x3, y3);
+                        g2.drawString("r2", x3/2 - 10, y3/2 - 5);
+
+                        drawAngle(g2,0,0,x3,y3,"01", 90);
+                    }
+
+                    // Cuarta línea
+                    if (puntos.size() > 3) {
+                        Punto cuartoPunto = puntos.get(3);
+                        int x4 = cuartoPunto.getX() * GRID_SIZE;
+                        int y4 = -cuartoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x4, y4);
+                        drawArrowHead(g2, 0, 0, x4, y4);
+                        g2.drawString("r3", x4/2 - 10, y4/2 - 5);
+
+                        drawAngle(g2,0,0,x4,y4,"01", 80);
+
+                    }
+
+                    // Quinta línea
+                    if (puntos.size() > 4) {
+                        Punto quintoPunto = puntos.get(4);
+                        int x5 = quintoPunto.getX() * GRID_SIZE;
+                        int y5 = -quintoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x5, y5);
+                        drawArrowHead(g2, 0, 0, x5, y5);
+                        g2.drawString("r4", x5/2 - 10, y5/2 - 5);
+
+                        drawAngle(g2,0,0,x5,y5,"01", 90);
+
+                    }
+
+                    // Sexta línea
+                    if (puntos.size() > 5) {
+                        Punto sextoPunto = puntos.get(5);
+                        int x6 = sextoPunto.getX() * GRID_SIZE;
+                        int y6 = -sextoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x6, y6);
+                        drawArrowHead(g2, 0, 0, x6, y6);
+                        g2.drawString("r5", x6/2 - 10, y6/2 - 5);
+
+                        drawAngle(g2,0,0,x6,y6,"01", 120);
+
+                    }
+
+                    // Séptima línea
+                    if (puntos.size() > 6) {
+                        Punto septimoPunto = puntos.get(6);
+                        int x7 = septimoPunto.getX() * GRID_SIZE;
+                        int y7 = -septimoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x7, y7);
+                        drawArrowHead(g2, 0, 0, x7, y7);
+                        g2.drawString("r6", x7/2 - 10, y7/2 - 5);
+
+                        drawAngle(g2,0,0,x7,y7,"01",150);
+
+                    }
+
+                    // Octava línea
+                    if (puntos.size() > 7) {
+                        Punto octavoPunto = puntos.get(7);
+                        int x8 = octavoPunto.getX() * GRID_SIZE;
+                        int y8 = -octavoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x8, y8);
+                        drawArrowHead(g2, 0, 0, x8, y8);
+                        g2.drawString("r7", x8/2 - 10, y8/2 - 5);
+
+                        drawAngle(g2,0,0,x8,y8,"07",180);
+
+                    }
+
+
+                    if (puntos.size() > 8) {
+                        Punto novenoPunto = puntos.get(8);
+                        int x9 = novenoPunto.getX() * GRID_SIZE;
+                        int y9 = -novenoPunto.getY() * GRID_SIZE;
+
+                        g2.drawLine(0, 0, x9, y9);
+                        drawArrowHead(g2, 0, 0, x9, y9);
+                        g2.drawString("r8", x9/2 - 10, y9/2 - 5);
+                        drawAngle(g2,0,0,x9,y9,"08",210);
+
+                    }
                 }
 
                 // Restaurar el stroke y color original
                 g2.setStroke(strokeOriginal);
                 g2.setColor(colorOriginal);
             }
-            // Guardar el stroke original
-            Stroke strokeOriginal = g2.getStroke();
-            Color colorOriginal = g2.getColor();
 
-            // Configurar el estilo para las líneas punteadas
-            g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
-            float[] guiones = {10.0f, 10.0f}; // Define el patrón de la línea punteada
-            g2.setStroke(new BasicStroke(
-                    2.0f,                  // Grosor de la línea
-                    BasicStroke.CAP_ROUND, // Terminación redondeada
-                    BasicStroke.JOIN_ROUND,// Uniones redondeadas
-                    0,                     // Límite de inglete
-                    guiones,               // Patrón de guiones
-                    0                      // Fase inicial
-            ));
-
-            List<Punto> puntos = Punto.getPuntos();
-
-            // Para coordenadas polares
-            Point origenActual = new Point(0, 0);
-
-            for (int i = 0; i < puntos.size(); i++) {
-                Punto punto = puntos.get(i);
-                int x = punto.getX() * GRID_SIZE;
-                int y = -punto.getY() * GRID_SIZE;
-
-                // Generar el radio label para este punto específico
-                String radioTexto = "r" + (i + 1);
-
-                if (i == 0) {
-                    // Siempre dibujar el primer radio desde el origen (0,0) al primer punto
-                    g2.drawLine(0, 0, x, y);
-                    drawArrowHead(g2, 0, 0, x, y);
-
-                    // Calcular el punto medio para la etiqueta del radio
-                    int xMedio = x / 2;
-                    int yMedio = y / 2;
-                    g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
-                } else if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE) {
-                    // En modo absoluto, siempre dibujamos desde el origen (0,0)
-                    g2.drawLine(0, 0, x, y);
-                    drawArrowHead(g2, 0, 0, x, y);
-
-                    // Calcular el punto medio para la etiqueta del radio
-                    int xMedio = x / 2;
-                    int yMedio = y / 2;
-                    g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
-                } else if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
-                    // En modo relativo, dibujamos las líneas entre puntos consecutivos
-                    Punto puntoAnterior = puntos.get(i - 1);
-                    origenActual.x = puntoAnterior.getX() * GRID_SIZE;
-                    origenActual.y = -puntoAnterior.getY() * GRID_SIZE;
-
-                    // Dibujar la línea desde el punto anterior al actual
-                    if (i == puntos.size() - 1) {
-                        g2.drawLine(origenActual.x, origenActual.y, x, y);
-                        drawArrowHead(g2, origenActual.x, origenActual.y, x, y);
-                    }
-
-                    // Calcular el punto medio para la etiqueta del radio
-                    int xMedio = (origenActual.x + x) / 2;
-                    int yMedio = (origenActual.y + y) / 2;
-                    g2.drawString(radioTexto, xMedio - 10, yMedio - 5);
-                }
-            }
-
-            // Restaurar el stroke y color original
-            g2.setStroke(strokeOriginal);
-            g2.setColor(colorOriginal);
         }
     }
+    private void drawAngleRelativo(Graphics2D g2, Point origenActual, int x2, int y2, String angleLabel, int radio) {
+        // Calcular el ángulo respecto al punto de origen actual
+        double angle = Math.atan2(-(y2 - origenActual.y), x2 - origenActual.x);
+        if (angle < 0) angle += 2 * Math.PI;
+
+        // Radio para el arco del ángulo
+        int arcRadius = radio;
+
+        // Guardar el stroke actual
+        Stroke originalStroke = g2.getStroke();
+        g2.setStroke(new BasicStroke(1.5f));
+
+        boolean isSpecialCase = false;
+        if (y2 > origenActual.y && Math.abs(x2 - origenActual.x) < 5) {  // 5 pixels de tolerancia
+            angle = -Math.PI/2;  // -90 grados
+            isSpecialCase = true;
+        }
+
+        // Dibujar el arco
+        int angleInDegrees = (int) Math.toDegrees(angle);
+        g2.drawArc(
+                origenActual.x - arcRadius,
+                origenActual.y - arcRadius,
+                arcRadius * 2,
+                arcRadius * 2,
+                0,
+                angleInDegrees
+        );
+
+        // Dibujar el texto del ángulo cerca del inicio del arco
+        int textOffsetX = (int)(15 * Math.cos(Math.toRadians(10)));
+        int textOffsetY = -(int)(15 * Math.sin(Math.toRadians(10)));
+        g2.drawString(angleLabel, origenActual.x + textOffsetX, origenActual.y + textOffsetY);
+
+        // Dibujar la punta de flecha al final del arco
+        double endAngleRad = Math.toRadians(angleInDegrees);
+        int arrowX = origenActual.x + (int)(arcRadius * Math.cos(endAngleRad));
+        int arrowY = origenActual.y - (int)(arcRadius * Math.sin(endAngleRad));
+
+        // Calculamos la dirección tangente al arco en el punto final
+        double tangentAngle = endAngleRad + Math.PI/2;
+
+        if (isSpecialCase) {
+            tangentAngle -= Math.PI; // Flip the arrowhead direction by 180 degrees
+        }
+
+
+        int arrowLength = 10;
+
+        // Puntos para la punta de flecha
+        int[] xPoints = new int[3];
+        int[] yPoints = new int[3];
+
+        xPoints[0] = arrowX;
+        yPoints[0] = arrowY;
+
+        xPoints[1] = (int)(arrowX - arrowLength * Math.cos(tangentAngle - Math.PI/6));
+        yPoints[1] = (int)(arrowY + arrowLength * Math.sin(tangentAngle - Math.PI/6));
+
+        xPoints[2] = (int)(arrowX - arrowLength * Math.cos(tangentAngle + Math.PI/6));
+        yPoints[2] = (int)(arrowY + arrowLength * Math.sin(tangentAngle + Math.PI/6));
+
+        // Dibujar la punta de flecha
+        g2.fillPolygon(xPoints, yPoints, 3);
+
+        // Restaurar el stroke original
+        g2.setStroke(originalStroke);
+    }
+
+    private void drawAngle(Graphics2D g2, int x1, int y1, int x2, int y2, String angleLabel, int radio) {
+        // Calcular el ángulo
+        double angle = Math.atan2(-(y2 - y1), x2 - x1);
+        if (angle < 0) angle += 2 * Math.PI;
+
+        // Radio para el arco del ángulo
+        int arcRadius = radio;
+
+        // Guardar el stroke actual
+        Stroke originalStroke = g2.getStroke();
+        g2.setStroke(new BasicStroke(1.5f));
+
+        // Dibujar el arco
+        int angleInDegrees = (int) Math.toDegrees(angle);
+        g2.drawArc(
+                x1 - arcRadius,
+                y1 - arcRadius,
+                arcRadius * 2,
+                arcRadius * 2,
+                0,
+                angleInDegrees
+        );
+
+        g2.setColor(isDarkMode ? Color.YELLOW : Color.RED);
+
+
+        // Dibujar el texto del ángulo cerca del inicio del arco
+        // Calculamos una pequeña distancia desde el origen para el texto
+        int textOffsetX = (int)(15 * Math.cos(Math.toRadians(10))); // 10 grados desde el inicio
+        int textOffsetY = -(int)(15 * Math.sin(Math.toRadians(10))); // Negativo para Y porque el sistema de coordenadas está invertido
+        g2.drawString(angleLabel, x1 + textOffsetX, y1 + textOffsetY);
+
+        // Dibujar la punta de flecha al final del arco
+        // Calculamos la posición final del arco
+        double endAngleRad = Math.toRadians(angleInDegrees);
+        int arrowX = x1 + (int)(arcRadius * Math.cos(endAngleRad));
+        int arrowY = y1 - (int)(arcRadius * Math.sin(endAngleRad));
+
+        // Calculamos la dirección tangente al arco en el punto final
+        double tangentAngle = endAngleRad + Math.PI/2;
+        int arrowLength = 10;
+
+        // Puntos para la punta de flecha
+        int[] xPoints = new int[3];
+        int[] yPoints = new int[3];
+
+        xPoints[0] = arrowX;
+        yPoints[0] = arrowY;
+
+        xPoints[1] = (int)(arrowX - arrowLength * Math.cos(tangentAngle - Math.PI/6));
+        yPoints[1] = (int)(arrowY + arrowLength * Math.sin(tangentAngle - Math.PI/6));
+
+        xPoints[2] = (int)(arrowX - arrowLength * Math.cos(tangentAngle + Math.PI/6));
+        yPoints[2] = (int)(arrowY + arrowLength * Math.sin(tangentAngle + Math.PI/6));
+
+        // Dibujar la punta de flecha
+        g2.fillPolygon(xPoints, yPoints, 3);
+
+        // Restaurar el stroke original
+        g2.setStroke(originalStroke);
+    }
+
+
+
 
     private void drawArrowHead(Graphics2D g2, int x1, int y1, int x2, int y2) {
         double dx = x2 - x1;
