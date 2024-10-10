@@ -67,6 +67,9 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         planoCartesiano = new PlanoCartesianoFiguraPer();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
+        xInicialFieldNuevo = new JTextField();
+        yInicialFieldNuevo = new JTextField();
+
         // Create the "Generar" button and its menu
 
         titleLabel = new JLabel("Figura de ocho puntos");
@@ -138,13 +141,13 @@ public class FiguraAnonimaDrawMenu extends JFrame {
                 columnNames = new String[]{"Punto", "X", "Y"};
                 break;
             case CARTESIAN_RELATIVE:
-                columnNames = new String[]{"Punto", "ΔX", "ΔY"};
+                columnNames = new String[]{"Punto", "dX", "dY"};
                 break;
             case POLAR_ABSOLUTE:
-                columnNames = new String[]{"Punto", "Radio", "Ángulo"};
+                columnNames = new String[]{"Punto", "r", "θ"};
                 break;
             case POLAR_RELATIVE:
-                columnNames = new String[]{"Punto", "ΔRadio", "ΔÁngulo"};
+                columnNames = new String[]{"Punto", "dr", "dθ"};
                 break;
             default:
                 columnNames = new String[]{"Punto", "X", "Y"};
@@ -219,6 +222,11 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         rightPanel.add(bottomPanel, BorderLayout.NORTH);
         add(rightPanel, BorderLayout.EAST);
     }
+    public void initializeAndDraw(int xInicio, int yInicio) {
+        xInicialFieldNuevo.setText(String.valueOf(xInicio));
+        yInicialFieldNuevo.setText(String.valueOf(yInicio));
+        drawFiguraAnonima(xInicio, yInicio);
+    }
 
     private void addActionListeners() {
         coordSystemComboBox.addActionListener(e -> {
@@ -246,9 +254,17 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         });
 
         backButton.addActionListener(e -> {
+            clearPlanoAndData(); // Limpia el plano y los datos de las figuras
             new PaginaPrincipal().setVisible(true);
             dispose();
         });
+    }
+
+    private void clearPlanoAndData() {
+        planoCartesiano.clear(); // Limpia el plano cartesiano
+        figurasMap.clear(); // Limpia el mapa de figuras
+        figurasComboBox.removeAllItems(); // Limpia el combo box de figuras
+        tableModel.setRowCount(0); // Limpia la tabla de información
     }
 
     private void updateTableWithPoints(List<Punto> puntos) {
@@ -331,6 +347,8 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     }
 
     public void drawFiguraAnonima(int xInicio, int yInicio) {
+        clearPlanoAndData(); // Limpia el plano y los datos antes de dibujar la nueva figura
+
         nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;
 
         try {

@@ -127,7 +127,6 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
         drawPoints(g2);
         drawLines(g2);
-        drawArcos(g2);
     }
 
     private void drawGrid(Graphics2D g2) {
@@ -171,11 +170,15 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0);
         g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2));
 
+
         g2.setFont(new Font("Arial", Font.PLAIN, 12));
-        g2.drawString("X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
-        g2.drawString("-X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
-        g2.drawString("Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
-        g2.drawString("-Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
+        String prefix = (currentCoordSystem == CoordinateSystem.Type.CARTESIAN_RELATIVE ||
+                currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) ? "d" : "";
+
+        g2.drawString(prefix +"X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
+        g2.drawString("-" + prefix + "X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
+        g2.drawString(prefix + "Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
+        g2.drawString("-" + prefix + "Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 10));
 
@@ -306,112 +309,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         }
     }
 
-    private void drawLinesfk(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.CYAN);
-        } else {
-            g2.setColor(Color.BLUE);
-        }
-        g2.setStroke(new BasicStroke(2));
-
-        List<Linea> lineas = Linea.getLineas();
-        int puntoCounter = 1; // Contador global para los nombres de los puntos
-
-        for (Linea linea : lineas) {
-            Punto inicio = linea.getPuntoInicio();
-            Punto fin = linea.getPuntoFin();
-            int x1 = inicio.getX() * GRID_SIZE;
-            int y1 = -inicio.getY() * GRID_SIZE;
-            int x2 = fin.getX() * GRID_SIZE;
-            int y2 = -fin.getY() * GRID_SIZE;
-
-            g2.drawLine(x1, y1, x2, y2);
-// Etiquetar el punto de inicio
-
-            if (linea.isEsParteDeFiguraAnonima()) {
-                // Para la figura anónima, solo dibujamos y etiquetamos los puntos de inicio y fin
-                g2.fillOval(x1 - 3, y1 - 3, 6, 6);
-                g2.fillOval(x2 - 3, y2 - 3, 6, 6);
-                g2.drawString("P" + puntoCounter++, x1 + 5, y1 - 5);
-                g2.drawString("P" + puntoCounter++, x2 + 5, y2 - 5);
-            } else {
-                // Para líneas normales, dibujamos todos los puntos intermedios
-                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
-                for (Punto punto : puntosIntermedios) {
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
-                    g2.fillOval(x - 3, y - 3, 6, 6);
-                    g2.drawString("P" + puntoCounter++, x + 5, y - 5);
-                }
-            }
-        }
-    }
 
 
-    public void drawLinesFGAnonima(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.CYAN);
-        } else {
-            g2.setColor(Color.BLUE);
-        }
-        g2.setStroke(new BasicStroke(2));
-
-        List<Linea> lineas = Linea.getLineas();
-        for (Linea linea : lineas) {
-            Punto inicio = linea.getPuntoInicio();
-            Punto fin = linea.getPuntoFin();
-            int x1 = inicio.getX() * GRID_SIZE;
-            int y1 = -inicio.getY() * GRID_SIZE;
-            int x2 = fin.getX() * GRID_SIZE;
-            int y2 = -fin.getY() * GRID_SIZE;
-
-            g2.drawLine(x1, y1, x2, y2);
-        }
-    }
-
-
-
-    private void drawArcos(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.ORANGE);
-        } else {
-            g2.setColor(Color.RED);
-        }
-
-        for (Arco arco : Arco.getArcos()) {
-            int xCentro = arco.getCentro().getX() * GRID_SIZE;
-            int yCentro = -arco.getCentro().getY() * GRID_SIZE;
-            int radio = arco.getRadio() * GRID_SIZE;
-            int anguloInicio = (int) arco.getAnguloInicio();
-            int anguloFinal = (int) arco.getAnguloFin();
-
-            // Dibujar el arco
-            g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFinal - anguloInicio);
-
-            // Dibujar los puntos inicial y final del arco
-            Point puntoInicial = calcularPuntoEnArco(xCentro, yCentro, radio, anguloInicio);
-            Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFinal);
-
-            g2.fillOval(puntoInicial.x - 3, puntoInicial.y - 3, 6, 6);
-            g2.fillOval(puntoFinal.x - 3, puntoFinal.y - 3, 6, 6);
-
-            // Etiquetar los puntos
-            g2.drawString("Inicio", puntoInicial.x + 5, puntoInicial.y - 5);
-            g2.drawString("Fin", puntoFinal.x + 5, puntoFinal.y - 5);
-
-            // Dibujar las líneas desde los puntos inicial y final hacia el centro (simulando la rebanada de pizza)
-            g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);  // Línea desde el centro al punto inicial
-            g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);      // Línea desde el centro al punto final
-        }
-    }
-
-    // Método auxiliar para calcular un punto en el arco dado el ángulo
-    private Point calcularPuntoEnArco(int xCentro, int yCentro, int radio, int angulo) {
-        double anguloRadianes = Math.toRadians(angulo);
-        int x = (int) (xCentro + radio * Math.cos(anguloRadianes));
-        int y = (int) (yCentro - radio * Math.sin(anguloRadianes)); // Y invertido en gráficos
-        return new Point(x, y);
-    }
 
     public void addLinea(Linea linea) {
         Linea.getLineas().add(linea);
@@ -442,7 +341,6 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     public void clear() {
         Punto.getPuntos().clear();
         Linea.getLineas().clear();
-        Arco.getArcos().clear();
         repaint(); // Redibujar el plano para reflejar los cambios
     }
 
@@ -483,7 +381,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                     // Punto de origen actual inicia en el primer punto
                     Point origenActual = new Point(x1, y1);
 
-                    drawAngle(g2,0,0,x1,y1,"01", 30);
+                    drawAngle(g2,0,0,x1,y1,"01");
 
 
                     // Tercera línea
@@ -597,7 +495,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawAngleRelativo(g2, origenActual, x9, y9, "θ8", 30);
 
 
-                        origenActual = new Point(x9, x9);
+                        origenActual = new Point(x9, y9);
                     }
 
                 }
@@ -635,7 +533,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                     drawArrowHead(g2, 0, 0, x1, y1);
                     g2.drawString("", x1/2 - 10, y1/2 - 5);
 
-                    drawAngle(g2,0,0,x1,y1,"01", 30);
+                    drawAngle(g2,0,0,x1,y1,"0");
 
                     // Segunda línea
                     if (puntos.size() > 1) {
@@ -647,7 +545,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x2, y2);
                         g2.drawString("r1", x2/2 - 10, y2/2 - 5);
 
-                        drawAngle(g2,0,0,x2,y2,"02",60);
+                        drawAngle(g2,0,0,x2,y2,"01");
                     }
 
                     // Tercera línea
@@ -660,7 +558,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x3, y3);
                         g2.drawString("r2", x3/2 - 10, y3/2 - 5);
 
-                        drawAngle(g2,0,0,x3,y3,"01", 90);
+                        drawAngle(g2,0,0,x3,y3,"02");
                     }
 
                     // Cuarta línea
@@ -673,7 +571,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x4, y4);
                         g2.drawString("r3", x4/2 - 10, y4/2 - 5);
 
-                        drawAngle(g2,0,0,x4,y4,"01", 80);
+                        drawAngle(g2,0,0,x4,y4,"03");
 
                     }
 
@@ -687,7 +585,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x5, y5);
                         g2.drawString("r4", x5/2 - 10, y5/2 - 5);
 
-                        drawAngle(g2,0,0,x5,y5,"01", 90);
+                        drawAngle(g2,0,0,x5,y5,"04");
 
                     }
 
@@ -701,7 +599,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x6, y6);
                         g2.drawString("r5", x6/2 - 10, y6/2 - 5);
 
-                        drawAngle(g2,0,0,x6,y6,"01", 120);
+                        drawAngle(g2,0,0,x6,y6,"05");
 
                     }
 
@@ -715,7 +613,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x7, y7);
                         g2.drawString("r6", x7/2 - 10, y7/2 - 5);
 
-                        drawAngle(g2,0,0,x7,y7,"01",150);
+                        drawAngle(g2,0,0,x7,y7,"06");
 
                     }
 
@@ -729,7 +627,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, 0, 0, x8, y8);
                         g2.drawString("r7", x8/2 - 10, y8/2 - 5);
 
-                        drawAngle(g2,0,0,x8,y8,"07",180);
+                        drawAngle(g2,0,0,x8,y8,"07");
 
                     }
 
@@ -742,7 +640,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         g2.drawLine(0, 0, x9, y9);
                         drawArrowHead(g2, 0, 0, x9, y9);
                         g2.drawString("r8", x9/2 - 10, y9/2 - 5);
-                        drawAngle(g2,0,0,x9,y9,"08",210);
+                        drawAngle(g2,0,0,x9,y9,"08");
 
                     }
                 }
@@ -823,13 +721,16 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         g2.setStroke(originalStroke);
     }
 
-    private void drawAngle(Graphics2D g2, int x1, int y1, int x2, int y2, String angleLabel, int radio) {
+    private void drawAngle(Graphics2D g2, int x1, int y1, int x2, int y2, String angleLabel) {
         // Calcular el ángulo
         double angle = Math.atan2(-(y2 - y1), x2 - x1);
         if (angle < 0) angle += 2 * Math.PI;
 
-        // Radio para el arco del ángulo
-        int arcRadius = radio;
+        // Calcular la longitud del radio (distancia desde el origen al punto)
+        double radioTotal = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+        // El arco será la mitad del radio total
+        int arcRadius = (int)(radioTotal / 2);
 
         // Guardar el stroke actual
         Stroke originalStroke = g2.getStroke();
@@ -848,15 +749,27 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
         g2.setColor(isDarkMode ? Color.YELLOW : Color.RED);
 
+        // Modificación para el posicionamiento del texto
+        double textAngle;
+        if (angleLabel.equals("08")) {
+            // Ajuste específico para θ8
+            textAngle = Math.PI/180; // Reducimos el ángulo a la mitad (7.5 grados)
+        } else {
+            textAngle = Math.PI/12; // 15 grados para los demás
+        }
 
-        // Dibujar el texto del ángulo cerca del inicio del arco
-        // Calculamos una pequeña distancia desde el origen para el texto
-        int textOffsetX = (int)(15 * Math.cos(Math.toRadians(10))); // 10 grados desde el inicio
-        int textOffsetY = -(int)(15 * Math.sin(Math.toRadians(10))); // Negativo para Y porque el sistema de coordenadas está invertido
-        g2.drawString(angleLabel, x1 + textOffsetX, y1 + textOffsetY);
+        // Colocar el texto cerca del inicio del ángulo
+        // Usamos un ángulo pequeño fijo para el texto (15 grados = π/12 radianes)
+
+        // El texto estará un poco más alejado que el arco
+        int textRadius = arcRadius + 5;
+        int textOffsetX = (int)(textRadius * Math.cos(textAngle));
+        int textOffsetY = -(int)(textRadius * Math.sin(textAngle));
+
+        // Dibujamos el texto
+        g2.drawString("θ" + angleLabel.substring(1), x1 + textOffsetX, y1 + textOffsetY);
 
         // Dibujar la punta de flecha al final del arco
-        // Calculamos la posición final del arco
         double endAngleRad = Math.toRadians(angleInDegrees);
         int arrowX = x1 + (int)(arcRadius * Math.cos(endAngleRad));
         int arrowY = y1 - (int)(arcRadius * Math.sin(endAngleRad));
@@ -884,10 +797,6 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         // Restaurar el stroke original
         g2.setStroke(originalStroke);
     }
-
-
-
-
     private void drawArrowHead(Graphics2D g2, int x1, int y1, int x2, int y2) {
         double dx = x2 - x1;
         double dy = y2 - y1;

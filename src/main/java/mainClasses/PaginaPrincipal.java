@@ -65,7 +65,9 @@ public class PaginaPrincipal extends JFrame {
         goToFiguraAnonimaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new FiguraAnonimaDrawMenu().setVisible(true);
+                FiguraAnonimaDrawMenu frame = new FiguraAnonimaDrawMenu();
+                frame.initializeAndDraw(2, 2);
+                frame.setVisible(true);
                 dispose();
             }
         });
