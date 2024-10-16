@@ -167,26 +167,29 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         double viewportWidth = getWidth() / zoomFactor;
         double viewportHeight = getHeight() / zoomFactor;
 
-        g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0);
-        g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2));
-
+        // Dibujar los ejes X e Y
+        g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0); // Eje X
+        g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2)); // Eje Y
 
         g2.setFont(new Font("Arial", Font.PLAIN, 12));
         String prefix = (currentCoordSystem == CoordinateSystem.Type.CARTESIAN_RELATIVE ||
                 currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) ? "d" : "";
 
-        g2.drawString(prefix +"X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
+        // Etiquetas de los ejes
+        g2.drawString(prefix + "X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
         g2.drawString("-" + prefix + "X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
         g2.drawString(prefix + "Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
         g2.drawString("-" + prefix + "Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 10));
 
+        // Dibujar las marcas y números en los ejes
         int startX = (int) Math.floor((-offsetX - viewportWidth / 2) / GRID_SIZE);
         int endX = (int) Math.ceil((-offsetX + viewportWidth / 2) / GRID_SIZE);
         int startY = (int) Math.floor((-offsetY - viewportHeight / 2) / GRID_SIZE);
         int endY = (int) Math.ceil((-offsetY + viewportHeight / 2) / GRID_SIZE);
 
+        // Dibujar marcas en el eje X
         for (int i = startX; i <= endX; i++) {
             if (i != 0) {
                 int x = i * GRID_SIZE;
@@ -195,6 +198,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
             }
         }
 
+        // Dibujar marcas en el eje Y
         for (int i = startY; i <= endY; i++) {
             if (i != 0) {
                 int y = i * GRID_SIZE;
@@ -202,24 +206,29 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                 g2.drawString(Integer.toString(-i), -LABEL_OFFSET, y + 5);
             }
         }
+
         int arrowSize = 10; // Tamaño de la punta de la flecha
 
-        // Add arrows to the axes (modificado para que no crucen el origen)
-        drawArrow(g2, (int) (-offsetX + viewportWidth / 2 - arrowSize), 0, 0); // X-axis arrow
-        drawArrow(g2, (int) (-offsetX - viewportWidth / 2 + arrowSize), 0, 180); // -X-axis arrow
-        drawArrow(g2, 0, (int) (-offsetY - viewportHeight / 2 + arrowSize), 270); // Y-axis arrow (corregido)
-        drawArrow(g2, 0, (int) (-offsetY + viewportHeight / 2 - arrowSize), 90); // -Y-axis arrow (corregido)
+        // Dibujar flechas en los ejes
+        // Flechas del eje X
+        drawArrow(g2, (int) (-offsetX + viewportWidth / 2 - arrowSize), 0, 0); // Flecha X positivo
+        drawArrow(g2, (int) (-offsetX - viewportWidth / 2 + arrowSize), 0, 180); // Flecha X negativo
 
+        // Flechas del eje Y
+        drawArrow(g2, 0, (int) (-offsetY - viewportHeight / 2 + arrowSize), -90); // Flecha Y positivo
+        drawArrow(g2, 0, (int) (-offsetY + viewportHeight / 2 - arrowSize), 90); // Flecha Y negativo
 
+        // Dibujar punto de origen
         g2.fillOval(-3, -3, 6, 6);
-        //g2.drawString("(0,0)", 5, -5);
     }
-    // Helper method to draw an arrow
+
+    // Método auxiliar para dibujar las flechas
     private void drawArrow(Graphics2D g2, int x, int y, int angle) {
-        int arrowSize = 10; // Size of the arrowhead
+        int arrowSize = 10; // Tamaño de la punta de la flecha
         AffineTransform tx = g2.getTransform();
         g2.translate(x, y);
-        g2.rotate(Math.toRadians(angle));
+        double radians = Math.toRadians(angle);
+        g2.rotate(radians);
         g2.drawLine(0, 0, -arrowSize, -arrowSize);
         g2.drawLine(0, 0, -arrowSize, arrowSize);
         g2.setTransform(tx);
@@ -346,6 +355,104 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
 
     private void drawPolarLines(Graphics2D g2) {
+
+        if (currentCoordSystem == CoordinateSystem.Type.CARTESIAN_RELATIVE) {
+            // Guardar el stroke original
+            Stroke strokeOriginal = g2.getStroke();
+            Color colorOriginal = g2.getColor();
+
+            // Configurar el estilo para las líneas punteadas
+            g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+            float[] dash = {5.0f, 5.0f}; // Define el patrón de línea punteada
+            g2.setStroke(new BasicStroke(
+                    1.0f,
+                    BasicStroke.CAP_BUTT,
+                    BasicStroke.JOIN_MITER,
+                    10.0f,
+                    dash,
+                    0.0f
+            ));
+
+            List<Punto> puntos = Punto.getPuntos();
+            if (puntos.size() > 0) {
+                Point lastPoint = new Point(0, 0);
+
+                for (int i = 0; i < puntos.size(); i++) {
+                    Punto currentPunto = puntos.get(i);
+                    int currentX = currentPunto.getX() * GRID_SIZE;
+                    int currentY = -currentPunto.getY() * GRID_SIZE;
+
+                    if (i == 0) {
+                        g2.drawLine(0, currentY, currentX, currentY);
+                        g2.drawString("dx1", currentX/2, currentY - 5);
+                        drawArrowHead(g2,0, currentY, currentX, currentY);
+
+                        g2.drawLine(currentX, 0, currentX, currentY);
+                        g2.drawString("dy1", currentX + 5, currentY/2);
+                        drawArrowHead(g2,currentX, 0, currentX, currentY);
+
+                    }
+
+                    else if (i == 2) {
+                        g2.drawLine(lastPoint.x-10, lastPoint.y, lastPoint.x-10, currentY);
+                        g2.drawString("dy2", lastPoint.x -30, (lastPoint.y + currentY) / 2);
+                        drawArrowHead(g2,lastPoint.x-10, lastPoint.y, lastPoint.x-10, currentY);
+
+
+                    }
+                    else if (i == 3) {
+                        g2.drawLine(lastPoint.x, lastPoint.y - 10, currentX, lastPoint.y-10);
+                        g2.drawString("dx3", lastPoint.x + 30, ((lastPoint.y + currentY) / 2) - 15);
+                        drawArrowHead(g2,lastPoint.x, lastPoint.y - 10, currentX, lastPoint.y-10);
+
+
+                    }
+                    else if (i == 4) {
+                        g2.drawLine(lastPoint.x+10, lastPoint.y, lastPoint.x+10, currentY);
+                        g2.drawString("dy4", lastPoint.x +20, (lastPoint.y + currentY) / 2);
+                        drawArrowHead(g2,lastPoint.x+10, lastPoint.y, lastPoint.x+10, currentY);
+
+
+                    }
+                    else if (i == 5) {
+                        g2.drawLine(lastPoint.x, lastPoint.y + 10, currentX, lastPoint.y+10);
+                        g2.drawString("dx5", lastPoint.x +10, ((lastPoint.y + currentY) / 2) + 20);
+                        drawArrowHead(g2,lastPoint.x, lastPoint.y + 10, currentX, lastPoint.y+10);
+
+                    }
+                    else if (i == 6) {
+                        g2.drawLine(lastPoint.x-10, lastPoint.y, lastPoint.x-10, currentY);
+                        g2.drawString("dy6",lastPoint.x -30, (lastPoint.y + currentY) / 2);
+                        drawArrowHead(g2,lastPoint.x-10, lastPoint.y, lastPoint.x-10, currentY);
+
+                    }
+
+                    else if (i == 7) {
+                        g2.drawLine(lastPoint.x, lastPoint.y - 10, currentX, lastPoint.y-10);
+                        g2.drawString("dx7", lastPoint.x + 30, ((lastPoint.y + currentY) / 2) - 15);
+                        drawArrowHead(g2,lastPoint.x, lastPoint.y - 10, currentX, lastPoint.y-10);
+
+
+                    }
+                    else if (i == 8) {
+                        g2.drawLine(lastPoint.x+10, lastPoint.y, lastPoint.x+10, currentY);
+                        g2.drawString("dy8", lastPoint.x + 20, (lastPoint.y + currentY) / 2);
+                        drawArrowHead(g2,lastPoint.x+10, lastPoint.y, lastPoint.x+10, currentY);
+
+                    }
+
+
+
+                    lastPoint = new Point(currentX, currentY);
+                }
+            }
+
+            g2.setStroke(strokeOriginal);
+            g2.setColor(colorOriginal);
+        }
+
+
+
         if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE ||
                 currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
             if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
@@ -801,7 +908,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         double dx = x2 - x1;
         double dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
-        int len = 15; // Longitud de la flecha
+        int len = 10; // Longitud de la flecha
 
         // Calcular los puntos de la flecha
         int[] xPoints = new int[3];

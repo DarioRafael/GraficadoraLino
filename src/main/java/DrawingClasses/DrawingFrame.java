@@ -1079,7 +1079,7 @@ public class DrawingFrame extends JFrame {
             double x = centerX + radius * Math.cos(t);
             double y = centerY + radius * Math.sin(t);
 
-            tableModel.addRow(new Object[]{"P" + (i + 1), String.format("%.2f", x), String.format("%.2f", y)});
+            tableModel.addRow(new Object[]{"P" + (i + 1), String.format(String.valueOf(x)), String.format(String.valueOf(y))});
         }
 
     }
@@ -1091,7 +1091,7 @@ public class DrawingFrame extends JFrame {
             double x = centerX + radius * Math.cos(angle);
             double y = centerY + radius * Math.sin(angle);
             //puntosFigura.add(new Point2D.Double(x, y));
-            tableModel.addRow(new Object[]{"P" + (i + 1), String.format("%.2f", radius), String.format("%.2f", Math.toDegrees(angle))});
+            tableModel.addRow(new Object[]{"P" + (i + 1), String.format(String.valueOf(radius)), String.format(String.valueOf(Math.toDegrees(angle)))});
         }
     }
 
@@ -1101,7 +1101,7 @@ public class DrawingFrame extends JFrame {
             double t = 2 * Math.PI * i / numSteps;
             double x = centerX + radioX * Math.cos(t);
             double y = centerY + radioY * Math.sin(t);
-            tableModel.addRow(new Object[]{"P" + (i + 1), String.format("%.2f", x), String.format("%.2f", y)});
+            tableModel.addRow(new Object[]{"P" + (i + 1), String.format(String.valueOf(x)), String.format(String.valueOf(y))});
         }
     }
 
@@ -1117,8 +1117,8 @@ public class DrawingFrame extends JFrame {
 
             tableModel.addRow(new Object[]{
                     "P" + (i + 1),
-                    String.format("%.2f", radioEfectivo),
-                    String.format("%.2f", Math.toDegrees(angle))
+                    String.format(String.valueOf(radioEfectivo)),
+                    String.format(String.valueOf(Math.toDegrees(angle)))
             });
         }
     }

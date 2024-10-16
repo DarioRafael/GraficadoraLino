@@ -112,7 +112,7 @@ public class FiguraAnonimaDrawMenu extends JFrame {
             }
         });
 
-        aumentoComboBox = new JComboBox<>(new Integer[]{1, 2, 4, 8, 16});
+        aumentoComboBox = new JComboBox<>(new Integer[]{(Integer) 1, (Integer) 2, (Integer) 4, (Integer) 8, (Integer) 16});
         aumentoComboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
