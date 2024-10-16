@@ -376,12 +376,12 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                     g2.drawLine(0, 0, x1, y1);
                     drawArrowHead(g2, 0, 0, x1, y1);
-                    g2.drawString("r1", x1/2 - 10, y1/2 - 5);
+                    g2.drawString("dr1", x1/2 - 10, y1/2 - 5);
 
                     // Punto de origen actual inicia en el primer punto
                     Point origenActual = new Point(x1, y1);
 
-                    drawAngle(g2,0,0,x1,y1,"01");
+                    drawAngle(g2,0,0,x1,y1,"d01");
 
 
                     // Tercera línea
@@ -392,9 +392,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x3, y3);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x3, y3);
-                        g2.drawString("r2", (origenActual.x + x3)/2 - 10, (origenActual.y + y3)/2 - 5);
+                        g2.drawString("dr2", (origenActual.x + x3)/2 - 10, (origenActual.y + y3)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x3, y3, "θ2", 30);
+                        drawAngleRelativo(g2, origenActual, x3, y3, "dθ2", 30);
 
 
                         origenActual = new Point(x3, y3);
@@ -410,9 +410,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x4, y4);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x4, y4);
-                        g2.drawString("r3", (origenActual.x + x4)/2 - 10, (origenActual.y + y4)/2 - 5);
+                        g2.drawString("dr3", (origenActual.x + x4)/2 - 10, (origenActual.y + y4)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x4, y4, "θ3", 30);
+                        drawAngleRelativo(g2, origenActual, x4, y4, "dθ3", 30);
 
 
                         origenActual = new Point(x4, y4);
@@ -426,9 +426,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x5, y5);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x5, y5);
-                        g2.drawString("r4", (origenActual.x + x5)/2 - 10, (origenActual.y + y5)/2 - 5);
+                        g2.drawString("dr4", (origenActual.x + x5)/2 - 10, (origenActual.y + y5)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x5, y5, "θ4", 30);
+                        drawAngleRelativo(g2, origenActual, x5, y5, "dθ4", 30);
 
 
                         origenActual = new Point(x5, y5);
@@ -442,9 +442,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x6, y6);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x6, y6);
-                        g2.drawString("r5", (origenActual.x + x6)/2 - 10, (origenActual.y + y6)/2 - 5);
+                        g2.drawString("dr5", (origenActual.x + x6)/2 - 10, (origenActual.y + y6)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x6, y6, "θ5", 30);
+                        drawAngleRelativo(g2, origenActual, x6, y6, "dθ5", 30);
 
 
                         origenActual = new Point(x6, y6);
@@ -458,9 +458,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x7, y7);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x7, y7);
-                        g2.drawString("r6", (origenActual.x + x7)/2 - 10, (origenActual.y + y7)/2 - 5);
+                        g2.drawString("dr6", (origenActual.x + x7)/2 - 10, (origenActual.y + y7)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x7, y7, "θ6", 30);
+                        drawAngleRelativo(g2, origenActual, x7, y7, "dθ6", 30);
 
 
                         origenActual = new Point(x7, y7);
@@ -474,9 +474,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x8, y8);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x8, y8);
-                        g2.drawString("r7", (origenActual.x + x8)/2 - 10, (origenActual.y + y8)/2 - 5);
+                        g2.drawString("dr7", (origenActual.x + x8)/2 - 10, (origenActual.y + y8)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x8, y8, "θ7", 30);
+                        drawAngleRelativo(g2, origenActual, x8, y8, "dθ7", 30);
 
 
                         origenActual = new Point(x8, y8);
@@ -490,9 +490,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                         g2.drawLine(origenActual.x, origenActual.y, x9, y9);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x9, y9);
-                        g2.drawString("r8", (origenActual.x + x9)/2 - 10, (origenActual.y + y9)/2 - 5);
+                        g2.drawString("dr8", (origenActual.x + x9)/2 - 10, (origenActual.y + y9)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x9, y9, "θ8", 30);
+                        drawAngleRelativo(g2, origenActual, x9, y9, "dθ8", 30);
 
 
                         origenActual = new Point(x9, y9);

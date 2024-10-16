@@ -1,4 +1,7 @@
-package mainClasses;
+package PaginaPrincipalFolder;
+
+import DrawingClasses.DrawingFrame;
+import DrawingClasses.FiguraAnonimaDrawMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +46,7 @@ public class PaginaPrincipal extends JFrame {
         centerPanel.setBackground(Color.decode("#f0f0f0"));
 
         // Botón para ir a DrawingFrame
-        JButton goToDrawingButton = new JButton("GRAFICADORA");
+        JButton goToDrawingButton = new JButton("Graficadora Universal");
         goToDrawingButton.setFont(new Font("Arial", Font.BOLD, 16));
         goToDrawingButton.setBackground(Color.decode("#007bff")); // Color de fondo azul
         goToDrawingButton.setForeground(Color.WHITE); // Texto en blanco
@@ -57,7 +60,7 @@ public class PaginaPrincipal extends JFrame {
         });
 
         // Botón para ir a FiguraAnonimaDrawMenu
-        JButton goToFiguraAnonimaButton = new JButton("FIGURA ANÓNIMA");
+        JButton goToFiguraAnonimaButton = new JButton("Figura de 8 puntos");
         goToFiguraAnonimaButton.setFont(new Font("Arial", Font.BOLD, 16));
         goToFiguraAnonimaButton.setBackground(Color.decode("#28a745")); // Color de fondo verde
         goToFiguraAnonimaButton.setForeground(Color.WHITE); // Texto en blanco
@@ -66,7 +69,7 @@ public class PaginaPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FiguraAnonimaDrawMenu frame = new FiguraAnonimaDrawMenu();
-                frame.initializeAndDraw(2, 2);
+                frame.initializeAndDraw(frame.xInicio, frame.yInicio);
                 frame.setVisible(true);
                 dispose();
             }

@@ -1,17 +1,6 @@
-package mainClasses;
+package DrawingClasses;
 
-import Plano.CoordinateSystem;
-import Plano.PlanoCartesianoFiguraPer;
-import formasADibujar.Linea;
-import formasADibujar.Punto;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-
+import PaginaPrincipalFolder.PaginaPrincipal;
 import Plano.CoordinateSystem;
 import Plano.PlanoCartesianoFiguraPer;
 import formasADibujar.Linea;
@@ -41,14 +30,16 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     JComboBox<Integer> aumentoComboBox;
 
     int aumento = 1;
-    static int xInicio;
-    static int yInicio;
+    public static int xInicio = 2;
+    public static int yInicio= 2;
 
     static JTextField xInicialFieldNuevo;
     static JTextField yInicialFieldNuevo;
     JButton regenerarFigura;
 
     private JButton backButton; // New button to go back to PaginaPrincipal
+
+    List<Punto> puntosList;
 
     public FiguraAnonimaDrawMenu() {
         setTitle("Graficación Básica por Computadora");
@@ -222,10 +213,12 @@ public class FiguraAnonimaDrawMenu extends JFrame {
         rightPanel.add(bottomPanel, BorderLayout.NORTH);
         add(rightPanel, BorderLayout.EAST);
     }
-    public void initializeAndDraw(int xInicio, int yInicio) {
-        xInicialFieldNuevo.setText(String.valueOf(xInicio));
-        yInicialFieldNuevo.setText(String.valueOf(yInicio));
-        drawFiguraAnonima(xInicio, yInicio);
+    public void initializeAndDraw(int xInicioMet, int yInicioMet) {
+        xInicialFieldNuevo.setText(String.valueOf(xInicioMet));
+        yInicialFieldNuevo.setText(String.valueOf(yInicioMet));
+        xInicio = xInicioMet;
+        yInicio = yInicioMet;
+        drawFiguraAnonima(xInicioMet, yInicioMet);
     }
 
     private void addActionListeners() {
@@ -366,7 +359,7 @@ public class FiguraAnonimaDrawMenu extends JFrame {
                     new Punto(xInicio + (6 * aumento), yInicio)
             };
 
-            List<Punto> puntosList = Arrays.asList(puntosArray);
+            puntosList = Arrays.asList(puntosArray);
 
             // Label points
             for (int i = 0; i < puntosList.size(); i++) {
@@ -396,7 +389,6 @@ public class FiguraAnonimaDrawMenu extends JFrame {
     }
 
     public void regenerarDrawAnonima() {
-        nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;
 
         try {
             planoCartesiano.clear(); // Clear the plane before drawing new figure
@@ -475,7 +467,6 @@ public class FiguraAnonimaDrawMenu extends JFrame {
             yInicialFieldNuevo.setText("2");
             xInicio = Integer.parseInt(xInicialFieldNuevo.getText());
             yInicio = Integer.parseInt(yInicialFieldNuevo.getText());
-
             frame.drawFiguraAnonima(xInicio, yInicio);
 
             frame.setVisible(true);
