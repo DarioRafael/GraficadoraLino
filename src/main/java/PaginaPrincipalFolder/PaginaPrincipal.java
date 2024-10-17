@@ -58,7 +58,7 @@ public class PaginaPrincipal extends JFrame {
                 dispose();
             }
         });
-
+//
         // Botón para ir a FiguraAnonimaDrawMenu
         JButton goToFiguraAnonimaButton = new JButton("Figura de 8 puntos");
         goToFiguraAnonimaButton.setFont(new Font("Arial", Font.BOLD, 16));
