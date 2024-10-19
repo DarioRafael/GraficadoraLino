@@ -24,7 +24,6 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     private static final int LABEL_OFFSET = 20;
 
     private CoordinateSystem.Type currentCoordSystem = CoordinateSystem.Type.CARTESIAN_ABSOLUTE;
-    private boolean isDarkMode = false; // Flag to track dark mode status
 
 
     public PlanoCartesianoFiguraPer() {
@@ -100,12 +99,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
     private void setupGraphics(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // Set background color based on dark mode
-        if (isDarkMode) {
-            g2.setColor(Color.BLACK);
-        } else {
-            g2.setColor(Color.WHITE);
-        }
+
+        //COLOR DEL PLANO
+        g2.setColor(Color.WHITE);
         g2.fillRect(0, 0, getWidth(), getHeight());
     }
 
@@ -130,11 +126,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     }
 
     private void drawGrid(Graphics2D g2) {
-        if (isDarkMode) {
+
             g2.setColor(Color.GRAY);
-        } else {
-            g2.setColor(Color.LIGHT_GRAY);
-        }
+
         g2.setStroke(new BasicStroke(1));
 
         double viewportWidth = getWidth() / zoomFactor;
@@ -157,11 +151,10 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     }
 
     private void drawAxes(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.WHITE);
-        } else {
-            g2.setColor(Color.BLACK);
-        }
+
+        //COLOR DE LOS EJES
+        g2.setColor(Color.BLACK);
+
         g2.setStroke(new BasicStroke(AXIS_THICKNESS));
 
         double viewportWidth = getWidth() / zoomFactor;
@@ -235,11 +228,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     }
 
     private void drawPoints(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.YELLOW);
-        } else {
-            g2.setColor(Color.RED);
-        }
+        g2.setColor(Color.YELLOW);
+
         List<Punto> puntos = Punto.getPuntos();
 
         for (Punto punto : puntos) {
@@ -264,11 +254,9 @@ public class PlanoCartesianoFiguraPer extends JPanel {
     }
 
     private void drawLines(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.CYAN);
-        } else {
-            g2.setColor(Color.BLUE);
-        }
+
+            g2.setColor(Color.BLACK);
+
         g2.setStroke(new BasicStroke(2));
 
         List<Linea> lineas = Linea.getLineas();
@@ -328,16 +316,6 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
 
 
-
-
-    public void setDarkMode(boolean darkMode) {
-        isDarkMode = darkMode;
-        repaint(); // Redibujar el plano al cambiar el modo
-    }
-
-
-
-
     public int getGridSize() {
         return gridSize;
     }
@@ -361,8 +339,10 @@ public class PlanoCartesianoFiguraPer extends JPanel {
             Stroke strokeOriginal = g2.getStroke();
             Color colorOriginal = g2.getColor();
 
-            // Configurar el estilo para las líneas punteadas
-            g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+            // COLOR DE LAS LINEAS PUNTEADAS EN RELATIVAS
+            g2.setColor(Color.RED );
+
+
             float[] dash = {5.0f, 5.0f}; // Define el patrón de línea punteada
             g2.setStroke(new BasicStroke(
                     1.0f,
@@ -461,7 +441,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                 Color colorOriginal = g2.getColor();
 
                 // Configurar el estilo para las líneas punteadas
-                g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+                g2.setColor(Color.BLUE );
                 float[] guiones = {10.0f, 10.0f};
                 g2.setStroke(new BasicStroke(
                         2.0f,
@@ -483,12 +463,16 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
                     g2.drawLine(0, 0, x1, y1);
                     drawArrowHead(g2, 0, 0, x1, y1);
+
+
                     g2.drawString("dr1", x1/2 - 10, y1/2 - 5);
 
                     // Punto de origen actual inicia en el primer punto
                     Point origenActual = new Point(x1, y1);
+                    Point origenActual0 = new Point(0, 0);
 
-                    drawAngle(g2,0,0,x1,y1,"d01");
+
+                    drawAngleRelativo(g2,origenActual0,x1,y1,"  dθ1", 50);
 
 
                     // Tercera línea
@@ -501,7 +485,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, origenActual.x, origenActual.y, x3, y3);
                         g2.drawString("dr2", (origenActual.x + x3)/2 - 10, (origenActual.y + y3)/2 - 5);
 
-                        drawAngleRelativo(g2, origenActual, x3, y3, "dθ2", 30);
+                        drawAngleRelativo(g2, origenActual, x3, y3, "   dθ2", 50);
 
 
                         origenActual = new Point(x3, y3);
@@ -616,7 +600,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                 Color colorOriginal = g2.getColor();
 
                 // Configurar el estilo para las líneas punteadas
-                g2.setColor(isDarkMode ? Color.GRAY : Color.RED);
+                g2.setColor(Color.GRAY);
                 float[] guiones = {10.0f, 10.0f};
                 g2.setStroke(new BasicStroke(
                         2.0f,
@@ -854,7 +838,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                 angleInDegrees
         );
 
-        g2.setColor(isDarkMode ? Color.YELLOW : Color.RED);
+        g2.setColor(Color.BLUE );
 
         // Modificación para el posicionamiento del texto
         double textAngle;
