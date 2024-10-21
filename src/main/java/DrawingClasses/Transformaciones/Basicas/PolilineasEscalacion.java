@@ -23,13 +23,16 @@ public class PolilineasEscalacion extends JFrame {
     private JTextField yInicialField;
     private JTextField sxField;
     private JTextField syField;
+    private JLabel sxLabel;
+    private JLabel syLabel;
+    private JComboBox<String> aumentoComboBox;
     private JButton regenerarFigura;
     private JButton escalarButton;
     private List<Punto> puntosList;
     private List<Punto> puntosEscaladosList;
 
     public PolilineasEscalacion() {
-        setTitle("Escalación de Figuras");
+        setTitle("Transformacion: Escalación");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -53,19 +56,31 @@ public class PolilineasEscalacion extends JFrame {
         regenerarFigura = new JButton("Generar figura");
         escalarButton = new JButton("Escalar figura");
 
+        // ComboBox para seleccionar el aumento
+        String[] aumentoOptions = {"x1", "x2", "x4", "x8", "x16"};
+        aumentoComboBox = new JComboBox<>(aumentoOptions);
+        aumentoComboBox.setSelectedIndex(0); // Valor por defecto: x1
+
         String[] columnNames = {"P", "X", "Y"};
         String[] columnNamesEdi = {"P'", "X'", "Y'"};
         originalTableModel = new DefaultTableModel(columnNames, 0);
         scaledTableModel = new DefaultTableModel(columnNamesEdi, 0);
         originalTable = new JTable(originalTableModel);
         scaledTable = new JTable(scaledTableModel);
+
+        // Labels para mostrar valores de Sx y Sy después de la escalación
+        sxLabel = new JLabel("Sx: 1", SwingConstants.CENTER);
+        sxLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
+
+        syLabel = new JLabel("Sy: 1", SwingConstants.CENTER);
+        syLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
     }
 
     private void configureLayout() {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Escalación de Figuras", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformacion: Escalación", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -94,13 +109,15 @@ public class PolilineasEscalacion extends JFrame {
 
         rightPanel.add(tablesPanel, BorderLayout.CENTER);
 
-        JPanel controlPanel = new JPanel(new GridLayout(8, 2, 5, 5));
+        JPanel controlPanel = new JPanel(new GridLayout(10, 2, 5, 5));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         controlPanel.add(new JLabel("X inicial:"));
         controlPanel.add(xInicialField);
         controlPanel.add(new JLabel("Y inicial:"));
         controlPanel.add(yInicialField);
+        controlPanel.add(new JLabel("Aumento:"));
+        controlPanel.add(aumentoComboBox); // Añadimos el ComboBox del aumento
         controlPanel.add(new JLabel(""));
         controlPanel.add(regenerarFigura);
         controlPanel.add(new JSeparator());
@@ -111,6 +128,8 @@ public class PolilineasEscalacion extends JFrame {
         controlPanel.add(syField);
         controlPanel.add(new JLabel(""));
         controlPanel.add(escalarButton);
+        controlPanel.add(sxLabel);  // Mostrar valor de Sx
+        controlPanel.add(syLabel);  // Mostrar valor de Sy
 
         rightPanel.add(controlPanel, BorderLayout.NORTH);
         add(rightPanel, BorderLayout.EAST);
@@ -125,7 +144,8 @@ public class PolilineasEscalacion extends JFrame {
         regenerarFigura.addActionListener(e -> {
             int xInicio = Integer.parseInt(xInicialField.getText());
             int yInicio = Integer.parseInt(yInicialField.getText());
-            drawFiguraOriginal(xInicio, yInicio, 1);
+            int aumento = Integer.parseInt(aumentoComboBox.getSelectedItem().toString().substring(1)); // Obtener el valor de aumento (x1, x2, etc.)
+            drawFiguraOriginal(xInicio, yInicio, aumento);
         });
 
         escalarButton.addActionListener(e -> realizarEscalacion());
@@ -196,43 +216,49 @@ public class PolilineasEscalacion extends JFrame {
             }
 
             puntosEscaladosList = new ArrayList<>();
-
-            // Calcular punto de referencia (primer punto)
-            Punto puntoReferencia = puntosList.get(0);
-            int xRef = puntoReferencia.getX();
-            int yRef = puntoReferencia.getY();
-
-            System.out.println("X = " + xRef +"X = " + yRef) ;
-
-            // Crear puntos escalados
-            for (int i = 0; i < puntosList.size(); i++) {
-                Punto puntoOriginal = puntosList.get(i);
-                // Aplicar transformación de escalado respecto al punto de referencia
-                double newX =(puntoOriginal.getX() ) * sx;
-                double newY =(puntoOriginal.getY() ) * sy;
-
-                Punto puntoEscalado = new Punto((int)Math.round(newX), (int)Math.round(newY));
-                puntoEscalado.setNombrePunto("P" + (i + 1) + "'");
+            for (Punto puntoOriginal : puntosList) {
+                int nuevoX = puntoOriginal.getX() * sx;
+                int nuevoY = puntoOriginal.getY() * sy;
+                Punto puntoEscalado = new Punto(nuevoX, nuevoY);
                 puntosEscaladosList.add(puntoEscalado);
             }
 
-            // Dibujar figura escalada
-            Punto puntoAnterior = puntosEscaladosList.get(0);
-            planoCartesiano.addPunto(puntoAnterior);
+            Punto puntoAnteriorEscalado = puntosEscaladosList.get(0);
+            planoCartesiano.addPunto(puntoAnteriorEscalado);
 
-            for (int i = 1; i < puntosEscaladosList.size(); i++) {
-                Punto punto = puntosEscaladosList.get(i);
-                planoCartesiano.addPunto(punto);
-                Linea linea = new Linea(puntoAnterior, punto, true, i);
-                planoCartesiano.addLinea(linea);
-                puntoAnterior = punto;
+            for (int i = 0; i < puntosEscaladosList.size(); i++) {
+                Punto puntoEscalado = puntosEscaladosList.get(i);
+                puntoEscalado.setNombrePunto("P" + (i+1 ) + "'"); // Establece el nombre P'1, P'2, etc.
+
+                planoCartesiano.addPunto(puntoEscalado);
+                planoCartesiano.addLinea(new Linea(puntoAnteriorEscalado, puntoEscalado, true, i));
+                puntoAnteriorEscalado = puntoEscalado;
             }
 
             updateScaledTable(puntosEscaladosList);
             planoCartesiano.repaint();
 
+            // Actualizar las etiquetas para mostrar los valores de Sx y Sy
+            sxLabel.setText("Sx: " + sx);
+            syLabel.setText("Sy: " + sy);
+
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos para Sx y Sy");
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos.");
+        }
+    }
+
+    private void updateOriginalTable(List<Punto> puntos) {
+        originalTableModel.setRowCount(0);
+        for (Punto punto : puntos) {
+            originalTableModel.addRow(new Object[]{punto.getNombrePunto(), punto.getX(), punto.getY()});
+        }
+    }
+
+    private void updateScaledTable(List<Punto> puntosEscalados) {
+        scaledTableModel.setRowCount(0);
+        for (int i = 0; i < puntosEscalados.size(); i++) {
+            Punto puntoEscalado = puntosEscalados.get(i);
+            scaledTableModel.addRow(new Object[]{"P" + (i + 1) + "'", puntoEscalado.getX(), puntoEscalado.getY()});
         }
     }
 
@@ -242,31 +268,7 @@ public class PolilineasEscalacion extends JFrame {
         scaledTableModel.setRowCount(0);
     }
 
-    private void updateOriginalTable(List<Punto> puntos) {
-        originalTableModel.setRowCount(0);
-        for (Punto punto : puntos) {
-            originalTableModel.addRow(new Object[]{
-                    punto.getNombrePunto(),
-                    punto.getX(),
-                    punto.getY()
-            });
-        }
-    }
-
-    private void updateScaledTable(List<Punto> puntos) {
-        scaledTableModel.setRowCount(0);
-        for (Punto punto : puntos) {
-            scaledTableModel.addRow(new Object[]{
-                    punto.getNombrePunto(),
-                    punto.getX(),
-                    punto.getY()
-            });
-        }
-    }
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            PolilineasEscalacion frame = new PolilineasEscalacion();
-        });
+        SwingUtilities.invokeLater(PolilineasEscalacion::new);
     }
 }
