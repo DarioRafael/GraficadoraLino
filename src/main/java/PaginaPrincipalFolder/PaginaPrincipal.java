@@ -1,7 +1,7 @@
 package PaginaPrincipalFolder;
 
 import DrawingClasses.DrawingFrame;
-import DrawingClasses.FiguraAnonimaDrawMenu;
+import DrawingClasses.Polilineas.PolilineasDrawMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +60,7 @@ public class PaginaPrincipal extends JFrame {
         });
 //
         // Botón para ir a FiguraAnonimaDrawMenu
-        JButton goToFiguraAnonimaButton = new JButton("Figura de 8 puntos");
+        JButton goToFiguraAnonimaButton = new JButton("Polilineas");
         goToFiguraAnonimaButton.setFont(new Font("Arial", Font.BOLD, 16));
         goToFiguraAnonimaButton.setBackground(Color.decode("#28a745")); // Color de fondo verde
         goToFiguraAnonimaButton.setForeground(Color.WHITE); // Texto en blanco
@@ -68,7 +68,7 @@ public class PaginaPrincipal extends JFrame {
         goToFiguraAnonimaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FiguraAnonimaDrawMenu frame = new FiguraAnonimaDrawMenu();
+                PolilineasDrawMenu frame = new PolilineasDrawMenu();
                 frame.initializeAndDraw(frame.xInicio, frame.yInicio);
                 frame.setVisible(true);
                 dispose();

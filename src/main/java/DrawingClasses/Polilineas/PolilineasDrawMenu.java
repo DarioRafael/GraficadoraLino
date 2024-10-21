@@ -1,8 +1,8 @@
-    package DrawingClasses;
+    package DrawingClasses.Polilineas;
 
     import PaginaPrincipalFolder.PaginaPrincipal;
     import Plano.CoordinateSystem;
-    import Plano.PlanoCartesianoFiguraPer;
+    import Plano.Polilineas.PlanoCartesianoFiguraPer;
     import formasADibujar.Linea;
     import formasADibujar.Punto;
 
@@ -12,7 +12,7 @@
     import java.util.*;
     import java.util.List;
 
-    public class FiguraAnonimaDrawMenu extends JFrame {
+    public class PolilineasDrawMenu extends JFrame {
         private PlanoCartesianoFiguraPer planoCartesiano;
         private JButton otrosButton;
         private JTable infoTable;
@@ -41,7 +41,7 @@
 
         List<Punto> puntosList;
 
-        public FiguraAnonimaDrawMenu() {
+        public PolilineasDrawMenu() {
             setTitle("Graficación Básica por Computadora");
             setSize(1650, 960);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -425,7 +425,7 @@
         public static void main(String[] args) {
 
             SwingUtilities.invokeLater(() -> {
-                FiguraAnonimaDrawMenu frame = new FiguraAnonimaDrawMenu();
+                PolilineasDrawMenu frame = new PolilineasDrawMenu();
 
                 xInicialFieldNuevo.setText("2");
                 yInicialFieldNuevo.setText("2");
