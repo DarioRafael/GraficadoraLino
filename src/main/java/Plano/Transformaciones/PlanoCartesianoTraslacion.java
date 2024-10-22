@@ -1,8 +1,8 @@
 package Plano.Transformaciones;
 
 import Plano.CoordinateSystem;
-import formasADibujar.Rotacion.Linea;
-import formasADibujar.Rotacion.Punto;
+import formasADibujar.Linea;
+import formasADibujar.Punto;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,10 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.List;
 
-public class PlanoCartesianoRotacion extends JPanel {
+public class PlanoCartesianoTraslacion extends JPanel {
 
     private double offsetX = 0, offsetY = 0;
     private int gridSize = 50;
@@ -34,7 +33,7 @@ public class PlanoCartesianoRotacion extends JPanel {
     private static final Color COLOR_LINEA_ORIGINAL = Color.BLACK;
     private static final Color COLOR_LINEA_ESCALADA = new Color(255, 140, 0);
 
-    public PlanoCartesianoRotacion() {
+    public PlanoCartesianoTraslacion() {
         setupMouseListeners();
     }
 
@@ -122,7 +121,10 @@ public class PlanoCartesianoRotacion extends JPanel {
         drawGrid(g2);
         drawAxes(g2);
 
-
+        // Dibujar líneas polares si corresponde
+        if (currentCoordSystem == CoordinateSystem.Type.POLAR_ABSOLUTE ||
+                currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
+        }
 
         drawPoints(g2);
         drawLines(g2);
@@ -231,28 +233,27 @@ public class PlanoCartesianoRotacion extends JPanel {
     }
 
     private void drawPoints(Graphics2D g2) {
-        g2.setColor(Color.BLACK);
         List<Punto> puntos = Punto.getPuntos();
 
         for (Punto punto : puntos) {
-            // Convertir las coordenadas double a píxeles
-            double x = punto.getX() * GRID_SIZE;
-            double y = -punto.getY() * GRID_SIZE;
+            int x = punto.getX() * GRID_SIZE;
+            int y = -punto.getY() * GRID_SIZE;
 
-            g2.fillOval((int)(x - 3), (int)(y - 3), 6, 6);
+            // Determinar el color basado en si es un punto escalado o no
+            if (punto.getNombrePunto() != null && punto.getNombrePunto().contains("'")) {
+                g2.setColor(COLOR_PUNTO_ESCALADO);
+            } else {
+                g2.setColor(COLOR_PUNTO_ORIGINAL);
+            }
 
+            g2.fillOval(x - 3, y - 3, 6, 6);
+
+            // Verificar si el nombre no es null antes de dibujar
             String nombrePunto = punto.getNombrePunto();
             if (nombrePunto != null) {
-                g2.drawString(nombrePunto, (int)(x + 2), (int)(y - 2));
+                g2.drawString(nombrePunto, x + 2, y - 2);
             }
         }
-    }
-
-
-    // Método para agregar un nuevo punto y repintar
-    public void addPunto(Punto punto) {
-        Punto.getPuntos().add(punto);
-        repaint(); // Redibujar el plano
     }
 
     private void drawLines(Graphics2D g2) {
@@ -262,24 +263,44 @@ public class PlanoCartesianoRotacion extends JPanel {
         for (Linea linea : lineas) {
             Punto inicio = linea.getPuntoInicio();
             Punto fin = linea.getPuntoFin();
-            double x1 = inicio.getX() * GRID_SIZE;
-            double y1 = -inicio.getY() * GRID_SIZE;
-            double x2 = fin.getX() * GRID_SIZE;
-            double y2 = -fin.getY() * GRID_SIZE;
+            int x1 = inicio.getX() * GRID_SIZE;
+            int y1 = -inicio.getY() * GRID_SIZE;
+            int x2 = fin.getX() * GRID_SIZE;
+            int y2 = -fin.getY() * GRID_SIZE;
 
-            g2.setColor(Color.BLACK);
-            g2.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
+            // Determinar el color basado en si es una línea escalada o no
+            if (inicio.getNombrePunto() != null && inicio.getNombrePunto().contains("'")) {
+                g2.setColor(COLOR_LINEA_ESCALADA);
+            } else {
+                g2.setColor(COLOR_LINEA_ORIGINAL);
+            }
+
+            g2.drawLine(x1, y1, x2, y2);
 
             if (linea.isEsParteDeFiguraAnonima()) {
                 List<Punto> puntos = Punto.getPuntos();
                 for (Punto punto : puntos) {
-                    double x = punto.getX() * GRID_SIZE;
-                    double y = -punto.getY() * GRID_SIZE;
-                    g2.setColor(Color.RED);
-                    g2.fillOval((int)(x - 3), (int)(y - 3), 6, 6);
+                    int x = punto.getX() * GRID_SIZE;
+                    int y = -punto.getY() * GRID_SIZE;
+
+                    // Usar el mismo esquema de colores para los puntos
+                    if (punto.getNombrePunto() != null && punto.getNombrePunto().contains("'")) {
+                        g2.setColor(COLOR_PUNTO_ESCALADO);
+                    } else {
+                        g2.setColor(COLOR_PUNTO_ORIGINAL);
+                    }
+
+                    g2.fillOval(x - 3, y - 3, 6, 6);
                 }
             }
         }
+    }
+
+
+    // Método para agregar un nuevo punto y repintar
+    public void addPunto(Punto punto) {
+        Punto.getPuntos().add(punto);
+        repaint(); // Redibujar el plano
     }
 
 
@@ -294,6 +315,7 @@ public class PlanoCartesianoRotacion extends JPanel {
         Linea.getLineas().clear();
         repaint(); // Redibujar el plano para reflejar los cambios
     }
+
 
 
 

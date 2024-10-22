@@ -1,7 +1,7 @@
 package DrawingClasses.Transformaciones;
 
 import PaginaPrincipalFolder.PaginaPrincipal;
-import Plano.Transformaciones.PlanoCartesianoFiguraPerTrans;
+import Plano.Transformaciones.PlanoCartesianoTraslacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
 
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PolilineasRotacionPosibleT extends JFrame {
-    private PlanoCartesianoFiguraPerTrans planoCartesiano;
+    private PlanoCartesianoTraslacion planoCartesiano;
     private JTable originalTable;
     private JTable rotatedTable;
     private DefaultTableModel originalTableModel;
@@ -39,7 +39,7 @@ public class PolilineasRotacionPosibleT extends JFrame {
     }
 
     private void createComponents() {
-        planoCartesiano = new PlanoCartesianoFiguraPerTrans();
+        planoCartesiano = new PlanoCartesianoTraslacion();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
         xInicialField = new JTextField("2", 5);

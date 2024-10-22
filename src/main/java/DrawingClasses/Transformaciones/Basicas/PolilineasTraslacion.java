@@ -1,7 +1,7 @@
 package DrawingClasses.Transformaciones.Basicas;
 
 import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
-import Plano.Transformaciones.PlanoCartesianoFiguraPerTrans;
+import Plano.Transformaciones.PlanoCartesianoTraslacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
 
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PolilineasTraslacion extends JFrame {
-    private PlanoCartesianoFiguraPerTrans planoCartesiano;
+    private PlanoCartesianoTraslacion planoCartesiano;
     private JTable originalTable;
     private JTable translatedTable;
     private DefaultTableModel originalTableModel;
@@ -45,7 +45,7 @@ public class PolilineasTraslacion extends JFrame {
     }
 
     private void createComponents() {
-        planoCartesiano = new PlanoCartesianoFiguraPerTrans();
+        planoCartesiano = new PlanoCartesianoTraslacion();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
         xInicialField = new JTextField("2", 5);
@@ -144,6 +144,7 @@ public class PolilineasTraslacion extends JFrame {
 
     private void addActionListeners() {
         backButton.addActionListener(e -> {
+            clearPlanoAndData();
             new TransformacionesBasicas().setVisible(true);
             dispose();
         });
