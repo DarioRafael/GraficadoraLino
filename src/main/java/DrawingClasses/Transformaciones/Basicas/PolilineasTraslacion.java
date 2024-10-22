@@ -23,6 +23,9 @@ public class PolilineasTraslacion extends JFrame {
     private JTextField yInicialField;
     private JTextField txField;
     private JTextField tyField;
+    private JLabel txLabel;
+    private JLabel tyLabel;
+    private JComboBox<String> aumentoComboBox;
     private JButton regenerarFigura;
     private JButton trasladarButton;
     private List<Punto> puntosList;
@@ -30,7 +33,7 @@ public class PolilineasTraslacion extends JFrame {
     private int figuraCounter = 1;
 
     public PolilineasTraslacion() {
-        setTitle("Traslación de Figuras");
+        setTitle("Transformacion: Traslacion");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -54,19 +57,32 @@ public class PolilineasTraslacion extends JFrame {
         regenerarFigura = new JButton("Generar figura");
         trasladarButton = new JButton("Trasladar figura");
 
+        // ComboBox para seleccionar el aumento
+        String[] aumentoOptions = {"x1", "x2", "x4", "x8", "x16"};
+        aumentoComboBox = new JComboBox<>(aumentoOptions);
+        aumentoComboBox.setSelectedIndex(0); // Valor por defecto: x1
+
         String[] columnNames = {"Punto", "X", "Y"};
         String[] columnNamesEdi = {"P'", "X'", "Y'"};
         originalTableModel = new DefaultTableModel(columnNames, 0);
         translatedTableModel = new DefaultTableModel(columnNamesEdi, 0);
         originalTable = new JTable(originalTableModel);
         translatedTable = new JTable(translatedTableModel);
+
+        // Labels para mostrar valores de Sx y Sy después de la escalación
+        txLabel = new JLabel("Tx: 1", SwingConstants.CENTER);
+        txLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
+
+        tyLabel = new JLabel("Ty: 1", SwingConstants.CENTER);
+        tyLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
+
     }
 
     private void configureLayout() {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Traslación de Figuras", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformacion: Traslacion", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -100,13 +116,15 @@ public class PolilineasTraslacion extends JFrame {
         rightPanel.add(tablesPanel, BorderLayout.CENTER);
 
         // Panel de controles
-        JPanel controlPanel = new JPanel(new GridLayout(8, 2, 5, 5));
+        JPanel controlPanel = new JPanel(new GridLayout(10, 2, 5, 5));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         controlPanel.add(new JLabel("X inicial:"));
         controlPanel.add(xInicialField);
         controlPanel.add(new JLabel("Y inicial:"));
         controlPanel.add(yInicialField);
+        controlPanel.add(new JLabel("Aumento:"));
+        controlPanel.add(aumentoComboBox); // Añadimos el ComboBox del aumento
         controlPanel.add(new JLabel(""));
         controlPanel.add(regenerarFigura);
         controlPanel.add(new JSeparator());
@@ -117,6 +135,8 @@ public class PolilineasTraslacion extends JFrame {
         controlPanel.add(tyField);
         controlPanel.add(new JLabel(""));
         controlPanel.add(trasladarButton);
+        controlPanel.add(txLabel);  // Mostrar valor de Sx
+        controlPanel.add(tyLabel);  // Mostrar valor de Sy
 
         rightPanel.add(controlPanel, BorderLayout.NORTH);
         add(rightPanel, BorderLayout.EAST);
@@ -131,7 +151,8 @@ public class PolilineasTraslacion extends JFrame {
         regenerarFigura.addActionListener(e -> {
             int xInicio = Integer.parseInt(xInicialField.getText());
             int yInicio = Integer.parseInt(yInicialField.getText());
-            drawFiguraOriginal(xInicio, yInicio, 1);
+            int aumento = Integer.parseInt(aumentoComboBox.getSelectedItem().toString().substring(1)); // Obtener el valor de aumento (x1, x2, etc.)
+            drawFiguraOriginal(xInicio, yInicio, aumento);
         });
 
         trasladarButton.addActionListener(e -> realizarTraslacion());
@@ -235,6 +256,9 @@ public class PolilineasTraslacion extends JFrame {
             updateTranslatedTable(puntosTrasladadosList);
             planoCartesiano.repaint();
 
+            // Actualizar las etiquetas para mostrar los valores de Sx y Sy
+            txLabel.setText("Tx: " + tx);
+            tyLabel.setText("Ty: " + ty);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos para Tx y Ty");
         }

@@ -22,13 +22,15 @@ public class PolilineasRotacion extends JFrame {
     private JTextField xInicialField;
     private JTextField yInicialField;
     private JTextField anguloField;
+    private JLabel anguloLabel;
     private JButton regenerarFigura;
     private JButton rotarButton;
     private List<Punto> puntosList;
     private List<Punto> puntosRotadosList;
+    private JComboBox<String> aumentoComboBox;
 
     public PolilineasRotacion() {
-        setTitle("Rotación de Figuras");
+        setTitle("Transformacion: Rotacion");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -50,6 +52,11 @@ public class PolilineasRotacion extends JFrame {
         regenerarFigura = new JButton("Generar figura");
         rotarButton = new JButton("Rotar figura");
 
+        // ComboBox para seleccionar el aumento
+        String[] aumentoOptions = {"x1", "x2", "x4", "x8", "x16"};
+        aumentoComboBox = new JComboBox<>(aumentoOptions);
+        aumentoComboBox.setSelectedIndex(0); // Valor por defecto: x1
+
         String[] columnNames = {"Punto", "X", "Y"};
         String[] columnNamesEdi = {"P'", "X'", "Y'"};
 
@@ -57,13 +64,18 @@ public class PolilineasRotacion extends JFrame {
         rotatedTableModel = new DefaultTableModel(columnNamesEdi, 0);
         originalTable = new JTable(originalTableModel);
         rotatedTable = new JTable(rotatedTableModel);
+
+        // Labels para mostrar valores de Sx y Sy después de la escalación
+        anguloLabel = new JLabel("Angulo de rotación: 0", SwingConstants.CENTER);
+        anguloLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
+
     }
 
     private void configureLayout() {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Rotación de Figuras", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformacion: Rotacion", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -92,21 +104,25 @@ public class PolilineasRotacion extends JFrame {
 
         rightPanel.add(tablesPanel, BorderLayout.CENTER);
 
-        JPanel controlPanel = new JPanel(new GridLayout(8, 2, 5, 5));
+        JPanel controlPanel = new JPanel(new GridLayout(10, 2, 5, 5));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         controlPanel.add(new JLabel("X inicial:"));
         controlPanel.add(xInicialField);
         controlPanel.add(new JLabel("Y inicial:"));
         controlPanel.add(yInicialField);
+        controlPanel.add(new JLabel("Aumento:"));
+        controlPanel.add(aumentoComboBox); // Añadimos el ComboBox del aumento
         controlPanel.add(new JLabel(""));
         controlPanel.add(regenerarFigura);
         controlPanel.add(new JSeparator());
         controlPanel.add(new JSeparator());
-        controlPanel.add(new JLabel("Ángulo (grados):"));
+        controlPanel.add(new JLabel ("Angulo de rotacion:"));
+        controlPanel.add(anguloLabel);
         controlPanel.add(anguloField);
         controlPanel.add(new JLabel(""));
         controlPanel.add(rotarButton);
+        controlPanel.add(anguloLabel);
 
         rightPanel.add(controlPanel, BorderLayout.NORTH);
         add(rightPanel, BorderLayout.EAST);
@@ -121,6 +137,7 @@ public class PolilineasRotacion extends JFrame {
         regenerarFigura.addActionListener(e -> {
             int xInicio = Integer.parseInt(xInicialField.getText());
             int yInicio = Integer.parseInt(yInicialField.getText());
+            int aumento = Integer.parseInt(aumentoComboBox.getSelectedItem().toString().substring(1)); // Obtener el valor de aumento (x1, x2, etc.)
             drawFiguraOriginal(xInicio, yInicio, 1);
         });
 
@@ -249,6 +266,7 @@ public class PolilineasRotacion extends JFrame {
 
             updateRotatedTable(puntosRotadosList);
             planoCartesiano.repaint();
+            anguloLabel.setText("Angulo de rotación: " + anguloField.getText() + " grados");
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese un valor numérico válido para el ángulo.");
