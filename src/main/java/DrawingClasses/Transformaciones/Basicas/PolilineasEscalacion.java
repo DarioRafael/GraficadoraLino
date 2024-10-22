@@ -1,7 +1,7 @@
 package DrawingClasses.Transformaciones.Basicas;
 
 import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
-import Plano.Transformaciones.PlanoCartesianoEscalacion;
+import Plano.Transformaciones.Basicas.PlanoCartesianoEscalacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
 
@@ -25,7 +25,7 @@ public class PolilineasEscalacion extends JFrame {
     private JTextField syField;
     private JLabel sxLabel;
     private JLabel syLabel;
-    private JComboBox<String> aumentoComboBox;
+    public JComboBox<String> aumentoComboBox;
     private JButton regenerarFigura;
     private JButton escalarButton;
     private List<Punto> puntosList;
@@ -152,7 +152,7 @@ public class PolilineasEscalacion extends JFrame {
         escalarButton.addActionListener(e -> realizarEscalacion());
     }
 
-    private void drawFiguraOriginal(int xInicio, int yInicio, int aumento) {
+    public void drawFiguraOriginal(int xInicio, int yInicio, int aumento) {
         clearPlanoAndData();
 
         try {

@@ -1,7 +1,7 @@
 package DrawingClasses.Transformaciones;
 
 import PaginaPrincipalFolder.PaginaPrincipal;
-import Plano.Transformaciones.PlanoCartesianoTraslacion;
+import Plano.Transformaciones.Basicas.PlanoCartesianoTraslacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
 

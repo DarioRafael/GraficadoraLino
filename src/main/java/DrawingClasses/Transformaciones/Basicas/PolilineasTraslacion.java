@@ -1,7 +1,7 @@
 package DrawingClasses.Transformaciones.Basicas;
 
 import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
-import Plano.Transformaciones.PlanoCartesianoTraslacion;
+import Plano.Transformaciones.Basicas.PlanoCartesianoTraslacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
 
@@ -25,7 +25,7 @@ public class PolilineasTraslacion extends JFrame {
     private JTextField tyField;
     private JLabel txLabel;
     private JLabel tyLabel;
-    private JComboBox<String> aumentoComboBox;
+    public JComboBox<String> aumentoComboBox;
     private JButton regenerarFigura;
     private JButton trasladarButton;
     private List<Punto> puntosList;
@@ -159,7 +159,7 @@ public class PolilineasTraslacion extends JFrame {
         trasladarButton.addActionListener(e -> realizarTraslacion());
     }
 
-    private void drawFiguraOriginal(int xInicio, int yInicio, int aumento) {
+    public void drawFiguraOriginal(int xInicio, int yInicio, int aumento) {
         clearPlanoAndData();
 
         try {

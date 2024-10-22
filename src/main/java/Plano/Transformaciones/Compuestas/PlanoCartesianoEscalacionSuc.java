@@ -1,4 +1,4 @@
-package Plano.Transformaciones;
+package Plano.Transformaciones.Compuestas;
 
 import Plano.CoordinateSystem;
 import formasADibujar.Linea;
@@ -12,7 +12,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
-public class PlanoCartesianoTraslacion extends JPanel {
+public class PlanoCartesianoEscalacionSuc extends JPanel {
 
     private double offsetX = 0, offsetY = 0;
     private int gridSize = 50;
@@ -23,7 +23,6 @@ public class PlanoCartesianoTraslacion extends JPanel {
     private static final int AXIS_THICKNESS = 2;
     private static final int TICK_SIZE = 5;
     private static final int LABEL_OFFSET = 20;
-
     private CoordinateSystem.Type currentCoordSystem = CoordinateSystem.Type.CARTESIAN_ABSOLUTE;
 
     private static final Color COLOR_PUNTO_ORIGINAL = Color.RED;
@@ -33,7 +32,11 @@ public class PlanoCartesianoTraslacion extends JPanel {
     private static final Color COLOR_LINEA_ORIGINAL = Color.BLACK;
     private static final Color COLOR_LINEA_ESCALADA = new Color(255, 140, 0);
 
-    public PlanoCartesianoTraslacion() {
+
+
+
+
+    public PlanoCartesianoEscalacionSuc() {
         setupMouseListeners();
     }
 
@@ -302,6 +305,8 @@ public class PlanoCartesianoTraslacion extends JPanel {
         Punto.getPuntos().add(punto);
         repaint(); // Redibujar el plano
     }
+
+
 
 
     public void addLinea(Linea linea) {

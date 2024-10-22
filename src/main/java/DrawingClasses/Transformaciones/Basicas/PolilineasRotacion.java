@@ -1,7 +1,7 @@
 package DrawingClasses.Transformaciones.Basicas;
 
 import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
-import Plano.Transformaciones.PlanoCartesianoRotacion;
+import Plano.Transformaciones.Basicas.PlanoCartesianoRotacion;
 import formasADibujar.Rotacion.Linea;
 import formasADibujar.Rotacion.Punto;
 
@@ -27,7 +27,7 @@ public class PolilineasRotacion extends JFrame {
     private JButton rotarButton;
     private List<Punto> puntosList;
     private List<Punto> puntosRotadosList;
-    private JComboBox<String> aumentoComboBox;
+    public JComboBox<String> aumentoComboBox;
 
     public PolilineasRotacion() {
         setTitle("Transformacion: Rotacion");
@@ -131,6 +131,7 @@ public class PolilineasRotacion extends JFrame {
     private void addActionListeners() {
         backButton.addActionListener(e -> {
             new TransformacionesBasicas().setVisible(true);
+            clearPlanoAndData();
             dispose();
         });
 
@@ -144,7 +145,7 @@ public class PolilineasRotacion extends JFrame {
         rotarButton.addActionListener(e -> realizarRotacion());
     }
 
-    private void drawFiguraOriginal(double xInicio, double yInicio, double aumento) {
+    public void drawFiguraOriginal(double xInicio, double yInicio, double aumento) {
         clearPlanoAndData();
 
         try {
@@ -303,6 +304,7 @@ public class PolilineasRotacion extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             PolilineasRotacion frame = new PolilineasRotacion();
+
         });
     }
 }

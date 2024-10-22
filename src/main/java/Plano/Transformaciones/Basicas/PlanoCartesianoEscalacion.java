@@ -1,4 +1,4 @@
-package Plano.Transformaciones;
+package Plano.Transformaciones.Basicas;
 
 import Plano.CoordinateSystem;
 import formasADibujar.Linea;

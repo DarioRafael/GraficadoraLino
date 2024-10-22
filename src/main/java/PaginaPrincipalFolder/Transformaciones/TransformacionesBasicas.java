@@ -40,17 +40,25 @@ public class TransformacionesBasicas extends JFrame {
 
         traslacionButton.addActionListener(e -> {
             dispose();
-            new PolilineasTraslacion();
+            PolilineasTraslacion frame = new PolilineasTraslacion();
+            frame.drawFiguraOriginal(2, 2, 2);
+            frame.aumentoComboBox.setSelectedIndex(1);
         });
 
         escalacionButton.addActionListener(e -> {
             dispose();
-            new PolilineasEscalacion();
+            PolilineasEscalacion frame = new PolilineasEscalacion();
+            frame.drawFiguraOriginal(2,2, 2);
+            frame.aumentoComboBox.setSelectedIndex(1);
+
         });
 
         rotacionButton.addActionListener(e -> {
             dispose();
-            new PolilineasRotacion();
+            PolilineasRotacion frame = new PolilineasRotacion();
+            frame.drawFiguraOriginal(2, 2, 2);
+            frame.aumentoComboBox.setSelectedIndex(1);
+
         });
 
         buttonPanel.add(traslacionButton);
