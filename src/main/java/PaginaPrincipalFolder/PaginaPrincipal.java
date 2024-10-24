@@ -1,6 +1,6 @@
 package PaginaPrincipalFolder;
 
-import DrawingClasses.DrawingFrame;
+import DrawingClasses.GraficadoraBasica.DrawingFrame;
 import DrawingClasses.Polilineas.PolilineasDrawMenu;
 
 import javax.swing.*;

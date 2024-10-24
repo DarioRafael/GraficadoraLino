@@ -1,6 +1,7 @@
     package DrawingClasses.Polilineas;
 
     import PaginaPrincipalFolder.PaginaPrincipal;
+    import PaginaPrincipalFolder.Polilineas.PrincipalGraficacionPolilineas;
     import Plano.CoordinateSystem;
     import Plano.Polilineas.PlanoCartesianoFiguraPer;
     import formasADibujar.Linea;
@@ -248,8 +249,11 @@
 
             backButton.addActionListener(e -> {
                 clearPlanoAndData(); // Limpia el plano y los datos de las figuras
-                new PaginaPrincipal().setVisible(true);
                 dispose();
+                SwingUtilities.invokeLater(() -> {
+                    PrincipalGraficacionPolilineas principalFrame = new PrincipalGraficacionPolilineas();
+                    principalFrame.setVisible(true);
+                });
             });
         }
 

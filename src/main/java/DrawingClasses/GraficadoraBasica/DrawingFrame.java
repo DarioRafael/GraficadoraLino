@@ -1,4 +1,4 @@
-package DrawingClasses;
+package DrawingClasses.GraficadoraBasica;
 
 
 
@@ -162,7 +162,6 @@ public class DrawingFrame extends JFrame {
         otrosButton = new JButton("Otros");
         otrosMenu = new JPopupMenu();
         JMenuItem figuraAnonimaItem = new JMenuItem("FiguraAnonima");
-        figuraAnonimaItem.addActionListener(e -> drawFiguraAnonima());
         otrosMenu.add(figuraAnonimaItem);
 
 
@@ -520,80 +519,7 @@ public class DrawingFrame extends JFrame {
             }
         });
     }
-    public void drawFiguraAnonima() {
-        figuraAnonima = true; // Set the flag to true
-        String nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;
 
-        // Solicitar el punto de inicio
-        JPanel panelInicio = new JPanel(new GridLayout(2, 2));
-        JTextField xInicioField = new JTextField(5);
-        JTextField yInicioField = new JTextField(5);
-        panelInicio.add(new JLabel("X origen:"));
-        panelInicio.add(xInicioField);
-        panelInicio.add(new JLabel("Y origen:"));
-        panelInicio.add(yInicioField);
-        addNumericOnlyFilter(xInicioField);
-        addNumericOnlyFilter(yInicioField);
-
-
-        int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
-                "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
-
-        if (resultInicio == JOptionPane.OK_OPTION) {
-            try {
-                int xInicio = Integer.parseInt(xInicioField.getText());
-                int yInicio = Integer.parseInt(yInicioField.getText());
-                Punto puntoInicio = new Punto(xInicio, yInicio);
-
-                // Definir los puntos de la figura anónima
-                Punto[] puntosArray = {
-                        new Punto(xInicio, yInicio),
-                        new Punto(xInicio, yInicio + 2),
-                        new Punto(xInicio + 2, yInicio + 2),
-                        new Punto(xInicio + 2, yInicio + 1),
-                        new Punto(xInicio + 4, yInicio + 1),
-                        new Punto(xInicio + 4, yInicio + 2),
-                        new Punto(xInicio + 6, yInicio + 2),
-                        new Punto(xInicio + 6, yInicio)
-                };
-
-                // Convertir el array a una lista
-                List<Punto> puntosList = Arrays.asList(puntosArray);
-
-                // Asignar etiquetas a los puntos
-                for (int i = 0; i < puntosList.size(); i++) {
-                    puntosList.get(i).setNombrePunto("P" + (i + 1));
-                }
-
-                // Dibujar la figura en el plano cartesiano
-                Punto puntoAnterior = puntoInicio;
-                planoCartesiano.addPunto(puntoInicio); // Agregar el punto inicial
-
-                for (Punto punto : puntosList) {
-                    planoCartesiano.addPunto(punto);
-                    planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true)); // Dibujar línea entre puntos
-                    puntoAnterior = punto;
-                }
-
-                // Actualizar la tabla con los puntos de la figura anónima
-                configurarColumnas(false);
-                tableModel.setRowCount(0); // Limpiar la tabla
-                int puntoNumero = 1;
-                for (Punto punto : puntosList) {
-                    tableModel.addRow(new Object[]{"P" + puntoNumero++, (Object) punto.getX(), (Object) punto.getY()});
-                }
-
-                // Agregar la figura al mapa y al JComboBox
-                addFigura(nombreFiguraAnonima, puntosList);
-                planoCartesiano.repaint(); // Repintar el plano cartesiano
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
-            }
-        }
-    }
-    public boolean isFiguraAnonima() {
-        return figuraAnonima;
-    }
 
     private void toggleDarkMode() {
         isDarkMode = !isDarkMode;
