@@ -30,7 +30,7 @@ public class PolilineasRotacion extends JFrame {
     public JComboBox<String> aumentoComboBox;
 
     public PolilineasRotacion() {
-        setTitle("Transformacion: Rotacion");
+        setTitle("Transformacion 2D Básica: Rotacion");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -75,7 +75,7 @@ public class PolilineasRotacion extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformacion: Rotacion", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformacion 2D Básica: Rotacion", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -139,7 +139,7 @@ public class PolilineasRotacion extends JFrame {
             int xInicio = Integer.parseInt(xInicialField.getText());
             int yInicio = Integer.parseInt(yInicialField.getText());
             int aumento = Integer.parseInt(aumentoComboBox.getSelectedItem().toString().substring(1)); // Obtener el valor de aumento (x1, x2, etc.)
-            drawFiguraOriginal(xInicio, yInicio, 1);
+            drawFiguraOriginal(xInicio, yInicio, aumento);
         });
 
         rotarButton.addActionListener(e -> realizarRotacion());

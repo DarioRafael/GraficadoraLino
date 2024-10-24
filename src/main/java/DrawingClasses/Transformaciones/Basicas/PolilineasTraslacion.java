@@ -82,7 +82,7 @@ public class PolilineasTraslacion extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformacion: Traslacion", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformacion 2D Básica: Traslacion", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
