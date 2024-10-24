@@ -30,9 +30,11 @@ public class PolilineasEscalacion extends JFrame {
     private JButton escalarButton;
     private List<Punto> puntosList;
     private List<Punto> puntosEscaladosList;
+    public int sx = 2;
+    public int sy = 2;
 
     public PolilineasEscalacion() {
-        setTitle("Transformacion: Escalación");
+        setTitle("Transformacion 2D Básica: Escalación");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -80,7 +82,7 @@ public class PolilineasEscalacion extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformacion: Escalación", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformacion 2D Básica: Escalación", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -93,14 +95,22 @@ public class PolilineasEscalacion extends JFrame {
         JPanel tablesPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
         JPanel originalTablePanel = new JPanel(new BorderLayout());
-        originalTablePanel.add(new JLabel("Puntos Originales", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        JLabel originalLabel = new JLabel("Puntos Originales", SwingConstants.CENTER);
+        originalLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font to Arial, bold, size 18
+        originalTablePanel.add(originalLabel, BorderLayout.NORTH);
         JScrollPane originalScrollPane = new JScrollPane(originalTable);
+
         originalScrollPane.setPreferredSize(new Dimension(300, 200));
         originalTablePanel.add(originalScrollPane, BorderLayout.CENTER);
 
         JPanel scaledTablePanel = new JPanel(new BorderLayout());
-        scaledTablePanel.add(new JLabel("Puntos Escalados", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        JLabel scaledLabel = new JLabel("Puntos Escalados: " + "Sx: " + sx + " Sy: " + sy, SwingConstants.CENTER);
+        scaledLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font to Arial, bold, size 18
+        scaledTablePanel.add(scaledLabel, BorderLayout.NORTH);
         JScrollPane scaledScrollPane = new JScrollPane(scaledTable);
+
         scaledScrollPane.setPreferredSize(new Dimension(300, 200));
         scaledTablePanel.add(scaledScrollPane, BorderLayout.CENTER);
 
@@ -184,8 +194,15 @@ public class PolilineasEscalacion extends JFrame {
                 planoCartesiano.addLinea(new Linea(puntoAnterior, punto, true, i + 1));
                 puntoAnterior = punto;
             }
-
+            // Actualizar la etiqueta de la tabla escalada
+            Component parent = scaledTable.getParent().getParent().getParent();
+            if (parent instanceof JPanel) {
+                JLabel label = (JLabel) ((JPanel) parent).getComponent(0);
+                label.setText("Puntos Escalados: Sx: " + 1 + " Sy: " + 1);
+                label.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
+            }
             updateOriginalTable(puntosList);
+
             planoCartesiano.repaint();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos.");
@@ -194,8 +211,8 @@ public class PolilineasEscalacion extends JFrame {
 
     private void realizarEscalacion() {
         try {
-            int sx = Integer.parseInt(sxField.getText());
-            int sy = Integer.parseInt(syField.getText());
+            sx = Integer.parseInt(sxField.getText());
+            sy = Integer.parseInt(syField.getText());
 
             if (puntosList == null || puntosList.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Primero debe generar la figura original");
@@ -243,7 +260,11 @@ public class PolilineasEscalacion extends JFrame {
             sxLabel.setText("Sx: " + sx);
             syLabel.setText("Sy: " + sy);
 
-        } catch (NumberFormatException ex) {
+            // Actualizar la etiqueta de la tabla escalada
+            Component parent = scaledTable.getParent().getParent().getParent();
+            if (parent instanceof JPanel) {
+                ((JLabel) ((JPanel) parent).getComponent(0)).setText("Puntos Escalados: Sx: " + sx + " Sy: " + sy);
+            }        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos.");
         }
     }

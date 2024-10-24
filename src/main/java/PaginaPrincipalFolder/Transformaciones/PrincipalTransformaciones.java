@@ -41,8 +41,8 @@ public class PrincipalTransformaciones {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
         // Creación de botones personalizados
-        JButton basicasButton = createStyledButton("Transformaciones Básicas", "Traslación, Escalación y Rotación");
-        JButton compuestasButton = createStyledButton("Transformaciones Compuestas", "Combinación de transformaciones");
+        JButton basicasButton = createStyledButton("Transformaciones 2D Básicas", "Traslación, Escalación y Rotación");
+        JButton compuestasButton = createStyledButton("Transformaciones 2D Compuestas", "Transformaciones sucesivas");
 
         basicasButton.addActionListener(e -> {
             frame.dispose();

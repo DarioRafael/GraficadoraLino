@@ -31,6 +31,8 @@ public class PolilineasTraslacion extends JFrame {
     private List<Punto> puntosList;
     private List<Punto> puntosTrasladadosList;
     private int figuraCounter = 1;
+    public int tx = 0;
+    public int ty = 0;
 
     public PolilineasTraslacion() {
         setTitle("Transformacion: Traslacion");
@@ -70,10 +72,10 @@ public class PolilineasTraslacion extends JFrame {
         translatedTable = new JTable(translatedTableModel);
 
         // Labels para mostrar valores de Sx y Sy después de la escalación
-        txLabel = new JLabel("Tx: 1", SwingConstants.CENTER);
+        txLabel = new JLabel("Tx: 0", SwingConstants.CENTER);
         txLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
 
-        tyLabel = new JLabel("Ty: 1", SwingConstants.CENTER);
+        tyLabel = new JLabel("Ty: 0", SwingConstants.CENTER);
         tyLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
 
     }
@@ -98,14 +100,25 @@ public class PolilineasTraslacion extends JFrame {
 
         // Primera tabla (Original)
         JPanel originalTablePanel = new JPanel(new BorderLayout());
-        originalTablePanel.add(new JLabel("Puntos Originales", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        JLabel originalLabel = new JLabel("Puntos Originales", SwingConstants.CENTER);
+        originalLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font to Arial, bold, size 18
+        originalTablePanel.add(originalLabel, BorderLayout.NORTH);
         JScrollPane originalScrollPane = new JScrollPane(originalTable);
+
+
         originalScrollPane.setPreferredSize(new Dimension(300, 200));
         originalTablePanel.add(originalScrollPane, BorderLayout.CENTER);
 
         // Segunda tabla (Trasladada)
         JPanel translatedTablePanel = new JPanel(new BorderLayout());
-        translatedTablePanel.add(new JLabel("Puntos Trasladados", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        JLabel scaledLabel = new JLabel("Puntos Trasladados: " + "Tx: " + tx + " Ty: " + ty, SwingConstants.CENTER);
+        scaledLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font to Arial, bold, size 18
+        translatedTablePanel.add(scaledLabel, BorderLayout.NORTH);
+
+
+
         JScrollPane translatedScrollPane = new JScrollPane(translatedTable);
         translatedScrollPane.setPreferredSize(new Dimension(300, 200));
         translatedTablePanel.add(translatedScrollPane, BorderLayout.CENTER);
@@ -260,6 +273,14 @@ public class PolilineasTraslacion extends JFrame {
             // Actualizar las etiquetas para mostrar los valores de Sx y Sy
             txLabel.setText("Tx: " + tx);
             tyLabel.setText("Ty: " + ty);
+
+            // Actualizar la etiqueta de la tabla escalada
+            Component parent = translatedTable.getParent().getParent().getParent();
+            if (parent instanceof JPanel) {
+                ((JLabel) ((JPanel) parent).getComponent(0)).setText("Puntos Escalados: Tx: " + tx + " Ty: " + ty);
+            }
+
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos para Tx y Ty");
         }

@@ -15,7 +15,7 @@ public class TransformacionesBasicas extends JFrame {
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
 
     public TransformacionesBasicas() {
-        setTitle("Transformaciones Básicas");
+        setTitle("Transformaciones 2D Básicas");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -25,7 +25,7 @@ public class TransformacionesBasicas extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
         // Título
-        JLabel titleLabel = new JLabel("Transformaciones Básicas", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones 2D Básicas", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 

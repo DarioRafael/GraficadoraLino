@@ -28,6 +28,7 @@ public class PolilineasRotacion extends JFrame {
     private List<Punto> puntosList;
     private List<Punto> puntosRotadosList;
     public JComboBox<String> aumentoComboBox;
+    public int anguloText = 0;
 
     public PolilineasRotacion() {
         setTitle("Transformacion 2D Básica: Rotacion");
@@ -66,7 +67,7 @@ public class PolilineasRotacion extends JFrame {
         rotatedTable = new JTable(rotatedTableModel);
 
         // Labels para mostrar valores de Sx y Sy después de la escalación
-        anguloLabel = new JLabel("Angulo de rotación: 0", SwingConstants.CENTER);
+        anguloLabel = new JLabel("Angulo de rotación: 0 °", SwingConstants.CENTER);
         anguloLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Cambia "Arial" y 18 por la fuente y tamaño deseados
 
     }
@@ -88,14 +89,24 @@ public class PolilineasRotacion extends JFrame {
         JPanel tablesPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
         JPanel originalTablePanel = new JPanel(new BorderLayout());
-        originalTablePanel.add(new JLabel("Puntos Originales", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        JLabel originalLabel = new JLabel("Puntos Originales", SwingConstants.CENTER);
+        originalLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font to Arial, bold, size 18
+        originalTablePanel.add(originalLabel, BorderLayout.NORTH);
         JScrollPane originalScrollPane = new JScrollPane(originalTable);
+
         originalScrollPane.setPreferredSize(new Dimension(300, 200));
         originalTablePanel.add(originalScrollPane, BorderLayout.CENTER);
 
         JPanel rotatedTablePanel = new JPanel(new BorderLayout());
-        rotatedTablePanel.add(new JLabel("Puntos Rotados", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        JLabel scaledLabel = new JLabel("Puntos Rotados: " + "Ángulo de rotación: " + anguloText + "°" , SwingConstants.CENTER);
+        scaledLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font to Arial, bold, size 18
+        rotatedTablePanel.add(scaledLabel, BorderLayout.NORTH);
+
         JScrollPane rotatedScrollPane = new JScrollPane(rotatedTable);
+
+
         rotatedScrollPane.setPreferredSize(new Dimension(300, 200));
         rotatedTablePanel.add(rotatedScrollPane, BorderLayout.CENTER);
 
@@ -187,6 +198,7 @@ public class PolilineasRotacion extends JFrame {
     private void realizarRotacion() {
         try {
             double angulo = Math.toRadians(Double.parseDouble(anguloField.getText()));
+            anguloText = (int) angulo;
 
             if (puntosList == null || puntosList.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Primero debe generar la figura original");
@@ -267,7 +279,14 @@ public class PolilineasRotacion extends JFrame {
 
             updateRotatedTable(puntosRotadosList);
             planoCartesiano.repaint();
-            anguloLabel.setText("Angulo de rotación: " + anguloField.getText() + " grados");
+            anguloLabel.setText("Angulo de rotación: " + anguloField.getText() + " °");
+
+            // Actualizar la etiqueta de la tabla escalada
+            Component parent = rotatedTable.getParent().getParent().getParent();
+            if (parent instanceof JPanel) {
+                ((JLabel) ((JPanel) parent).getComponent(0)).setText("Puntos Rotados: " + "Ángulo de rotación: " + anguloField.getText() + "°");
+            }
+
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese un valor numérico válido para el ángulo.");
