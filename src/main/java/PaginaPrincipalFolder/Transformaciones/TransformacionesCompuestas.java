@@ -12,7 +12,7 @@ public class TransformacionesCompuestas extends JFrame {
     private static final Color SEPARATOR_COLOR = new Color(200, 200, 220);
 
     public TransformacionesCompuestas() {
-        setTitle("Transformaciones Sucesivas");
+        setTitle("Transformaciones Compuestas en 2D");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -25,7 +25,7 @@ public class TransformacionesCompuestas extends JFrame {
         JPanel headerPanel = new JPanel(new GridLayout(2, 1, 5, 5));
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Transformaciones Sucesivas", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones Compuestas en 2D", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
 
         JLabel descLabel = new JLabel("Aplique múltiples transformaciones del mismo tipo en secuencia", SwingConstants.CENTER);

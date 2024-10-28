@@ -43,7 +43,7 @@
         List<Punto> puntosList;
 
         public PolilineasDrawMenu() {
-            setTitle("Graficación Básica por Computadora");
+            setTitle("Graficación Geométrica 2D Básica: Polilineas");
             setSize(1650, 960);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
@@ -64,10 +64,10 @@
 
             // Create the "Generar" button and its menu
 
-            titleLabel = new JLabel("Figura de ocho puntos");
+            titleLabel = new JLabel("Graficación Geométrica 2D Básica: Polilineas");
             titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Set larger font size
 
-            JMenuItem figuraAnonimaItem = new JMenuItem("Figura de 8 puntos");
+            JMenuItem figuraAnonimaItem = new JMenuItem("Graficación Geométrica 2D Básica: Polilineas");
             figuraAnonimaItem.addActionListener(e -> regenerarDrawAnonima());
 
             // Coordinate system components

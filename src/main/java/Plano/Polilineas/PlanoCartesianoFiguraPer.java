@@ -236,13 +236,48 @@ public class PlanoCartesianoFiguraPer extends JPanel {
             int x = punto.getX() * GRID_SIZE;
             int y = -punto.getY() * GRID_SIZE;
 
-
-            g2.fillOval(x - 3, y - 3, 6, 6);
-
-            // Verificar si el nombre no es null antes de dibujar
+            // Lógica personalizada para ajustar la posición según el nombre del punto
             String nombrePunto = punto.getNombrePunto();
+            System.out.println(nombrePunto);
             if (nombrePunto != null) {
-                g2.drawString(nombrePunto, x +2, y - 2);
+                switch (nombrePunto) {
+                    case "P1":
+                        x += 10; // Mover a la derecha
+                        y -= 10; // Mover hacia arriba
+                        break;
+                    case "P2":
+                        x -= 20; // Mover a la izquierda
+                        y -= 10;
+                        break;
+                    case "P3":
+                        x -= 20; // Mover hacia abajo
+                        y += 20;
+                        break;
+                    case "P4":
+                        x -= 20 ; // Mover hacia abajo
+                        y += 20;
+                        break;
+                    case "P5":
+                        x += 5 ; // Mover hacia abajo
+                        y += 20;
+                        break;
+                    case "P6":
+                        x += 5 ; // Mover hacia abajo
+                        y += 20;
+                        break;
+                    case "P7":
+                        x += 5 ; // Mover hacia abajo
+                        y -= 10;
+                        break;
+
+                    case "P8":
+                        x -= 15 ; // Mover hacia abajo
+                        y += 20;
+                        break;
+                        default:
+                        break; // Mantener posición original para otros puntos
+                }
+                g2.drawString(nombrePunto, x + 2, y - 2);
             }
         }
     }
@@ -452,7 +487,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         g2.setColor(Color.BLUE);
                         g2.drawLine(origenActual.x, origenActual.y, x3, y3);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x3, y3);
-                        g2.drawString("dr2", (origenActual.x + x3) / 2 - 10, (origenActual.y + y3) / 2 - 5);
+                        g2.drawString("dr2", (origenActual.x + x3) / 2 - 20, (origenActual.y + y3) / 2 - 5);
 
                         g2.setColor(Color.RED);
                         drawAngleRelativo(g2, origenActual, x3, y3, "   dθ2", 50);
@@ -474,8 +509,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, origenActual.x, origenActual.y, x4, y4);
                         g2.drawString("dr3", (origenActual.x + x4) / 2 - 10, (origenActual.y + y4) / 2 - 5);
 
-                        g2.setColor(Color.RED);
-                        drawAngleRelativo(g2, origenActual, x4, y4, "dθ3", 30);
+                        //g2.setColor(Color.RED);
+                        //drawAngleRelativo(g2, origenActual, x4, y4, "dθ3", 30);
 
 
                         origenActual = new Point(x4, y4);
@@ -490,7 +525,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         g2.setColor(Color.BLUE);
                         g2.drawLine(origenActual.x, origenActual.y, x5, y5);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x5, y5);
-                        g2.drawString("dr4", (origenActual.x + x5) / 2 - 10, (origenActual.y + y5) / 2 - 5);
+                        g2.drawString("dr4", (origenActual.x + x5) / 2 + 5, (origenActual.y + y5) / 2 - 5);
 
                         g2.setColor(Color.RED);
                         drawAngleRelativo(g2, origenActual, x5, y5, "dθ4", 30);
@@ -510,8 +545,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, origenActual.x, origenActual.y, x6, y6);
                         g2.drawString("dr5", (origenActual.x + x6) / 2 - 10, (origenActual.y + y6) / 2 - 5);
 
-                        g2.setColor(Color.RED);
-                        drawAngleRelativo(g2, origenActual, x6, y6, "dθ5", 30);
+                        //g2.setColor(Color.RED);
+                        //drawAngleRelativo(g2, origenActual, x6, y6, "dθ5", 30);
 
 
                         origenActual = new Point(x6, y6);
@@ -526,7 +561,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         g2.setColor(Color.BLUE);
                         g2.drawLine(origenActual.x, origenActual.y, x7, y7);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x7, y7);
-                        g2.drawString("dr6", (origenActual.x + x7) / 2 - 10, (origenActual.y + y7) / 2 - 5);
+                        g2.drawString("dr6", (origenActual.x + x7) / 2 - 20, (origenActual.y + y7) / 2 - 5);
 
                         g2.setColor(Color.RED);
                         drawAngleRelativo(g2, origenActual, x7, y7, "dθ6", 30);
@@ -546,8 +581,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         drawArrowHead(g2, origenActual.x, origenActual.y, x8, y8);
                         g2.drawString("dr7", (origenActual.x + x8) / 2 - 10, (origenActual.y + y8) / 2 - 5);
 
-                        g2.setColor(Color.RED);
-                        drawAngleRelativo(g2, origenActual, x8, y8, "dθ7", 30);
+                        //g2.setColor(Color.RED);
+                        //drawAngleRelativo(g2, origenActual, x8, y8, "dθ7", 30);
 
 
                         origenActual = new Point(x8, y8);
@@ -562,7 +597,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
                         g2.setColor(Color.BLUE);
                         g2.drawLine(origenActual.x, origenActual.y, x9, y9);
                         drawArrowHead(g2, origenActual.x, origenActual.y, x9, y9);
-                        g2.drawString("dr8", (origenActual.x + x9) / 2 - 10, (origenActual.y + y9) / 2 - 5);
+                        g2.drawString("dr8", (origenActual.x + x9) / 2 - 20, (origenActual.y + y9) / 2 - 5);
 
                         g2.setColor(Color.RED);
                         drawAngleRelativo(g2, origenActual, x9, y9, "dθ8", 30);
@@ -778,7 +813,7 @@ public class PlanoCartesianoFiguraPer extends JPanel {
         // Dibujar el texto del ángulo cerca del inicio del arco
         int textOffsetX = (int) (15 * Math.cos(Math.toRadians(10)));
         int textOffsetY = -(int) (15 * Math.sin(Math.toRadians(10)));
-        g2.drawString(angleLabel, origenActual.x + textOffsetX, origenActual.y + textOffsetY);
+        g2.drawString(angleLabel, (origenActual.x + textOffsetX) + 30, origenActual.y + textOffsetY);
 
         // Dibujar la punta de flecha al final del arco
         double endAngleRad = Math.toRadians(angleInDegrees);

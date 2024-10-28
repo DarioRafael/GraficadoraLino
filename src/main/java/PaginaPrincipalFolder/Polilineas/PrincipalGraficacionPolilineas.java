@@ -14,7 +14,7 @@ public class PrincipalGraficacionPolilineas extends JFrame {
 
     public PrincipalGraficacionPolilineas() {
         // Configuración del frame
-        setTitle("Sistema de Polilíneas");
+        setTitle("Graficación Geométrica 2D Básica: Polilineas");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

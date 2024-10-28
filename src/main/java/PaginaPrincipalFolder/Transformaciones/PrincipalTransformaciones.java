@@ -17,8 +17,8 @@ public class PrincipalTransformaciones {
             e.printStackTrace();
         }
 
-        JFrame frame = new JFrame("Sistema de Transformaciones Geométricas");
-        frame.setSize(800, 600);
+        JFrame frame = new JFrame("Transformaciones Básicas en 2D");
+        frame.setSize(1080, 850);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
@@ -30,7 +30,7 @@ public class PrincipalTransformaciones {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Transformaciones Geométricas", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones 2D ", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
