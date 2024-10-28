@@ -33,11 +33,13 @@ public class PolilineasRotacionSuc extends JFrame {
     private List<Punto> primeraRotacionList;
     private List<Punto> segundaRotacionList;
     public JComboBox<String> aumentoComboBox;
-    public int primerAnguloText = 0;
-    public int segundoAnguloText = 0;
     private JButton primerRotacionButton;
     private JButton segundaRotacionButton;
     private boolean primeraRotacionCompletada = false;
+    private JLabel rotationTable1Label;
+    private JLabel rotationTable2Label;
+    double primerAngulo;
+    double segundoAngulo;
 
     public PolilineasRotacionSuc() {
         setTitle("Transformaciones Geométricas 2D Compuestas: Rotaciones Sucesivas");
@@ -113,18 +115,18 @@ public class PolilineasRotacionSuc extends JFrame {
 
         // Panel para primera rotación
         JPanel firstRotationPanel = new JPanel(new BorderLayout());
-        JLabel firstRotationLabel = new JLabel("Primera Rotación", SwingConstants.CENTER);
-        firstRotationLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        firstRotationPanel.add(firstRotationLabel, BorderLayout.NORTH);
+        rotationTable1Label = new JLabel("Primera Rotación (θ1 = 0°)", SwingConstants.CENTER);
+        rotationTable1Label.setFont(new Font("Arial", Font.BOLD, 18));
+        firstRotationPanel.add(rotationTable1Label, BorderLayout.NORTH);
         JScrollPane firstRotationScrollPane = new JScrollPane(firstRotationTable);
         firstRotationScrollPane.setPreferredSize(new Dimension(300, 150));
         firstRotationPanel.add(firstRotationScrollPane, BorderLayout.CENTER);
 
         // Panel para segunda rotación
         JPanel secondRotationPanel = new JPanel(new BorderLayout());
-        JLabel secondRotationLabel = new JLabel("Segunda Rotación", SwingConstants.CENTER);
-        secondRotationLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        secondRotationPanel.add(secondRotationLabel, BorderLayout.NORTH);
+        rotationTable2Label = new JLabel("Segunda Rotación (θ2 = 0°)", SwingConstants.CENTER);
+        rotationTable2Label.setFont(new Font("Arial", Font.BOLD, 18));
+        secondRotationPanel.add(rotationTable2Label, BorderLayout.NORTH);
         JScrollPane secondRotationScrollPane = new JScrollPane(secondRotationTable);
         secondRotationScrollPane.setPreferredSize(new Dimension(300, 150));
         secondRotationPanel.add(secondRotationScrollPane, BorderLayout.CENTER);
@@ -194,12 +196,13 @@ public class PolilineasRotacionSuc extends JFrame {
                 return;
             }
 
-            double primerAngulo = Math.toRadians(Double.parseDouble(primerAnguloField.getText()));
+            primerAngulo = Math.toRadians(Double.parseDouble(primerAnguloField.getText()));
 
             // Primera rotación - mover al segundo cuadrante
             primeraRotacionList = realizarRotacion(puntosList, primerAngulo, "'", 2);
 
             planoCartesiano.clear();
+            clearTableAll(2);
             dibujarFigura(puntosList, false, 1);
             dibujarFigura(primeraRotacionList, true, 2);
             updateRotatedTable(primeraRotacionList, firstRotationTableModel);
@@ -221,7 +224,7 @@ public class PolilineasRotacionSuc extends JFrame {
                 return;
             }
 
-            double segundoAngulo = Math.toRadians(Double.parseDouble(segundoAnguloField.getText()));
+            segundoAngulo = Math.toRadians(Double.parseDouble(segundoAnguloField.getText()));
 
             // Segunda rotación - mover al tercer cuadrante
             segundaRotacionList = realizarRotacion(primeraRotacionList, segundoAngulo, "''", 3);
@@ -230,7 +233,7 @@ public class PolilineasRotacionSuc extends JFrame {
             dibujarFigura(puntosList, false, 1);
             dibujarFigura(primeraRotacionList, true, 2);
             dibujarFigura(segundaRotacionList, true, 3);
-            updateRotatedTable(segundaRotacionList, secondRotationTableModel);
+            updateRotatedTable2(segundaRotacionList, secondRotationTableModel);
 
             segundoAnguloLabel.setText("Segunda rotación: " + segundoAnguloField.getText() + "°");
 
@@ -302,6 +305,18 @@ public class PolilineasRotacionSuc extends JFrame {
                     String.format("%.2f", punto.getY())
             });
         }
+        rotationTable1Label.setText(String.format("Primera rotación: %s°", primerAnguloField.getText()));    }
+
+    private void updateRotatedTable2(List<Punto> puntos, DefaultTableModel tableModel) {
+        tableModel.setRowCount(0);
+        for (Punto punto : puntos) {
+            tableModel.addRow(new Object[]{
+                    punto.getNombrePunto(),
+                    String.format("%.2f", punto.getX()),
+                    String.format("%.2f", punto.getY())
+            });
+        }
+        rotationTable2Label.setText(String.format("Primera rotación: %s°", segundoAnguloField.getText()));
     }
 
     public void drawFiguraOriginal(double xInicio, double yInicio, double aumento) {
@@ -327,6 +342,7 @@ public class PolilineasRotacionSuc extends JFrame {
                 puntosList.get(i).setNombrePunto("P" + (i + 1));
             }
 
+            clearTableAll(1);
             dibujarFigura(puntosList, false, 1);
             updateOriginalTable(puntosList);
             planoCartesiano.repaint();
@@ -350,6 +366,17 @@ public class PolilineasRotacionSuc extends JFrame {
                     punto.getX(),
                     punto.getY()
             });
+        }
+    }
+
+    private void clearTableAll(int index) {
+        if(index == 1){
+            rotationTable1Label.setText("Primera rotación: 0°");
+            rotationTable2Label.setText("Segunda rotación: 0°");
+
+
+        } else if (index == 2){
+            rotationTable2Label.setText("Segunda rotación: 0°");
         }
     }
 

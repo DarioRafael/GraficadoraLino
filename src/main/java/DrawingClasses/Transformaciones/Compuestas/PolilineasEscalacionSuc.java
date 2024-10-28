@@ -38,6 +38,9 @@ public class PolilineasEscalacionSuc extends JFrame {
     private List<Punto> puntosList;
     private List<Punto> puntosEscalados1List;
     private List<Punto> puntosEscalados2List;
+    private JLabel scaletedTable1Label;
+    private JLabel scaletedTable2Label;
+    private int sx1, sx2, sy1, sy2;
 
     public PolilineasEscalacionSuc() {
         setTitle("Transformaciones Geométricas 2D Compuestas: Escalación Sucesiva");
@@ -121,13 +124,18 @@ public class PolilineasEscalacionSuc extends JFrame {
         originalTablePanel.add(originalScrollPane, BorderLayout.CENTER);
 
         JPanel scaledTable1Panel = new JPanel(new BorderLayout());
-        scaledTable1Panel.add(new JLabel("Primera Escalación", SwingConstants.CENTER), BorderLayout.NORTH);
+        scaletedTable1Label = new JLabel("Primera Escalación (Sx1: 1, Sy1: 1)", SwingConstants.CENTER);
+        scaledTable1Panel.add(scaletedTable1Label, BorderLayout.NORTH);
+
         JScrollPane scaledScrollPane1 = new JScrollPane(scaledTable1);
         scaledScrollPane1.setPreferredSize(new Dimension(300, 150));
         scaledTable1Panel.add(scaledScrollPane1, BorderLayout.CENTER);
 
         JPanel scaledTable2Panel = new JPanel(new BorderLayout());
-        scaledTable2Panel.add(new JLabel("Segunda Escalación", SwingConstants.CENTER), BorderLayout.NORTH);
+        scaletedTable2Label = new JLabel("Segunda Escalación (Sx2: 1, Sy2: 1)", SwingConstants.CENTER);
+        scaledTable2Panel.add(scaletedTable2Label, BorderLayout.NORTH);
+
+
         JScrollPane scaledScrollPane2 = new JScrollPane(scaledTable2);
         scaledScrollPane2.setPreferredSize(new Dimension(300, 150));
         scaledTable2Panel.add(scaledScrollPane2, BorderLayout.CENTER);
@@ -229,6 +237,7 @@ public class PolilineasEscalacionSuc extends JFrame {
                 puntoAnterior = punto;
             }
 
+            clearTableAll(1);
             updateOriginalTable(puntosList);
             planoCartesiano.repaint();
 
@@ -240,8 +249,8 @@ public class PolilineasEscalacionSuc extends JFrame {
     private void realizarPrimeraEscalacion() {
         scaledTableModel2.setRowCount(0);
         try {
-            int sx1 = Integer.parseInt(sx1Field.getText());
-            int sy1 = Integer.parseInt(sy1Field.getText());
+            sx1 = Integer.parseInt(sx1Field.getText());
+            sy1 = Integer.parseInt(sy1Field.getText());
 
             if (puntosList == null || puntosList.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Primero debe generar la figura original");
@@ -257,6 +266,7 @@ public class PolilineasEscalacionSuc extends JFrame {
                 puntosEscalados1List.add(puntoEscalado);
             }
 
+            clearTableAll(2);
             dibujarFiguras();
             updateScaledTable1(puntosEscalados1List);
             sx1Label.setText("Sx1: " + sx1);
@@ -269,8 +279,8 @@ public class PolilineasEscalacionSuc extends JFrame {
 
     private void realizarSegundaEscalacion() {
         try {
-            int sx2 = Integer.parseInt(sx2Field.getText());
-            int sy2 = Integer.parseInt(sy2Field.getText());
+            sx2 = Integer.parseInt(sx2Field.getText());
+            sy2 = Integer.parseInt(sy2Field.getText());
 
             if (puntosEscalados1List == null || puntosEscalados1List.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Primero debe realizar la primera escalación");
@@ -347,6 +357,8 @@ public class PolilineasEscalacionSuc extends JFrame {
                     punto.getY()
             });
         }
+        scaletedTable1Label.setText(String.format("Primera Escalación (Sx1: %d, Sy1: %d)", sx1, sy1));
+
     }
 
     private void updateScaledTable2(List<Punto> puntos) {
@@ -357,6 +369,16 @@ public class PolilineasEscalacionSuc extends JFrame {
                     punto.getX(),
                     punto.getY()
             });
+        }
+        scaletedTable2Label.setText(String.format("Segunda Escalación (Sx2: %d, Sy2: %d)", sx2, sy2));
+    }
+
+    private void clearTableAll(int index) {
+        if(index == 1){
+            scaletedTable1Label.setText("Primera Escalación (Sx1: 1, Sy1: 1)");
+            scaletedTable2Label.setText("Segunda Escalación (Sx2: 1, Sy2: 1)");
+        } else if (index == 2){
+            scaletedTable2Label.setText("Segunda Escalación (Sx2: 1, Sy2: 1)");
         }
     }
 
@@ -373,6 +395,7 @@ public class PolilineasEscalacionSuc extends JFrame {
         sx2Label.setText("Sx2: 1");
         sy2Label.setText("Sy2: 1");
         planoCartesiano.repaint();
+
     }
 
     public static void main(String[] args) {

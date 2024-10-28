@@ -240,6 +240,7 @@ public class PolilineasTraslacionSuc extends JFrame {
                 puntosTrasladadosList1.add(puntoTransladado);
             }
 
+            clearTableAll(2);
             // Dibujar la figura trasladada
             dibujarFigura(puntosTrasladadosList1, Color.BLUE);
 
@@ -358,6 +359,7 @@ public class PolilineasTraslacionSuc extends JFrame {
                 puntosList.get(i).setNombrePunto("P" + (i + 1));
             }
 
+            clearTableAll(1);
             // Dibuja la figura original en negro
             dibujarFigura(puntosList, Color.BLACK);
 
@@ -397,6 +399,15 @@ public class PolilineasTraslacionSuc extends JFrame {
                     punto.getX(),
                     punto.getY()
             });
+        }
+    }
+
+    private void clearTableAll(int index) {
+        if(index == 1){
+            translatedTable1Label.setText("Primera Traslación (Tx1: 0, Ty1: 0)");
+            translatedTable2Label.setText("Segunda Traslación (Tx2: 0, Ty2: 0)");
+        } else if (index == 2){
+            translatedTable2Label.setText("Segunda Traslación (Tx2: 0, Ty2: 0)");
         }
     }
 
