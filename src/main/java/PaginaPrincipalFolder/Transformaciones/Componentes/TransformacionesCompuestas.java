@@ -1,4 +1,9 @@
-package PaginaPrincipalFolder.Transformaciones;
+package PaginaPrincipalFolder.Transformaciones.Componentes;
+
+import DrawingClasses.Transformaciones.Compuestas.PolilineasEscalacionSuc;
+import DrawingClasses.Transformaciones.Compuestas.PolilineasRotacionSuc;
+import DrawingClasses.Transformaciones.Compuestas.PolilineasTraslacionSuc;
+import PaginaPrincipalFolder.Transformaciones.PrincipalTransformaciones;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,20 +58,23 @@ public class TransformacionesCompuestas extends JFrame {
         // Agregar los action listeners
         traslacionesBtn.addActionListener(e -> {
             dispose();
-            // new TransformacionesSucesivas();
-            JOptionPane.showMessageDialog(this, "Módulo de Traslaciones Sucesivas en desarrollo");
+            PolilineasTraslacionSuc frame = new PolilineasTraslacionSuc();
+            frame.drawFiguraOriginal(2, 2, 2);
+            frame.aumentoComboBox.setSelectedIndex(1);
         });
 
         escalacionesBtn.addActionListener(e -> {
             dispose();
-            // new EscalacionesSucesivas();
-            JOptionPane.showMessageDialog(this, "Módulo de Escalaciones Sucesivas en desarrollo");
+            PolilineasEscalacionSuc frame = new PolilineasEscalacionSuc();
+            frame.drawFiguraOriginal(2, 2, 2);
+            frame.aumentoComboBox.setSelectedIndex(1);
         });
 
         rotacionesBtn.addActionListener(e -> {
             dispose();
-            // new RotacionesSucesivas();
-            JOptionPane.showMessageDialog(this, "Módulo de Rotaciones Sucesivas en desarrollo");
+            PolilineasRotacionSuc frame = new PolilineasRotacionSuc();
+            frame.drawFiguraOriginal(2, 2, 2);
+            frame.aumentoComboBox.setSelectedIndex(1);
         });
 
         // Agregar los botones al panel

@@ -1,6 +1,6 @@
 package DrawingClasses.Transformaciones.Basicas;
 
-import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
+import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesBasicas;
 import Plano.Transformaciones.Basicas.PlanoCartesianoRotacion;
 import formasADibujar.Rotacion.Linea;
 import formasADibujar.Rotacion.Punto;
@@ -31,7 +31,7 @@ public class PolilineasRotacion extends JFrame {
     public int anguloText = 0;
 
     public PolilineasRotacion() {
-        setTitle("Transformacion 2D Básica: Rotacion");
+        setTitle("Transformaciones Geométricas 2D Básica: Rotacion");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -76,7 +76,7 @@ public class PolilineasRotacion extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformacion 2D Básica: Rotacion", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones Geométricas 2D Básica: Rotacion", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);

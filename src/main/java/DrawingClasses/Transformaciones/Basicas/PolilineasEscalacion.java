@@ -1,6 +1,6 @@
 package DrawingClasses.Transformaciones.Basicas;
 
-import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
+import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesBasicas;
 import Plano.Transformaciones.Basicas.PlanoCartesianoEscalacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
@@ -34,7 +34,7 @@ public class PolilineasEscalacion extends JFrame {
     public int sy = 2;
 
     public PolilineasEscalacion() {
-        setTitle("Transformacion 2D Básica: Escalación");
+        setTitle("Transformaciones Geométricas 2D Básica: Escalación");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -82,7 +82,7 @@ public class PolilineasEscalacion extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformacion 2D Básica: Escalación", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones Geométricas 2D Básica: Escalación", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);

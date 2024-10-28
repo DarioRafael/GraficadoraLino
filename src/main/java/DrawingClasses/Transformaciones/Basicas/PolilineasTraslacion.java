@@ -1,6 +1,6 @@
 package DrawingClasses.Transformaciones.Basicas;
 
-import PaginaPrincipalFolder.Transformaciones.TransformacionesBasicas;
+import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesBasicas;
 import Plano.Transformaciones.Basicas.PlanoCartesianoTraslacion;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
@@ -35,7 +35,7 @@ public class PolilineasTraslacion extends JFrame {
     public int ty = 0;
 
     public PolilineasTraslacion() {
-        setTitle("Transformacion: Traslacion");
+        setTitle("Transformaciones Geométricas 2D Básica: Traslación");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -84,7 +84,7 @@ public class PolilineasTraslacion extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformacion 2D Básica: Traslacion", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones Geométricas 2D Básica: Traslacion", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);

@@ -1,5 +1,8 @@
 package PaginaPrincipalFolder.Transformaciones;
 
+import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesBasicas;
+import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesCompuestas;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,7 +20,7 @@ public class PrincipalTransformaciones {
             e.printStackTrace();
         }
 
-        JFrame frame = new JFrame("Transformaciones Básicas en 2D");
+        JFrame frame = new JFrame("Transformaciones Geométricas en 2D");
         frame.setSize(1080, 850);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -30,7 +33,7 @@ public class PrincipalTransformaciones {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Transformaciones 2D ", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones Geométricas en 2D ", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
@@ -41,8 +44,8 @@ public class PrincipalTransformaciones {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
         // Creación de botones personalizados
-        JButton basicasButton = createStyledButton("Transformaciones 2D Básicas", "Traslación, Escalación y Rotación");
-        JButton compuestasButton = createStyledButton("Transformaciones 2D Compuestas", "Transformaciones sucesivas");
+        JButton basicasButton = createStyledButton("Transformaciones Geométricas 2D Básicas", "Traslación, Escalación y Rotación");
+        JButton compuestasButton = createStyledButton("Transformaciones Geométricas 2D Compuestas", "Transformaciones sucesivas");
 
         basicasButton.addActionListener(e -> {
             frame.dispose();

@@ -1,8 +1,9 @@
-package PaginaPrincipalFolder.Transformaciones;
+package PaginaPrincipalFolder.Transformaciones.Componentes;
 
 import DrawingClasses.Transformaciones.Basicas.PolilineasEscalacion;
 import DrawingClasses.Transformaciones.Basicas.PolilineasRotacion;
 import DrawingClasses.Transformaciones.Basicas.PolilineasTraslacion;
+import PaginaPrincipalFolder.Transformaciones.PrincipalTransformaciones;
 
 import javax.swing.*;
 import java.awt.*;

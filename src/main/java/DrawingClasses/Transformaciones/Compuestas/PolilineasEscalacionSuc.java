@@ -1,6 +1,6 @@
 package DrawingClasses.Transformaciones.Compuestas;
 
-import PaginaPrincipalFolder.Transformaciones.TransformacionesCompuestas;
+import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesCompuestas;
 import Plano.Transformaciones.Compuestas.PlanoCartesianoEscalacionSuc;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
@@ -40,7 +40,7 @@ public class PolilineasEscalacionSuc extends JFrame {
     private List<Punto> puntosEscalados2List;
 
     public PolilineasEscalacionSuc() {
-        setTitle("Transformación: Escalación Sucesiva");
+        setTitle("Transformaciones Geométricas 2D Compuestas: Escalación Sucesiva");
         setSize(1800, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -98,7 +98,7 @@ public class PolilineasEscalacionSuc extends JFrame {
 
         // Top Panel con título y botón de regreso
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Transformación: Escalación Sucesiva", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Transformaciones Geométricas 2D Compuestas: Escalación Sucesiva", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(backButton, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -238,6 +238,7 @@ public class PolilineasEscalacionSuc extends JFrame {
     }
 
     private void realizarPrimeraEscalacion() {
+        scaledTableModel2.setRowCount(0);
         try {
             int sx1 = Integer.parseInt(sx1Field.getText());
             int sy1 = Integer.parseInt(sy1Field.getText());
