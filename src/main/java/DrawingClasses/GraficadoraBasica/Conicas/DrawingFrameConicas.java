@@ -1,6 +1,5 @@
 package DrawingClasses.GraficadoraBasica.Conicas;
 
-
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 import Plano.GenericsPlano.PlanoCartesiano;
 import formasADibujar.*;
@@ -45,40 +44,33 @@ public class DrawingFrameConicas extends JFrame {
     private JButton creditosButton;
     JLabel titleLabel;
 
-    private JButton menuButton; // Nuevo botón para el menú
+    private JButton menuButton;
 
 
-    private JComboBox<String> figurasComboBox;
+    private JComboBox<String> figurasComboBox, metodoComboBox;
     private Map<String, List<Punto>> figurasMap = new HashMap<>();
 
 
-    // Constructor de la ventana
     public DrawingFrameConicas() {
         setTitle("Graficación Básica por Computadora");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centra la ventana
+        setLocationRelativeTo(null);
 
         createComponents();
 
 
         configureLayout();
 
-        // Apply numeric-only listener to all text fields
         addNumericOnlyFilterToAll(this.getContentPane());
 
-        // Añadir ActionListeners
         addActionListeners();
 
-        // Hacer visible la ventana
         setVisible(true);
     }
 
     private void createComponents() {
-        // Initialize optionsPanel
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
-
-        // Create buttons
 
         drawConicasButton = new JButton("Cónicas");
         conicasTypeMenu = new JPopupMenu();
@@ -96,14 +88,12 @@ public class DrawingFrameConicas extends JFrame {
         planoCartesiano = new PlanoCartesiano();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
-        // Create the table and table model
         String[] columnNames = {"Punto", "X", "Y"};
         tableModel = new DefaultTableModel(columnNames, 0);
         infoTable = new JTable(tableModel);
 
-        // Adjust font size and apply bold to headers
         Font font = new Font("Arial", Font.BOLD, 16);
-        infoTable.setFont(new Font("Arial", Font.PLAIN, 14)); // Cell font size
+        infoTable.setFont(new Font("Arial", Font.PLAIN, 14));
 
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
         headerRenderer.setFont(font);
@@ -122,6 +112,8 @@ public class DrawingFrameConicas extends JFrame {
         figurasComboBox = new JComboBox<>();
         figurasComboBox.addActionListener(e -> mostrarPuntosFiguraSeleccionada());
 
+
+        metodoComboBox = new JComboBox<>();
         // En el método createComponents(), añade:
         metodoLabel = new JLabel();
         metodoLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -130,16 +122,13 @@ public class DrawingFrameConicas extends JFrame {
     private void configureLayout() {
         setLayout(new BorderLayout());
 
-        // Panel superior para el título y las opciones
         JPanel topPanel = new JPanel(new BorderLayout());
 
-        // Panel para el título
         titlePanel = new JPanel();
         titleLabel = new JLabel("Graficación Básica por Computadora");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titlePanel.add(titleLabel);
 
-        // Panel para las opciones
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(drawConicasButton);
@@ -149,20 +138,36 @@ public class DrawingFrameConicas extends JFrame {
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
 
-        // Agregar componentes al frame
         add(topPanel, BorderLayout.NORTH);
         add(planoCartesiano, BorderLayout.CENTER);
 
-
-
-        // Panel para la tabla y el JComboBox
-
-
         JPanel rightPanel = new JPanel(new BorderLayout());
 
-        // Panel para el JComboBox
-        // Add the infoPanel to the rightPanel
-        infoPanel = new JPanel();
+        infoPanel = new JPanel(new GridLayout(0, 2, 5, 5));
+
+        JLabel lineaLabel = new JLabel("Tipo de conica");
+        lineaLabel.setFont(new Font("Arial",Font.BOLD,16));
+        infoPanel.add(lineaLabel);
+
+        figurasComboBox.addItem("Circulo");
+        figurasComboBox.addItem("Elipse");
+        figurasComboBox.addItem("Arco");
+
+        infoPanel.add(figurasComboBox);
+
+        JLabel metodoLabel = new JLabel("Metodo:");
+        metodoLabel.setFont(new Font("Arial",Font.BOLD,16));
+        infoPanel.add(metodoLabel);
+
+        metodoComboBox.addItem("Polinomial");
+        metodoComboBox.addItem("Trigonometrico");
+
+
+        infoPanel.add(metodoComboBox);
+
+
+
+
         rightPanel.add(infoPanel, BorderLayout.NORTH);
 
 
@@ -196,21 +201,17 @@ public class DrawingFrameConicas extends JFrame {
         infoPanel.setLayout(new GridLayout(0, 2, 5, 5)); // Rows, 2 columns, gaps
 
 
-        // Si el tipo de figura es círculo, elipse o arco, mostrar el método usado
         if (tipoFigura.contains("circulo") || tipoFigura.contains("elipse") ||
                 tipoFigura.contains("arco")) {
-            // Añadir el label del método al principio del panel
             infoPanel.add(new JLabel("Método:"));
             String metodo = tipoFigura.contains("Trigonometrico") ? "Trigonométrico" : "Polinomial";
             metodoLabel.setText("<html><b>" + metodo + "</b></html>");
             infoPanel.add(metodoLabel);
         } else if(tipoFigura.contains("figuraAnonimaCartesiana")){
-            // Añadir el label del método al principio del panel
             infoPanel.add(new JLabel("Método:"));
         }
 
         switch (tipoFigura) {
-
             case "circuloPolinomial":
                 infoPanel.add(new JLabel("Centro X:"));
                 JTextField centroXField = new JTextField(datos.get("centroX"), 10);
@@ -322,11 +323,6 @@ public class DrawingFrameConicas extends JFrame {
                 break;
 
         }
-
-
-
-
-        // Aplica el filtro numérico a todos los JTextField
         for (Component comp : infoPanel.getComponents()) {
             if (comp instanceof JTextField) {
                 addNumericOnlyFilter((JTextField) comp);
@@ -338,8 +334,8 @@ public class DrawingFrameConicas extends JFrame {
     }
 
     private void handlerclear(){
-        planoCartesiano.clear(); // Llamar al método clear() del plano cartesiano
-        tableModel.setRowCount(0); // Limpiar la tabla
+        planoCartesiano.clear();
+        tableModel.setRowCount(0);
         figurasComboBox.removeAllItems();
     }
 
@@ -357,8 +353,6 @@ public class DrawingFrameConicas extends JFrame {
             }
         }
     }
-
-
     private void addNumericOnlyFilterToAll(Container container) {
         for (Component component : container.getComponents()) {
             if (component instanceof JTextField) {
@@ -368,7 +362,6 @@ public class DrawingFrameConicas extends JFrame {
             }
         }
     }
-
     private void addNumericOnlyFilter(JTextField textField) {
         ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
@@ -406,13 +399,11 @@ public class DrawingFrameConicas extends JFrame {
         });
     }
 
-
     private void drawConicaBasedOnType(String option) {
         handlerclear();
         Punto puntoInicio = null;
         int radio = 0;
 
-        // Primero, preguntar por el método
         String[] metodos = {"Polinomial", "Trigonométrico"};
         String metodoSeleccionado = (String) JOptionPane.showInputDialog(null,
                 "Seleccione el método de cálculo:",
@@ -423,7 +414,7 @@ public class DrawingFrameConicas extends JFrame {
                 metodos[0]);
 
         if (metodoSeleccionado == null) {
-            return; // El usuario canceló la selección
+            return;
         }
 
         // Solicitar el punto de inicio
@@ -452,7 +443,6 @@ public class DrawingFrameConicas extends JFrame {
                     case "Circulo":
                         if (metodoSeleccionado.equals("Polinomial")) {
 
-                            // Pedir el radio para el método polinomial
                             JTextField radioField = new JTextField(5);
                             JPanel panelRadio = new JPanel(new GridLayout(1, 2));
                             panelRadio.add(new JLabel("Radio:"));
@@ -476,9 +466,6 @@ public class DrawingFrameConicas extends JFrame {
 
                             }
                         } else {
-                            // Método trigonométrico
-
-                            // Pedir radio para el método trigonométrico
                             JTextField radioField = new JTextField(5);
                             JPanel panelRadio = new JPanel(new GridLayout(1, 2));
                             panelRadio.add(new JLabel("Radio:"));
@@ -550,7 +537,6 @@ public class DrawingFrameConicas extends JFrame {
                         JPanel panelArco;
 
                         if (metodoSeleccionado.equals("Polinomial")) {
-                            // Configuración del panel para el método Polinomial
                             JTextField x1Field = new JTextField(5);
                             JTextField x2Field = new JTextField(5);
 
@@ -570,7 +556,6 @@ public class DrawingFrameConicas extends JFrame {
                                 int x1 = Integer.parseInt(x1Field.getText());
                                 int x2 = Integer.parseInt(x2Field.getText());
 
-                                // Actualizar el panel de información para el arco polinomial
                                 Map<String, String> datosArcoPolinomial = new HashMap<>();
                                 datosArcoPolinomial.put("centroX", String.valueOf(xInicio));
                                 datosArcoPolinomial.put("centroY", String.valueOf(yInicio));
@@ -579,15 +564,12 @@ public class DrawingFrameConicas extends JFrame {
                                 datosArcoPolinomial.put("x2", String.valueOf(x2));
                                 updateInfoPanel("arcoPolinomial", datosArcoPolinomial);
 
-                                // Llama a la función polinomial que usa los puntos x1 y x2
                                 calcularPuntosArcoPolinomio(xInicio, yInicio, radioArco, x1, x2);
 
-                                // Se agrega un nuevo Arco (o puede ser que solo quieras los puntos calculados)
-                                Arco nuevoArco = new Arco(puntoInicio, radioArco, x1, x2); // Ajusta si es necesario
+                                Arco nuevoArco = new Arco(puntoInicio, radioArco, x1, x2);
                                 planoCartesiano.addArco(nuevoArco);
                             }
                         } else {
-                            // Configuración del panel para el método Trigonométrico
                             JTextField anguloInicioField = new JTextField(5);
                             JTextField anguloFinField = new JTextField(5);
 
@@ -607,7 +589,6 @@ public class DrawingFrameConicas extends JFrame {
                                 double anguloInicio = Double.parseDouble(anguloInicioField.getText());
                                 double anguloFin = Double.parseDouble(anguloFinField.getText());
 
-                                // Actualizar el panel de información para el arco trigonométrico
                                 Map<String, String> datosArcoTrigonometrico = new HashMap<>();
                                 datosArcoTrigonometrico.put("centroX", String.valueOf(xInicio));
                                 datosArcoTrigonometrico.put("centroY", String.valueOf(yInicio));
@@ -616,10 +597,8 @@ public class DrawingFrameConicas extends JFrame {
                                 datosArcoTrigonometrico.put("anguloFin", String.valueOf(anguloFin));
                                 updateInfoPanel("arcoTrigonometrico", datosArcoTrigonometrico);
 
-                                // Llama a la función trigonométrica
                                 calcularPuntosArcoTrigonometrico(xInicio, yInicio, radioArco, anguloInicio, anguloFin);
 
-                                // Se agrega un nuevo Arco
                                 Arco nuevoArco = new Arco(puntoInicio, radioArco, anguloInicio, anguloFin);
                                 planoCartesiano.addArco(nuevoArco);
                             }
@@ -633,11 +612,10 @@ public class DrawingFrameConicas extends JFrame {
             }
         }
     }
-
     private void calcularPuntosCirculoPolinomio(double centerX, double centerY, double radius) {
 
 
-        int numSteps = 8; // Puedes ajustar este valor según necesites
+        int numSteps = 8;
         for (int i = 0; i < numSteps; i++) {
             double t = 2 * Math.PI * i / numSteps;
             double x = centerX + radius * Math.cos(t);
@@ -647,9 +625,8 @@ public class DrawingFrameConicas extends JFrame {
         }
 
     }
-
     private void calcularPuntosCirculoTrigonometrico(double centerX, double centerY, double radius) {
-        int numSteps = 8; // Puedes ajustar este valor según necesites
+        int numSteps = 8;
         for (int i = 0; i < numSteps; i++) {
             double angle = 2 * Math.PI * i / numSteps;
             double x = centerX + radius * Math.cos(angle);
@@ -658,9 +635,8 @@ public class DrawingFrameConicas extends JFrame {
             tableModel.addRow(new Object[]{"P" + (i + 1), String.format(String.valueOf(radius)), String.format(String.valueOf(Math.toDegrees(angle)))});
         }
     }
-
     private void calcularPuntosElipsePolinomio(double centerX, double centerY, double radioX, double radioY) {
-        int numSteps = 8; // Puedes ajustar este valor según necesites
+        int numSteps = 8;
         for (int i = 0; i < numSteps; i++) {
             double t = 2 * Math.PI * i / numSteps;
             double x = centerX + radioX * Math.cos(t);
@@ -668,15 +644,13 @@ public class DrawingFrameConicas extends JFrame {
             tableModel.addRow(new Object[]{"P" + (i + 1), String.format(String.valueOf(x)), String.format(String.valueOf(y))});
         }
     }
-
     private void calcularPuntosElipseTrigonometrico(double centerX, double centerY, double radioX, double radioY) {
-        int numSteps = 8; // Puedes ajustar este valor según necesites
+        int numSteps = 8;
         for (int i = 0; i < numSteps; i++) {
             double angle = 2 * Math.PI * i / numSteps;
             double x = centerX + radioX * Math.cos(angle);
             double y = centerY + radioY * Math.sin(angle);
 
-            // Calcular el radio efectivo en este punto
             double radioEfectivo = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
 
             tableModel.addRow(new Object[]{
@@ -686,20 +660,16 @@ public class DrawingFrameConicas extends JFrame {
             });
         }
     }
-
     private void calcularPuntosArcoPolinomio(double centerX, double centerY, double radio, double anguloInicio, double anguloFin) {
         int numSteps = 8;
         double startRad = Math.toRadians(anguloInicio);
         double endRad = Math.toRadians(anguloFin);
 
-        // Verificar si es un círculo completo (0 a 360 grados)
         boolean esCirculoCompleto = (anguloInicio == 0 && anguloFin == 360);
 
         for (int i = 0; i < numSteps; i++) {
-            // Calcular el ángulo en radianes para este paso
             double t = startRad + (endRad - startRad) * i / (numSteps - 1);
 
-            // Si es un círculo completo, usar todos los ángulos; si no, verificar si el ángulo está dentro del rango
             if (esCirculoCompleto || (t >= startRad && t <= endRad)) {
                 double x = centerX + radio * Math.cos(t);
                 double y = centerY + radio * Math.sin(t);
@@ -711,20 +681,16 @@ public class DrawingFrameConicas extends JFrame {
             }
         }
     }
-
     private void calcularPuntosArcoTrigonometrico(double centerX, double centerY, double radio, double anguloInicio, double anguloFin) {
         int numSteps = 8;
         double startRad = Math.toRadians(anguloInicio);
         double endRad = Math.toRadians(anguloFin);
 
-        // Verificar si es un círculo completo (0 a 360 grados)
         boolean esCirculoCompleto = (anguloInicio == 0 && anguloFin == 360);
 
         for (int i = 0; i < numSteps; i++) {
-            // Calcular el ángulo en radianes para este paso
             double angle = startRad + (endRad - startRad) * i / (numSteps - 1);
 
-            // Si es un círculo completo, usar todos los ángulos; si no, verificar si el ángulo está dentro del rango
             if (esCirculoCompleto || (angle >= startRad && angle <= endRad)) {
                 double x = centerX + radio * Math.cos(angle);
                 double y = centerY + radio * Math.sin(angle);
@@ -736,21 +702,18 @@ public class DrawingFrameConicas extends JFrame {
             }
         }
     }
-
-
-    // Método para configurar las columnas según el contexto
     private void configurarColumnas(boolean esTrigonometria) {
         String[] columnNames;
         if (esTrigonometria) {
-            columnNames = new String[]{"Punto", "r", "Ángulo (°)"}; // Nombres para trigonometría
+            columnNames = new String[]{"Punto", "r", "Ángulo (°)"};
         } else {
-            columnNames = new String[]{"Punto", "X", "Y"}; // Nombres por defecto
+            columnNames = new String[]{"Punto", "X", "Y"};
         }
 
 
-        tableModel.setColumnCount(0); // Limpiar columnas anteriores
+        tableModel.setColumnCount(0);
         for (String columnName : columnNames) {
-            tableModel.addColumn(columnName); // Agregar nuevas columnas
+            tableModel.addColumn(columnName);
         }
     }
 
@@ -761,5 +724,3 @@ public class DrawingFrameConicas extends JFrame {
         });
     }
 }
-
-

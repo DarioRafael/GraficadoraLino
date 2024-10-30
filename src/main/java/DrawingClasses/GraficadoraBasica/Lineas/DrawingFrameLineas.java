@@ -2,7 +2,7 @@ package DrawingClasses.GraficadoraBasica.Lineas;
 
 
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
-import Plano.GenericsPlano.PlanoCartesiano;
+import Plano.GraficadoraBasica.PlanoCartesianoLineas;
 import formasADibujar.*;
 
 import javax.swing.*;
@@ -24,44 +24,25 @@ import java.util.Map;
 
 public class DrawingFrameLineas extends JFrame {
 
-    private PlanoCartesiano planoCartesiano;
+    private PlanoCartesianoLineas planoCartesiano;
     private Punto puntoActual;
-
-    private JButton drawPointButton;
-
-    private JButton drawLineButton;
     private JPopupMenu lineTypeMenu;
-
-
-    private JLabel metodoLabel;
-    private JButton clearButton;
-
-    private JButton menuButton; // Nuevo botón para el menú
-    private JPopupMenu popupMenu; // Menú emergente
-
+    private JLabel metodoLabel,titleLabel;
+    private JButton clearButton,menuButton,drawPointButton,drawLineButton,creditosButton;
+    private JButton originDraw, endDraw;
     JPanel optionsPanel;
     JScrollPane scrollPane;
-    JPanel titlePanel;
-
-    JPanel infoPanel;
-
+    private JPanel titlePanel,infoPanel;
 
     private JTable infoTable;
     private DefaultTableModel tableModel;
-    private JButton creditosButton;
-    JLabel titleLabel;
 
 
+    private JTextField xInicioField, yInicioField, xFinField, yFinField;
 
     private JComboBox<String> figurasComboBox;
     private Map<String, List<Punto>> figurasMap = new HashMap<>();
 
-    private JButton otrosButton;
-    private JPopupMenu otrosMenu;
-
-
-
-    // Constructor de la ventana
     public DrawingFrameLineas() {
         setTitle("Graficación Básica por Computadora");
         setSize(1650, 960);
@@ -84,10 +65,8 @@ public class DrawingFrameLineas extends JFrame {
     }
 
     private void createComponents() {
-        // Initialize optionsPanel
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
 
-        // Create buttons
         drawPointButton = new JButton("Dibujar Punto");
 
         drawLineButton = new JButton("Tipos de Lineas");
@@ -102,20 +81,16 @@ public class DrawingFrameLineas extends JFrame {
 
         clearButton = new JButton("Limpiar");
 
-        // Create the menu button and popup menu
         menuButton = new JButton("Menú");
 
 
-        // Create the Cartesian plane panel
-        planoCartesiano = new PlanoCartesiano();
+        planoCartesiano = new PlanoCartesianoLineas();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
 
-        // Create the table and table model
         String[] columnNames = {"Punto", "X", "Y"};
         tableModel = new DefaultTableModel(columnNames, 0);
         infoTable = new JTable(tableModel);
 
-        // Adjust font size and apply bold to headers
         Font font = new Font("Arial", Font.BOLD, 16);
         infoTable.setFont(new Font("Arial", Font.PLAIN, 14)); // Cell font size
 
@@ -124,31 +99,16 @@ public class DrawingFrameLineas extends JFrame {
         infoTable.getTableHeader().setDefaultRenderer(headerRenderer);
         infoTable.getTableHeader().setFont(font); // Bold headers
 
-        // Adjust column width if necessary
         infoTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
         creditosButton = new JButton("Créditos");
 
-        // Create the "Otros" button and popup menu
-        otrosButton = new JButton("Otros");
-        otrosMenu = new JPopupMenu();
-        JMenuItem figuraAnonimaItem = new JMenuItem("FiguraAnonima");
-        otrosMenu.add(figuraAnonimaItem);
-
-
-        // Add the "Otros" button to the options panel
-        optionsPanel.add(otrosButton);
-
-
-
-        // Inicializar el mapa de figuras
         figurasMap = new HashMap<>();
         figurasComboBox = new JComboBox<>();
         figurasComboBox.addActionListener(e -> mostrarPuntosFiguraSeleccionada());
 
-        // En el método createComponents(), añade:
         metodoLabel = new JLabel();
         metodoLabel.setFont(new Font("Arial", Font.BOLD, 14));
     }
@@ -156,20 +116,16 @@ public class DrawingFrameLineas extends JFrame {
     private void configureLayout() {
         setLayout(new BorderLayout());
 
-        // Panel superior para el título y las opciones
         JPanel topPanel = new JPanel(new BorderLayout());
 
-        // Panel para el título
         titlePanel = new JPanel();
         titleLabel = new JLabel("Graficación Básica por Computadora");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titlePanel.add(titleLabel);
 
-        // Panel para las opciones
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(drawLineButton);
-        optionsPanel.add(otrosButton);
         optionsPanel.add(clearButton);
         optionsPanel.add(creditosButton);
 
@@ -180,16 +136,64 @@ public class DrawingFrameLineas extends JFrame {
         add(topPanel, BorderLayout.NORTH);
         add(planoCartesiano, BorderLayout.CENTER);
 
-
-
-        // Panel para la tabla y el JComboBox
-
-
         JPanel rightPanel = new JPanel(new BorderLayout());
 
-        // Panel para el JComboBox
-        // Add the infoPanel to the rightPanel
-        infoPanel = new JPanel();
+        infoPanel = new JPanel(new GridLayout(0, 2, 5, 5));
+
+        JLabel lineaLabel = new JLabel("Tipo de lineas");
+        lineaLabel.setFont(new Font("Arial",Font.BOLD,16));
+        infoPanel.add(lineaLabel);
+
+        figurasComboBox.addItem("Vertical");
+        figurasComboBox.addItem("Horizontal");
+        figurasComboBox.addItem("Diagonal");
+
+        infoPanel.add(figurasComboBox);
+
+        JLabel xInicialLabel = new JLabel("X inicial:");
+        xInicialLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font size to 16
+        xInicialLabel.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(xInicialLabel);
+
+        xInicioField = new JTextField(3);
+        xInicioField.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(xInicioField);
+
+        JLabel yInicialLabel = new JLabel("Y inicial:");
+        yInicialLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font size to 16
+        yInicialLabel.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(yInicialLabel);
+
+        yInicioField = new JTextField(3);
+        yInicioField.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(yInicioField);
+
+        originDraw = new JButton("Dibujar punto origen");
+        infoPanel.add(new JLabel());
+        infoPanel.add(originDraw);
+
+        JLabel xFinalLabel = new JLabel("X final:");
+        xFinalLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font size to 16
+        xFinalLabel.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(xFinalLabel);
+
+        xFinField = new JTextField(3);
+        xFinField.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(xFinField);
+
+        JLabel yFinalLabel = new JLabel("Y final:");
+        yFinalLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font size to 16
+        yFinalLabel.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(yFinalLabel);
+
+        yFinField = new JTextField(3);
+        yFinField.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        infoPanel.add(yFinField);
+
+        endDraw = new JButton("Dibujar punto final");
+        infoPanel.add(new JLabel());
+        infoPanel.add(endDraw);
+
         rightPanel.add(infoPanel, BorderLayout.NORTH);
 
 
@@ -216,7 +220,6 @@ public class DrawingFrameLineas extends JFrame {
             }
         });
         clearButton.addActionListener(e -> handlerclear());
-        otrosButton.addActionListener(e -> otrosMenu.show(otrosButton, 0, otrosButton.getHeight()));
 
     }
 
@@ -225,10 +228,8 @@ public class DrawingFrameLineas extends JFrame {
         infoPanel.setLayout(new GridLayout(0, 2, 5, 5)); // Rows, 2 columns, gaps
 
 
-        // Si el tipo de figura es círculo, elipse o arco, mostrar el método usado
         if (tipoFigura.contains("circulo") || tipoFigura.contains("elipse") ||
                 tipoFigura.contains("arco")) {
-            // Añadir el label del método al principio del panel
             infoPanel.add(new JLabel("Método:"));
             String metodo = tipoFigura.contains("Trigonometrico") ? "Trigonométrico" : "Polinomial";
             metodoLabel.setText("<html><b>" + metodo + "</b></html>");
@@ -240,145 +241,13 @@ public class DrawingFrameLineas extends JFrame {
 
         switch (tipoFigura) {
             case "linea":
-                // Punto inicial
-                infoPanel.add(new JLabel("X inicial:"));
-                JTextField xInicioField = new JTextField(datos.get("xInicio"), 10);
-                infoPanel.add(xInicioField);
-
-                infoPanel.add(new JLabel("Y inicial:"));
-                JTextField yInicioField = new JTextField(datos.get("yInicio"), 10);
-                infoPanel.add(yInicioField);
-
-                // Punto final
-                infoPanel.add(new JLabel("X final:"));
-                JTextField xFinField = new JTextField(datos.get("xFin"), 10);
-                infoPanel.add(xFinField);
-
-                infoPanel.add(new JLabel("Y final:"));
-                JTextField yFinField = new JTextField(datos.get("yFin"), 10);
-                infoPanel.add(yFinField);
-                break;
-
-            case "circuloPolinomial":
-                infoPanel.add(new JLabel("Centro X:"));
-                JTextField centroXField = new JTextField(datos.get("centroX"), 10);
-                infoPanel.add(centroXField);
-
-                infoPanel.add(new JLabel("Centro Y:"));
-                JTextField centroYField = new JTextField(datos.get("centroY"), 10);
-                infoPanel.add(centroYField);
-
-                infoPanel.add(new JLabel("Radio:"));
-                JTextField radioField = new JTextField(datos.get("radio"), 10);
-                infoPanel.add(radioField);
-                break;
-
-            case "circuloTrigonometrico":
-                infoPanel.add(new JLabel("Centro X:"));
-                JTextField centroXTrigField = new JTextField(datos.get("centroX"), 10);
-                infoPanel.add(centroXTrigField);
-
-                infoPanel.add(new JLabel("Centro Y:"));
-                JTextField centroYTrigField = new JTextField(datos.get("centroY"), 10);
-                infoPanel.add(centroYTrigField);
-
-                infoPanel.add(new JLabel("Radio:"));
-                JTextField radioTrigField = new JTextField(datos.get("radio"), 10);
-                infoPanel.add(radioTrigField);
-
-                infoPanel.add(new JLabel("Ángulo:"));
-                JTextField anguloField = new JTextField(datos.get("angulo"), 10);
-                infoPanel.add(anguloField);
-                break;
-
-            case "elipsePolinomial":
-                infoPanel.add(new JLabel("Centro X:"));
-                JTextField centroXElipseField = new JTextField(datos.get("centroX"), 10);
-                infoPanel.add(centroXElipseField);
-
-                infoPanel.add(new JLabel("Centro Y:"));
-                JTextField centroYElipseField = new JTextField(datos.get("centroY"), 10);
-                infoPanel.add(centroYElipseField);
-
-                infoPanel.add(new JLabel("Radio X:"));
-                JTextField radioXField = new JTextField(datos.get("radioX"), 10);
-                infoPanel.add(radioXField);
-
-                infoPanel.add(new JLabel("Radio Y:"));
-                JTextField radioYField = new JTextField(datos.get("radioY"), 10);
-                infoPanel.add(radioYField);
-                break;
-            case "elipseTrigonometrico":
-                infoPanel.add(new JLabel("Centro X:"));
-                JTextField centroXTrigElipseField = new JTextField(datos.get("centroX"), 10);
-                infoPanel.add(centroXTrigElipseField);
-
-                infoPanel.add(new JLabel("Centro Y:"));
-                JTextField centroYTrigElipseField = new JTextField(datos.get("centroY"), 10);
-                infoPanel.add(centroYTrigElipseField);
-
-                infoPanel.add(new JLabel("Radio X:"));
-                JTextField radioXTrigField = new JTextField(datos.get("radioX"), 10);
-                infoPanel.add(radioXTrigField);
-
-                infoPanel.add(new JLabel("Radio Y:"));
-                JTextField radioYTrigField = new JTextField(datos.get("radioY"), 10);
-                infoPanel.add(radioYTrigField);
-                break;
-            case "arcoPolinomial":
-                infoPanel.add(new JLabel("Centro X:"));
-                JTextField centroXArcoField = new JTextField(datos.get("centroX"), 10);
-                infoPanel.add(centroXArcoField);
-
-                infoPanel.add(new JLabel("Centro Y:"));
-                JTextField centroYArcoField = new JTextField(datos.get("centroY"), 10);
-                infoPanel.add(centroYArcoField);
-
-                infoPanel.add(new JLabel("Radio:"));
-                JTextField radioArcoField = new JTextField(datos.get("radio"), 10);
-                infoPanel.add(radioArcoField);
-
-                infoPanel.add(new JLabel("X1:"));
-                JTextField x1Field = new JTextField(datos.get("x1"), 10);
-                infoPanel.add(x1Field);
-
-                infoPanel.add(new JLabel("X2:"));
-                JTextField x2Field = new JTextField(datos.get("x2"), 10);
-                infoPanel.add(x2Field);
-                break;
-
-            case "arcoTrigonometrico":
-                infoPanel.add(new JLabel("Centro X:"));
-                JTextField centroXArcoTrigField = new JTextField(datos.get("centroX"), 10);
-                infoPanel.add(centroXArcoTrigField);
-
-                infoPanel.add(new JLabel("Centro Y:"));
-                JTextField centroYArcoTrigField = new JTextField(datos.get("centroY"), 10);
-                infoPanel.add(centroYArcoTrigField);
-
-                infoPanel.add(new JLabel("Radio:"));
-                JTextField radioArcoTrigField = new JTextField(datos.get("radio"), 10);
-                infoPanel.add(radioArcoTrigField);
-
-                infoPanel.add(new JLabel("Ángulo Inicio (°):"));
-                JTextField anguloInicioField = new JTextField(datos.get("anguloInicio"), 10);
-                infoPanel.add(anguloInicioField);
-
-                infoPanel.add(new JLabel("Ángulo Fin (°):"));
-                JTextField anguloFinField = new JTextField(datos.get("anguloFin"), 10);
-                infoPanel.add(anguloFinField);
-                break;
-            case "figuraAnonima":
-                //infoPanel.add(centroXArcoTrigField);
 
                 break;
-
         }
 
 
 
 
-        // Aplica el filtro numérico a todos los JTextField
         for (Component comp : infoPanel.getComponents()) {
             if (comp instanceof JTextField) {
                 addNumericOnlyFilter((JTextField) comp);
@@ -390,13 +259,12 @@ public class DrawingFrameLineas extends JFrame {
     }
 
     private void handlerclear(){
-        planoCartesiano.clear(); // Llamar al método clear() del plano cartesiano
+        planoCartesiano.clear();
         tableModel.setRowCount(0); // Limpiar la tabla
         figurasComboBox.removeAllItems();
     }
 
     private void handleDrawPointAction() {
-        // Crear un panel para solicitar las coordenadas X e Y
         JPanel panel = new JPanel(new GridLayout(2, 2));
         panel.add(new JLabel("Coordenada X:"));
         JTextField xField = new JTextField(5);
@@ -417,7 +285,6 @@ public class DrawingFrameLineas extends JFrame {
 
                 tableModel.addRow(new Object[]{"P1", (Object) x, (Object) y});
 
-                // Pasar el punto al plano cartesiano
                 planoCartesiano.addPunto(puntoActual); // Agregar el punto
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
@@ -439,14 +306,13 @@ public class DrawingFrameLineas extends JFrame {
         }
     }
 
-    // Ejemplo de cómo agregar una figura al mapa y al JComboBox
-    public void addFigura(String nombreFigura, List<Punto> puntos) {
-        figurasMap.put(nombreFigura, puntos);
-        figurasComboBox.addItem(nombreFigura);
-    }
+
+
+
     private void addNumericOnlyFilterToAll(Container container) {
         for (Component component : container.getComponents()) {
             if (component instanceof JTextField) {
+
                 addNumericOnlyFilter((JTextField) component);
             } else if (component instanceof Container) {
                 addNumericOnlyFilterToAll((Container) component);
@@ -477,7 +343,6 @@ public class DrawingFrameLineas extends JFrame {
             }
         });
 
-        // Agregar un KeyListener para mayor seguridad
         textField.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
@@ -617,7 +482,6 @@ public class DrawingFrameLineas extends JFrame {
         return puntosIntermedios;
     }
 
-// Update the drawLineBasedOnType method
 
     public void updateTableWithLinePoints(Linea linea) {
         DefaultTableModel tableModel = (DefaultTableModel) infoTable.getModel();
