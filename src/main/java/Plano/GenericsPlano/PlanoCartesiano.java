@@ -1,4 +1,4 @@
-package Plano;
+package Plano.GenericsPlano;
 
 import formasADibujar.*;
 

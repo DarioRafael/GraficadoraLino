@@ -1,6 +1,6 @@
 package Plano.Transformaciones.Compuestas;
 
-import Plano.CoordinateSystem;
+import Plano.GenericsPlano.CoordinateSystem;
 import formasADibujar.Linea;
 import formasADibujar.Punto;
 

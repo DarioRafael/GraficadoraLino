@@ -20,4 +20,16 @@ public class Elipse {
     public int getSemiEjeMenor() { return semiEjeMenor; }
 
     public static List<Elipse> getElipses() { return elipses; }
+
+    // Method to calculate the points of the ellipse
+    public List<Punto> calcularPuntos() {
+        List<Punto> puntos = new ArrayList<>();
+        for (int angulo = 0; angulo < 360; angulo++) {
+            double radianes = Math.toRadians(angulo);
+            int x = (int) Math.round(centro.getX() + semiEjeMayor * Math.cos(radianes));
+            int y = (int) Math.round(centro.getY() + semiEjeMenor * Math.sin(radianes));
+            puntos.add(new Punto(x, y));
+        }
+        return puntos;
+    }
 }

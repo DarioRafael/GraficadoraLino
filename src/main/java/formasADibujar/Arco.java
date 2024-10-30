@@ -40,4 +40,16 @@ public class Arco {
     public static void limpiarArcos() {
         arcos.clear();
     }
+
+    // Método para calcular los puntos del arco
+    public List<Punto> calcularPuntos() {
+        List<Punto> puntos = new ArrayList<>();
+        for (double angulo = anguloInicio; angulo <= anguloFin; angulo += 1) {
+            double radianes = Math.toRadians(angulo);
+            int x = (int) Math.round(centro.getX() + radio * Math.cos(radianes));
+            int y = (int) Math.round(centro.getY() + radio * Math.sin(radianes));
+            puntos.add(new Punto(x, y));
+        }
+        return puntos;
+    }
 }

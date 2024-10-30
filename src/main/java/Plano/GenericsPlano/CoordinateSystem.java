@@ -1,4 +1,4 @@
-package Plano;
+package Plano.GenericsPlano;
 
 public class CoordinateSystem {
     public enum Type {

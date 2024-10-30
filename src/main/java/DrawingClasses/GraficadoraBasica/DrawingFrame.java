@@ -2,7 +2,7 @@ package DrawingClasses.GraficadoraBasica;
 
 
 
-import Plano.PlanoCartesiano;
+import Plano.GenericsPlano.PlanoCartesiano;
 import formasADibujar.*;
 
 import javax.swing.*;

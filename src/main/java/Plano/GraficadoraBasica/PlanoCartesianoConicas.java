@@ -1,8 +1,7 @@
-package Plano.Transformaciones.Basicas;
+package Plano.GraficadoraBasica;
 
 import Plano.GenericsPlano.CoordinateSystem;
-import formasADibujar.Rotacion.Linea;
-import formasADibujar.Rotacion.Punto;
+import formasADibujar.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +9,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.List;
 
-public class PlanoCartesianoRotacion extends JPanel {
+public class PlanoCartesianoConicas extends JPanel {
 
     private double offsetX = 0, offsetY = 0;
-    private int gridSize = 50;
     private double zoomFactor = 1.0;
     private Point dragStart = null;
 
@@ -25,15 +24,12 @@ public class PlanoCartesianoRotacion extends JPanel {
     private static final int LABEL_OFFSET = 20;
 
     private CoordinateSystem.Type currentCoordSystem = CoordinateSystem.Type.CARTESIAN_ABSOLUTE;
+    private List<Punto> puntos = new ArrayList<>();
+    private List<Circulo> circulos = new ArrayList<>();
+    private List<Elipse> elipses = new ArrayList<>();
+    private List<Arco> arcos = new ArrayList<>();
 
-    private static final Color COLOR_PUNTO_ORIGINAL = Color.RED;
-    private static final Color COLOR_PUNTO_ROTADO = Color.BLUE;
-
-
-    private static final Color COLOR_LINEA_ORIGINAL = Color.BLACK;
-    private static final Color COLOR_LINEA_ROTADA = new Color(255, 140, 0);
-
-    public PlanoCartesianoRotacion() {
+    public PlanoCartesianoConicas() {
         setupMouseListeners();
     }
 
@@ -94,21 +90,13 @@ public class PlanoCartesianoRotacion extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        setupGraphics(g2);
 
         AffineTransform originalTransform = g2.getTransform();
         applyTransformation(g2);
 
         drawComponents(g2);
+
         g2.setTransform(originalTransform);
-    }
-
-    private void setupGraphics(Graphics2D g2) {
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        //COLOR DEL PLANO
-        g2.setColor(Color.WHITE);
-        g2.fillRect(0, 0, getWidth(), getHeight());
     }
 
     private void applyTransformation(Graphics2D g2) {
@@ -120,17 +108,13 @@ public class PlanoCartesianoRotacion extends JPanel {
     private void drawComponents(Graphics2D g2) {
         drawGrid(g2);
         drawAxes(g2);
-
-
-
         drawPoints(g2);
-        drawLines(g2);
+        drawCircles(g2);
+        drawEllipses(g2);
+        drawArcs(g2);
     }
 
     private void drawGrid(Graphics2D g2) {
-
-        g2.setColor(Color.GRAY);
-
         g2.setStroke(new BasicStroke(1));
 
         double viewportWidth = getWidth() / zoomFactor;
@@ -153,38 +137,27 @@ public class PlanoCartesianoRotacion extends JPanel {
     }
 
     private void drawAxes(Graphics2D g2) {
-
-        //COLOR DE LOS EJES
-        g2.setColor(Color.BLACK);
-
         g2.setStroke(new BasicStroke(AXIS_THICKNESS));
 
         double viewportWidth = getWidth() / zoomFactor;
         double viewportHeight = getHeight() / zoomFactor;
 
-        // Dibujar los ejes X e Y
-        g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0); // Eje X
-        g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2)); // Eje Y
+        g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0);
+        g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2));
 
         g2.setFont(new Font("Arial", Font.PLAIN, 12));
-        String prefix = (currentCoordSystem == CoordinateSystem.Type.CARTESIAN_RELATIVE ||
-                currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) ? "d" : "";
-
-        // Etiquetas de los ejes
-        g2.drawString(prefix + "X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
-        g2.drawString("-" + prefix + "X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
-        g2.drawString(prefix + "Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
-        g2.drawString("-" + prefix + "Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
+        g2.drawString("X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
+        g2.drawString("-X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
+        g2.drawString("Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
+        g2.drawString("-Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 10));
 
-        // Dibujar las marcas y números en los ejes
         int startX = (int) Math.floor((-offsetX - viewportWidth / 2) / GRID_SIZE);
         int endX = (int) Math.ceil((-offsetX + viewportWidth / 2) / GRID_SIZE);
         int startY = (int) Math.floor((-offsetY - viewportHeight / 2) / GRID_SIZE);
         int endY = (int) Math.ceil((-offsetY + viewportHeight / 2) / GRID_SIZE);
 
-        // Dibujar marcas en el eje X
         for (int i = startX; i <= endX; i++) {
             if (i != 0) {
                 int x = i * GRID_SIZE;
@@ -193,7 +166,6 @@ public class PlanoCartesianoRotacion extends JPanel {
             }
         }
 
-        // Dibujar marcas en el eje Y
         for (int i = startY; i <= endY; i++) {
             if (i != 0) {
                 int y = i * GRID_SIZE;
@@ -201,119 +173,124 @@ public class PlanoCartesianoRotacion extends JPanel {
                 g2.drawString(Integer.toString(-i), -LABEL_OFFSET, y + 5);
             }
         }
-
         int arrowSize = 10; // Tamaño de la punta de la flecha
 
-        // Dibujar flechas en los ejes
-        // Flechas del eje X
-        drawArrow(g2, (int) (-offsetX + viewportWidth / 2 - arrowSize), 0, 0); // Flecha X positivo
-        drawArrow(g2, (int) (-offsetX - viewportWidth / 2 + arrowSize), 0, 180); // Flecha X negativo
+        // Add arrows to the axes (modificado para que no crucen el origen)
+        drawArrow(g2, (int) (-offsetX + viewportWidth / 2 - arrowSize), 0, 0); // X-axis arrow
+        drawArrow(g2, (int) (-offsetX - viewportWidth / 2 + arrowSize), 0, 180); // -X-axis arrow
+        drawArrow(g2, 0, (int) (-offsetY - viewportHeight / 2 + arrowSize), 270); // Y-axis arrow (corregido)
+        drawArrow(g2, 0, (int) (-offsetY + viewportHeight / 2 - arrowSize), 90); // -Y-axis arrow (corregido)
 
-        // Flechas del eje Y
-        drawArrow(g2, 0, (int) (-offsetY - viewportHeight / 2 + arrowSize), -90); // Flecha Y positivo
-        drawArrow(g2, 0, (int) (-offsetY + viewportHeight / 2 - arrowSize), 90); // Flecha Y negativo
-
-        // Dibujar punto de origen
         g2.fillOval(-3, -3, 6, 6);
     }
 
-    // Método auxiliar para dibujar las flechas
     private void drawArrow(Graphics2D g2, int x, int y, int angle) {
-        int arrowSize = 10; // Tamaño de la punta de la flecha
+        int arrowSize = 10; // Size of the arrowhead
         AffineTransform tx = g2.getTransform();
         g2.translate(x, y);
-        double radians = Math.toRadians(angle);
-        g2.rotate(radians);
+        g2.rotate(Math.toRadians(angle));
         g2.drawLine(0, 0, -arrowSize, -arrowSize);
         g2.drawLine(0, 0, -arrowSize, arrowSize);
         g2.setTransform(tx);
     }
 
     private void drawPoints(Graphics2D g2) {
-        g2.setColor(Color.BLACK);
         List<Punto> puntos = Punto.getPuntos();
 
         for (Punto punto : puntos) {
-            // Convertir las coordenadas double a píxeles
-            double x = punto.getX() * GRID_SIZE;
-            double y = -punto.getY() * GRID_SIZE;
+            int x = punto.getX() * GRID_SIZE;
+            int y = -punto.getY() * GRID_SIZE;
 
-            g2.fillOval((int)(x - 3), (int)(y - 3), 6, 6);
+            g2.fillOval(x - 3, y - 3, 6, 6);
 
+            // Verificar si el nombre no es null antes de dibujar
             String nombrePunto = punto.getNombrePunto();
             if (nombrePunto != null) {
-                g2.drawString(nombrePunto, (int)(x + 2), (int)(y - 2));
+                g2.drawString(nombrePunto, x + 5, y - 5);
             }
         }
     }
 
+    private void drawCircles(Graphics2D g2) {
+        g2.setStroke(new BasicStroke(2));
 
-    // Método para agregar un nuevo punto y repintar
+        List<Circulo> circulos = Circulo.getCirculos();
+
+        for (Circulo circulo : circulos) {
+            Punto centro = circulo.getCentro();
+            int x = centro.getX() * GRID_SIZE;
+            int y = -centro.getY() * GRID_SIZE;
+            int radius = circulo.getRadio() * GRID_SIZE;
+
+            g2.drawOval(x - radius, y - radius, 2 * radius, 2 * radius);
+        }
+    }
+
+    private void drawEllipses(Graphics2D g2) {
+        g2.setStroke(new BasicStroke(2));
+
+        List<Elipse> elipses = Elipse.getElipses();
+
+        for (Elipse elipse : elipses) {
+            Punto centro = elipse.getCentro();
+            int x = centro.getX() * GRID_SIZE;
+            int y = -centro.getY() * GRID_SIZE;
+            int radiusX = elipse.getSemiEjeMayor() * GRID_SIZE;
+            int radiusY = elipse.getSemiEjeMenor() * GRID_SIZE;
+
+            g2.drawOval(x - radiusX, y - radiusY, 2 * radiusX, 2 * radiusY);
+        }
+    }
+
+    private void drawArcs(Graphics2D g2) {
+        g2.setStroke(new BasicStroke(2));
+
+        List<Arco> arcos = Arco.getArcos();
+
+        for (Arco arco : arcos) {
+            Punto centro = arco.getCentro();
+            int x = centro.getX() * GRID_SIZE;
+            int y = -centro.getY() * GRID_SIZE;
+            int radius = arco.getRadio() * GRID_SIZE;
+            int startAngle = (int) arco.getAnguloInicio();
+            int endAngle = (int) arco.getAnguloFin();
+
+            g2.drawArc(x - radius, y - radius, 2 * radius, 2 * radius, startAngle, endAngle - startAngle);
+        }
+    }
+
     public void addPunto(Punto punto) {
         Punto.getPuntos().add(punto);
         repaint(); // Redibujar el plano
     }
 
-    private void drawLines(Graphics2D g2) {
-        g2.setStroke(new BasicStroke(2));
-        List<Linea> lineas = Linea.getLineas();
-
-        for (Linea linea : lineas) {
-            Punto inicio = linea.getPuntoInicio();
-            Punto fin = linea.getPuntoFin();
-            double x1 = inicio.getX() * GRID_SIZE;
-            double y1 = -inicio.getY() * GRID_SIZE;
-            double x2 = fin.getX() * GRID_SIZE;
-            double y2 = -fin.getY() * GRID_SIZE;
-
-            // Revisar si el nombre del punto contiene un apóstrofe (') para identificar si es la figura rotada
-            if (inicio.getNombrePunto() != null && inicio.getNombrePunto().contains("'")) {
-                g2.setColor(new Color(0, 128, 0)); // Verde oscuro para la figura rotada
-            } else {
-                g2.setColor(Color.BLACK); // Negro para la figura original
-            }
-
-            g2.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
-
-            if (linea.isEsParteDeFiguraAnonima()) {
-                List<Punto> puntos = Punto.getPuntos();
-                for (Punto punto : puntos) {
-                    double x = punto.getX() * GRID_SIZE;
-                    double y = -punto.getY() * GRID_SIZE;
-
-                    // Colorear los puntos según si son originales o rotados
-                    if (punto.getNombrePunto() != null && punto.getNombrePunto().contains("'")) {
-                        g2.setColor(COLOR_PUNTO_ROTADO); // Verde más oscuro para los puntos rotados
-                    } else {
-                        g2.setColor(Color.RED); // Rojo para los puntos originales
-                    }
-
-                    g2.fillOval((int)(x - 3), (int)(y - 3), 6, 6);
-                }
-            }
-        }
-    }
-
-
-    public void addLinea(Linea linea) {
-        Linea.getLineas().add(linea);
+    public void addCirculo(Circulo circulo) {
+        Circulo.getCirculos().add(circulo);
         repaint(); // Redibujar el plano para reflejar los cambios
     }
 
+    public void addElipse(Elipse elipse) {
+        Elipse.getElipses().add(elipse);
+        repaint(); // Redibujar el plano para reflejar los cambios
+    }
+
+    public void addArco(Arco arco) {
+        Arco.getArcos().add(arco);
+        repaint(); // Redibujar el plano para reflejar los cambios
+    }
 
     public void clear() {
         Punto.getPuntos().clear();
-        Linea.getLineas().clear();
+        Circulo.getCirculos().clear();
+        Elipse.getElipses().clear();
+        Arco.getArcos().clear();
         repaint(); // Redibujar el plano para reflejar los cambios
     }
-
-
 
     public CoordinateSystem.Type getCurrentCoordSystem() {
         return currentCoordSystem;
     }
 
-    // Asegúrate de que este método esté actualizado para manejar el cambio de sistema de coordenadas
     public void setCurrentCoordSystem(CoordinateSystem.Type coordSystem) {
         if (this.currentCoordSystem != coordSystem) {
             this.currentCoordSystem = coordSystem;
@@ -321,6 +298,4 @@ public class PlanoCartesianoRotacion extends JPanel {
             repaint();
         }
     }
-
 }
-

@@ -1,6 +1,6 @@
 package formasADibujar;
 
-import Plano.PlanoCartesiano;
+import Plano.GenericsPlano.PlanoCartesiano;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +44,6 @@ public class Circulo {
         return 2 * Math.PI * radio;
     }
 
-
-
     // Método para obtener la lista de círculos
     public static List<Circulo> getCirculos() {
         return circulos;
@@ -62,25 +60,20 @@ public class Circulo {
             int y = (int) Math.round(centro.getY() + radio * Math.sin(radianes));
             plano.addPunto(new Punto(x, y)); // Asegúrate de que tu método addPunto esté definido
             System.out.println("Punto " + i + ": (" + x + ", " + y + ")");
-
         }
 
         plano.repaint(); // Repaint para actualizar el plano
     }
 
-    private List<Punto> calcularPuntosCirculo(int xCentro, int yCentro, int radio) {
+    // Método para calcular los puntos del círculo
+    public List<Punto> calcularPuntos() {
         List<Punto> puntos = new ArrayList<>();
-        puntos.add(new Punto(xCentro + radio, yCentro));        // P₁ (derecha)
-        puntos.add(new Punto(xCentro - radio, yCentro));        // P₂ (izquierda)
-        puntos.add(new Punto(xCentro, yCentro + radio));        // P₃ (abajo)
-        puntos.add(new Punto(xCentro, yCentro - radio));        // P₄ (arriba)
-        puntos.add(new Punto((int)(xCentro + radio / Math.sqrt(2)), (int)(yCentro + radio / Math.sqrt(2)))); // P₅ (diagonal abajo derecha)
-        puntos.add(new Punto((int)(xCentro - radio / Math.sqrt(2)), (int)(yCentro + radio / Math.sqrt(2)))); // P₆ (diagonal abajo izquierda)
-        puntos.add(new Punto((int)(xCentro + radio / Math.sqrt(2)), (int)(yCentro - radio / Math.sqrt(2)))); // P₇ (diagonal arriba derecha)
-        puntos.add(new Punto((int)(xCentro - radio / Math.sqrt(2)), (int)(yCentro - radio / Math.sqrt(2)))); // P₈ (diagonal arriba izquierda)
+        for (int angulo = 0; angulo < 360; angulo++) {
+            double radianes = Math.toRadians(angulo);
+            int x = (int) Math.round(centro.getX() + radio * Math.cos(radianes));
+            int y = (int) Math.round(centro.getY() + radio * Math.sin(radianes));
+            puntos.add(new Punto(x, y));
+        }
         return puntos;
     }
-
-
-
 }

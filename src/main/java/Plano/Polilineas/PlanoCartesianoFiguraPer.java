@@ -1,6 +1,6 @@
 package Plano.Polilineas;
 
-import Plano.CoordinateSystem;
+import Plano.GenericsPlano.CoordinateSystem;
 import formasADibujar.*;
 
 import javax.swing.*;

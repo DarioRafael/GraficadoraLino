@@ -1,8 +1,7 @@
     package DrawingClasses.Polilineas;
 
-    import PaginaPrincipalFolder.PaginaPrincipal;
     import PaginaPrincipalFolder.Polilineas.PrincipalGraficacionPolilineas;
-    import Plano.CoordinateSystem;
+    import Plano.GenericsPlano.CoordinateSystem;
     import Plano.Polilineas.PlanoCartesianoFiguraPer;
     import formasADibujar.Linea;
     import formasADibujar.Punto;

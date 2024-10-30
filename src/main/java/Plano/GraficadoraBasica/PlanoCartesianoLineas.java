@@ -1,6 +1,6 @@
 package Plano.GraficadoraBasica;
 
-import Plano.CoordinateSystem;
+import Plano.GenericsPlano.CoordinateSystem;
 import formasADibujar.*;
 
 import javax.swing.*;
