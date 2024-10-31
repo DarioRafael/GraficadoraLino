@@ -56,7 +56,6 @@ public class MenuDeLineas extends JFrame {
             dispose();
 
             DrawingFrameLineas frameVen = new DrawingFrameLineas();
-            frameVen.handlerclear();
             frameVen.setVisible(true);
         });
 
@@ -68,7 +67,6 @@ public class MenuDeLineas extends JFrame {
             dispose();
 
             DrawingFrameHorizontal frameVen = new DrawingFrameHorizontal();
-            frameVen.handlerclear();
             frameVen.setVisible(true);
         });
 
@@ -77,7 +75,6 @@ public class MenuDeLineas extends JFrame {
             dispose();
 
             DrawingFrameVertical frameVen = new DrawingFrameVertical();
-            frameVen.handlerclear();
             frameVen.setVisible(true);
         });
 

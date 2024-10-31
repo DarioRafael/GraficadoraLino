@@ -487,6 +487,17 @@ public class PlanoCartesianoConicasV extends JPanel {
             int radio = (int) (arco.getRadio() * GRID_SIZE);
             int anguloInicio = (int) arco.getAnguloInicio();
             int anguloFinal = (int) arco.getAnguloFin();
+            int x1 = (int) (arco.getX1() * GRID_SIZE); // Asumiendo que Arco tiene getX1()
+            int x2 = (int) (arco.getX2() * GRID_SIZE); // Asumiendo que Arco tiene getX2()
+
+            if (isTrigonometrico) {
+                drawArcoTrigonometrico(g2, xCentro, yCentro, radio, anguloInicio, anguloFinal);
+            } else {
+                drawPolinomio(g2, xCentro, yCentro, x1, x2, radio, anguloInicio, anguloFinal);
+            }
+        }
+    }
+    private void drawArcoTrigonometrico(Graphics2D g2, int xCentro, int yCentro, int radio, int anguloInicio, int anguloFinal) {
 
             // Dibujar el arco
             g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFinal - anguloInicio);
@@ -511,34 +522,18 @@ public class PlanoCartesianoConicasV extends JPanel {
             Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFinal);
             g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);
             g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);
-        }
+
     }
 
-    private Point calcularPuntoEnArco(int xCentro, int yCentro, int radio, int angulo) {
-        double anguloRadianes = Math.toRadians(angulo);
-        int x = (int) (xCentro + radio * Math.cos(anguloRadianes));
-        int y = (int) (yCentro - radio * Math.sin(anguloRadianes));
-        return new Point(x, y);
-    }
 
-    private void drawPolinomio(Graphics2D g2, int xOrigen, int yOrigen, int x1, int x2, int radio, int anguloInicio, int anguloFin) {
-        g2.setColor(Color.BLUE);
-
-        // Calculamos el centro del arco basado en xOrigen, yOrigen y el radio
-        int xCentro = xOrigen;
-        int yCentro = yOrigen;
-
-        // Se asegura que el radio no sea negativo
-        if (radio < 0) {
-            radio = Math.abs(radio);
-        }
+    private void drawPolinomio(Graphics2D g2, int xCentro, int yCentro, int x1, int x2, int radio, int anguloInicio, int anguloFinal) {
 
         // Dibujar el arco
-        g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFin - anguloInicio);
+        g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFinal - anguloInicio);
 
         // Calcular y dibujar los 8 puntos distribuidos uniformemente
         int numPuntos = 8;
-        double deltaAngulo = (anguloFin - anguloInicio) / (double)(numPuntos - 1);
+        double deltaAngulo = (anguloFinal - anguloInicio) / (double)(numPuntos - 1);
 
         for (int i = 0; i < numPuntos; i++) {
             int anguloActual = (int)(anguloInicio + deltaAngulo * i);
@@ -553,10 +548,20 @@ public class PlanoCartesianoConicasV extends JPanel {
 
         // Dibujar las líneas desde los puntos inicial y final hacia el centro
         Point puntoInicial = calcularPuntoEnArco(xCentro, yCentro, radio, anguloInicio);
-        Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFin);
+        Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFinal);
         g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);
         g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);
     }
+
+
+
+    private Point calcularPuntoEnArco(int xCentro, int yCentro, int radio, int angulo) {
+        double anguloRadianes = Math.toRadians(angulo);
+        int x = (int) (xCentro + radio * Math.cos(anguloRadianes));
+        int y = (int) (yCentro - radio * Math.sin(anguloRadianes));
+        return new Point(x, y);
+    }
+
 
     public void addLinea(Linea linea) {
         Linea.getLineas().add(linea);
@@ -585,11 +590,6 @@ public class PlanoCartesianoConicasV extends JPanel {
     }
 
 
-
-    public void setGridSize(int newSize) {
-        this.gridSize = newSize;
-        repaint();
-    }
 
     public void clear() {
         Punto.getPuntos().clear();

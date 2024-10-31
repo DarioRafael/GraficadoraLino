@@ -38,7 +38,7 @@ public class DrawingFrameCirculos extends JFrame {
     JScrollPane scrollPane;
     JPanel titlePanel;
 
-    JPanel infoPanel;
+    public JPanel infoPanel;
 
 
     private JTable infoTable;
@@ -49,12 +49,14 @@ public class DrawingFrameCirculos extends JFrame {
     private JButton menuButton;
 
 
-    private JComboBox<String> figurasComboBox, metodoComboBox;
+    public JComboBox<String> figurasComboBox, metodoComboBox;
     private Map<String, List<Punto>> figurasMap = new HashMap<>();
 
     private JButton calcularButton; // Add this new field
     private boolean modoTrigonometrico;
-
+    private JColorChooser colorChooserPuntos;
+    private JColorChooser colorChooserFigura;
+    private JCheckBox rellenarCirculoCheckBox;
 
     public DrawingFrameCirculos() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
@@ -71,17 +73,15 @@ public class DrawingFrameCirculos extends JFrame {
 
         addActionListeners();
 
+        inicializarCirculoPredeterminado();
         setVisible(true);
     }
 
     private void createComponents() {
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
 
-
-
         clearButton = new JButton("Limpiar");
         menuButton = new JButton("Menú");
-
 
         planoCartesiano = new PlanoCartesianoConicasV();
         planoCartesiano.setPreferredSize(new Dimension(600, 400));
@@ -105,35 +105,51 @@ public class DrawingFrameCirculos extends JFrame {
 
         creditosButton = new JButton("Créditos");
 
-
         figurasMap = new HashMap<>();
         figurasComboBox = new JComboBox<>();
         figurasComboBox.addActionListener(e -> mostrarPuntosFiguraSeleccionada());
-
 
         metodoComboBox = new JComboBox<>();
         // En el método createComponents(), añade:
         metodoLabel = new JLabel();
         metodoLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
-
         calcularButton = new JButton("Dibujar figura");
 
         figurasComboBox.addItem("Circulo");
 
-
         metodoComboBox.addItem("Polinomial");
         metodoComboBox.addItem("Trigonometrico");
+
+        // Inicializar los JColorChoosers
+        colorChooserPuntos = new JColorChooser(Color.BLACK); // Color inicial
+        colorChooserFigura = new JColorChooser(Color.RED); // Color inicial
+
+        // Crear un panel para los JColorChoosers
+        JPanel colorPanel = new JPanel(new GridLayout(2, 1));
+        colorPanel.add(new JLabel("Elige color para puntos:"));
+        colorPanel.add(colorChooserPuntos);
+        colorPanel.add(new JLabel("Elige color para figura:"));
+        colorPanel.add(colorChooserFigura);
+
+        // Inicializar el JCheckBox
+        rellenarCirculoCheckBox = new JCheckBox("Rellenar círculo");
+
+        // Agregar el panel de colores a las opciones
+        optionsPanel.add(colorPanel); // Agregar el panel de colores al optionsPanel
     }
 
     private void configureLayout() {
         setLayout(new BorderLayout());
 
+        // Panel superior
         JPanel topPanel = new JPanel(new BorderLayout());
 
+        // Panel del título
         titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
 
+        // Existing code
         titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
@@ -144,58 +160,63 @@ public class DrawingFrameCirculos extends JFrame {
         circleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(circleLabel);
 
+// New code for method label
+        JLabel methodLabel = new JLabel("Método: Polinomial"); // Default method
+        methodLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        methodLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titlePanel.add(methodLabel);
 
+// Update methodLabel when the method changes
+        metodoComboBox.addActionListener(e -> {
+            String selectedMethod = (String) metodoComboBox.getSelectedItem();
+            methodLabel.setText("Método: " + selectedMethod);
+        });
 
+        // Panel de opciones
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);
         optionsPanel.add(creditosButton);
 
+        // Añadiendo los panels al panel superior
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
 
         add(topPanel, BorderLayout.NORTH);
         add(planoCartesiano, BorderLayout.CENTER);
 
+        // Panel derecho
         JPanel rightPanel = new JPanel(new BorderLayout());
 
+        // Panel de información
         infoPanel = new JPanel(new GridLayout(0, 2, 5, 5));
 
-        JLabel lineaLabel = new JLabel("Tipo de conica");
-        lineaLabel.setFont(new Font("Arial",Font.BOLD,16));
+        JLabel lineaLabel = new JLabel("Tipo de cónica");
+        lineaLabel.setFont(new Font("Arial", Font.BOLD, 16));
         infoPanel.add(lineaLabel);
+        infoPanel.add(figurasComboBox); // Añadir el JComboBox para figuras
 
-
-        infoPanel.add(figurasComboBox);
-
-        JLabel metodoLabel = new JLabel("Metodo:");
-        metodoLabel.setFont(new Font("Arial",Font.BOLD,16));
+        JLabel metodoLabel = new JLabel("Método:");
+        metodoLabel.setFont(new Font("Arial", Font.BOLD, 16));
         infoPanel.add(metodoLabel);
+        infoPanel.add(metodoComboBox); // Añadir el JComboBox para métodos
 
-
-//
-
-        infoPanel.add(metodoComboBox);
-
-
-// Add initial fields for circle (default)
+        // Agregar campos iniciales para círculo (predeterminado)
         updateFieldsBasedOnSelection();
 
-        infoPanel.add(calcularButton);
+        infoPanel.add(calcularButton); // Botón para calcular
 
+        rightPanel.add(infoPanel, BorderLayout.NORTH); // Añadir panel de información al panel derecho
 
-        rightPanel.add(infoPanel, BorderLayout.NORTH);
-
-
-
+        // ScrollPane para la tabla
         scrollPane = new JScrollPane(infoTable);
         scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
-        rightPanel.add(scrollPane, BorderLayout.SOUTH);
+        rightPanel.add(scrollPane, BorderLayout.SOUTH); // Añadir ScrollPane al panel derecho
 
-
-
+        // Agregar el panel derecho al layout
         add(rightPanel, BorderLayout.EAST);
     }
+
     private void addActionListeners() {
         creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
@@ -205,7 +226,10 @@ public class DrawingFrameCirculos extends JFrame {
         });
         figurasComboBox.addActionListener(e -> updateFieldsBasedOnSelection());
 
-        metodoComboBox.addActionListener(e -> updateFieldsBasedOnSelection());
+        metodoComboBox.addActionListener(e -> {
+            updateFieldsBasedOnSelection();
+            inicializarCirculoPredeterminado();
+        });
 
         calcularButton.addActionListener(e -> calculateAndDrawFigure());
 
@@ -333,7 +357,7 @@ public class DrawingFrameCirculos extends JFrame {
         planoCartesiano.repaint();
     }
 
-    private void calculateAndDrawFigure() {
+    public void calculateAndDrawFigure() {
         try {
             String selectedFigura = (String) figurasComboBox.getSelectedItem();
             String selectedMetodo = (String) metodoComboBox.getSelectedItem();
@@ -371,7 +395,7 @@ public class DrawingFrameCirculos extends JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
-    private Component getComponentByName(Container container, String labelText) {
+    public Component getComponentByName(Container container, String labelText) {
         for (Component comp : container.getComponents()) {
             if (comp instanceof JLabel && ((JLabel) comp).getText().equals(labelText)) {
                 int index = Arrays.asList(container.getComponents()).indexOf(comp);
@@ -449,6 +473,58 @@ public class DrawingFrameCirculos extends JFrame {
         });
     }
 
+    private void inicializarCirculoPredeterminado() {
+        // Valores predeterminados
+        int hPredeterminado = 0;
+        int kPredeterminado = 0;
+        int radioPredeterminado = 5;
+
+        // Actualizar campos según el método seleccionado
+        String metodoSeleccionado = (String) metodoComboBox.getSelectedItem();
+
+        if (metodoSeleccionado.equals("Polinomial")) {
+            // Obtener referencias a los campos
+            JTextField hField = (JTextField) getComponentByName(infoPanel, "h:");
+            JTextField kField = (JTextField) getComponentByName(infoPanel, "k:");
+            JTextField radioField = (JTextField) getComponentByName(infoPanel, "Radio:");
+
+            // Establecer valores predeterminados
+            if (hField != null) hField.setText(String.valueOf(hPredeterminado));
+            if (kField != null) kField.setText(String.valueOf(kPredeterminado));
+            if (radioField != null) radioField.setText(String.valueOf(radioPredeterminado));
+
+            // Dibujar el círculo predeterminado
+            desactivarModoTrigonometrico();
+            configurarColumnas(false);
+            calcularPuntosCirculoPolinomio(hPredeterminado, kPredeterminado, radioPredeterminado);
+
+            // Crear y añadir el círculo al plano
+            Circulo circuloPredeterminado = new Circulo(new Punto(hPredeterminado, kPredeterminado), radioPredeterminado);
+            planoCartesiano.addCirculo(circuloPredeterminado);
+
+        } else if (metodoSeleccionado.equals("Trigonometrico")) {
+            // Obtener referencias a los campos
+            JTextField xOrigenField = (JTextField) getComponentByName(infoPanel, "X origen:");
+            JTextField yOrigenField = (JTextField) getComponentByName(infoPanel, "Y origen:");
+            JTextField radioField = (JTextField) getComponentByName(infoPanel, "Radio:");
+
+            // Establecer valores predeterminados
+            if (xOrigenField != null) xOrigenField.setText(String.valueOf(hPredeterminado));
+            if (yOrigenField != null) yOrigenField.setText(String.valueOf(kPredeterminado));
+            if (radioField != null) radioField.setText(String.valueOf(radioPredeterminado));
+
+            // Dibujar el círculo predeterminado
+            activarModoTrigonometrico();
+            configurarColumnas(true);
+            calcularPuntosCirculoTrigonometrico(hPredeterminado, kPredeterminado, radioPredeterminado);
+
+            // Crear y añadir el círculo al plano
+            Circulo circuloPredeterminado = new Circulo(new Punto(hPredeterminado, kPredeterminado), radioPredeterminado);
+            planoCartesiano.addCirculo(circuloPredeterminado);
+        }
+
+        planoCartesiano.repaint();
+    }
 
     private void calcularPuntosCirculoPolinomio(double centerX, double centerY, double radius) {
         desactivarModoTrigonometrico();
@@ -458,9 +534,16 @@ public class DrawingFrameCirculos extends JFrame {
             double x = centerX + radius * Math.cos(t);
             double y = centerY + radius * Math.sin(t);
 
-            tableModel.addRow(new Object[]{"P" + (i + 1), String.format(String.valueOf(x)), String.format(String.valueOf(y))});
+            // Redondear solo los puntos P3, P5 y P7
+            if (i == 2 || i == 4 || i == 6) {
+                x = Math.round(x * 100.0) / 100.0; // Redondear a dos decimales
+                y = Math.round(y * 100.0) / 100.0;
+            }
+
+            tableModel.addRow(new Object[]{"P" + (i + 1), String.valueOf(x), String.valueOf(y)});
         }
     }
+
     private void calcularPuntosCirculoTrigonometrico(double centerX, double centerY, double radius) {
         activarModoTrigonometrico();
         int numSteps = 8;

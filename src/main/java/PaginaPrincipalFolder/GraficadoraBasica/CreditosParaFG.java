@@ -119,7 +119,7 @@ public class CreditosParaFG {
         JTextArea hardwareReq = new JTextArea(
                 "- Procesador: Pentium II 600 MHz.\n" +
                         "- Disco Duro: Mb espacio ocupado.\n" +
-                        "- Resolución de Pantalla: 1024 x 768 Pixeles mínimo.\n" +
+                        "- Resolución de Pantalla: 1650 x 960 Pixeles mínimo.\n" +
                         "- Unidad de USB."
         );
         hardwareReq.setFont(textFont);

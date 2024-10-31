@@ -61,6 +61,10 @@ public class DrawingFrameHorizontal extends JFrame {
         // Añadir ActionListeners
         addActionListeners();
 
+        SwingUtilities.invokeLater(() -> {
+            figurasComboBox.setSelectedItem("Horizontal");
+        });
+
         // Hacer visible la ventana
         setVisible(true);
     }
@@ -146,7 +150,31 @@ public class DrawingFrameHorizontal extends JFrame {
         infoPanel.add(lineaLabel);
 
         figurasComboBox.addItem("Horizontal");
+        Map<String, int[]> valoresIniciales = new HashMap<>();
+        valoresIniciales.put("Horizontal", new int[]{2, 3, 7, 3});  // x1,y1,x2,y2
 
+        // Modificar el ActionListener del ComboBox
+        figurasComboBox.addActionListener(e -> {
+            String selectedType = (String) figurasComboBox.getSelectedItem();
+            if (selectedType != null) {
+                int[] valores = valoresIniciales.get(selectedType);
+                xInicioField.setText(String.valueOf(valores[0]));
+                yInicioField.setText(String.valueOf(valores[1]));
+                xFinField.setText(String.valueOf(valores[2]));
+                yFinField.setText(String.valueOf(valores[3]));
+
+                // Habilitar/deshabilitar campos según el tipo
+                switch (selectedType) {
+                    case "Horizontal":
+                        xFinField.setEnabled(true);
+                        yFinField.setEnabled(false);
+                        break;
+                }
+
+                // Dibujar automáticamente
+                dibujarLineaAutomatica();
+            }
+        });
 
         infoPanel.add(figurasComboBox);
 
@@ -231,6 +259,50 @@ public class DrawingFrameHorizontal extends JFrame {
 
     }
 
+    public void dibujarLineaAutomatica() {
+        try {
+            int xInicio = Integer.parseInt(xInicioField.getText());
+            int yInicio = Integer.parseInt(yInicioField.getText());
+            int xFin = Integer.parseInt(xFinField.getText());
+            int yFin = Integer.parseInt(yFinField.getText());
+
+            // Limpiar el plano y la tabla
+            handlerclear();
+
+            // Crear puntos
+            Punto puntoInicio = new Punto(xInicio, yInicio);
+            Punto puntoFin = new Punto(xFin, yFin);
+
+            // Crear y dibujar la línea
+            Linea nuevaLinea = new Linea(puntoInicio, puntoFin, false);
+            planoCartesiano.repaint();
+
+            // Actualizar la tabla con los puntos intermedios
+            List<Punto> puntosIntermedios = calcularPuntosIntermedios(puntoInicio, puntoFin);
+            updateTableWithPoints(puntosIntermedios);
+
+            // Habilitar campos y botones como si se hubiera dibujado manualmente
+            puntoActual = puntoInicio;
+            String lineType = (String) figurasComboBox.getSelectedItem();
+
+            // Habilitar campos finales según el tipo de línea
+            switch (lineType) {
+                case "Horizontal":
+                    xFinField.setEnabled(true);
+                    yFinField.setEnabled(false);
+                    yFinField.setText(String.valueOf(yInicio)); // Mantener mismo valor Y
+                    break;
+            }
+
+            endDraw.setEnabled(true);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al procesar los valores numéricos.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void resetFields() {
         xInicioField.setText("");
         yInicioField.setText("");
@@ -282,12 +354,14 @@ public class DrawingFrameHorizontal extends JFrame {
     }
 
     private void handleEndDraw() {
-        handlerclear();
         try {
             int xInicio = Integer.parseInt(xInicioField.getText());
             int yInicio = Integer.parseInt(yInicioField.getText());
             int xFin = Integer.parseInt(xFinField.getText());
             int yFin = Integer.parseInt(yFinField.getText());
+
+            // Limpiar solo el plano, manteniendo el estado
+            planoCartesiano.clear();
 
             // Crear puntos
             Punto puntoInicio = new Punto(xInicio, yInicio);
@@ -307,6 +381,7 @@ public class DrawingFrameHorizontal extends JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public void handlerclear(){
         planoCartesiano.clear();
         tableModel.setRowCount(0); // Limpiar la tabla

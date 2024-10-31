@@ -145,6 +145,18 @@ public class DrawingFrameElipse extends JFrame {
         circleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(circleLabel);
 
+        // New code for method label
+        JLabel methodLabel = new JLabel("Método: Polinomial"); // Default method
+        methodLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        methodLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titlePanel.add(methodLabel);
+
+// Update methodLabel when the method changes
+        metodoComboBox.addActionListener(e -> {
+            String selectedMethod = (String) metodoComboBox.getSelectedItem();
+            methodLabel.setText("Método: " + selectedMethod);
+        });
+
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);

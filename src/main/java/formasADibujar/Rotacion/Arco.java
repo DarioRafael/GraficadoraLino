@@ -9,11 +9,21 @@ public class Arco {
     private double radio; // Changed from int to double
     private double anguloInicio;
     private double anguloFin;
+    private int x1; // New field
+    private int x2; // New field
     private static List<Arco> arcos = new ArrayList<>();
 
     public Arco(Punto centro, double radio, double anguloInicio, double anguloFin) {
         this.centro = centro;
         this.radio = radio;
+        this.anguloInicio = anguloInicio;
+        this.anguloFin = anguloFin;
+    }
+    public Arco(Punto centro, double radio, int x1, int x2, double anguloInicio, double anguloFin) {
+        this.centro = centro;
+        this.radio = radio;
+        this.x1 = x1;
+        this.x2 = x2;
         this.anguloInicio = anguloInicio;
         this.anguloFin = anguloFin;
     }
@@ -53,4 +63,7 @@ public class Arco {
         }
         return puntos;
     }
+    public int getX1() { return x1; } // New getter
+    public int getX2() { return x2; } // New getter
+
 }

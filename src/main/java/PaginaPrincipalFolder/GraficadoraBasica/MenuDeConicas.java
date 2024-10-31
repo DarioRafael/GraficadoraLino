@@ -57,7 +57,6 @@ public class MenuDeConicas extends JFrame {
             dispose();
 
             DrawingFrameConicas frame = new DrawingFrameConicas();
-            frame.handlerclear();
             frame.setVisible(true);
         });
 
@@ -70,7 +69,8 @@ public class MenuDeConicas extends JFrame {
             dispose();
 
             DrawingFrameCirculos frame = new DrawingFrameCirculos();
-            frame.handlerclear();
+
+
             frame.setVisible(true);
         });
 

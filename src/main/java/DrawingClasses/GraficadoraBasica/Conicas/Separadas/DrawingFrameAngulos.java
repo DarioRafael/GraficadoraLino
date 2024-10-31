@@ -143,6 +143,18 @@ public class DrawingFrameAngulos extends JFrame {
         circleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(circleLabel);
 
+        // New code for method label
+        JLabel methodLabel = new JLabel("Método: Polinomial"); // Default method
+        methodLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        methodLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titlePanel.add(methodLabel);
+
+// Update methodLabel when the method changes
+        metodoComboBox.addActionListener(e -> {
+            String selectedMethod = (String) metodoComboBox.getSelectedItem();
+            methodLabel.setText("Método: " + selectedMethod);
+        });
+
 
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
@@ -276,27 +288,17 @@ public class DrawingFrameAngulos extends JFrame {
             infoPanel.add(yOrigenField);
 
 
-            JLabel x1Label = new JLabel("X1:");
-            JTextField x1Field = new JTextField(10);
-            infoPanel.add(x1Label);
-            infoPanel.add(x1Field);
-
-            JLabel x2Label = new JLabel("X2:");
-            JTextField x2Field = new JTextField(10);
-            infoPanel.add(x2Label);
-            infoPanel.add(x2Field);
-
             JLabel radioLabel = new JLabel("Radio:");
             JTextField radioField = new JTextField(10);
             infoPanel.add(radioLabel);
             infoPanel.add(radioField);
 
-            JLabel anguloInicioLabel = new JLabel("Ángulo Inicio (°):");
+            JLabel anguloInicioLabel = new JLabel("θ1:");
             JTextField anguloInicioField = new JTextField(10);
             infoPanel.add(anguloInicioLabel);
             infoPanel.add(anguloInicioField);
 
-            JLabel anguloFinLabel = new JLabel("Ángulo Fin (°):");
+            JLabel anguloFinLabel = new JLabel("θ2:");
             JTextField anguloFinField = new JTextField(10);
             infoPanel.add(anguloFinLabel);
             infoPanel.add(anguloFinField);
@@ -311,20 +313,22 @@ public class DrawingFrameAngulos extends JFrame {
             infoPanel.add(yOrigenLabel);
             infoPanel.add(yOrigenField);
 
-            JLabel anguloInicioLabel = new JLabel("Ángulo Inicio (°):");
-            JTextField anguloInicioField = new JTextField(10);
-            infoPanel.add(anguloInicioLabel);
-            infoPanel.add(anguloInicioField);
-
-            JLabel anguloFinLabel = new JLabel("Ángulo Fin (°):");
-            JTextField anguloFinField = new JTextField(10);
-            infoPanel.add(anguloFinLabel);
-            infoPanel.add(anguloFinField);
-
             JLabel radioLabel = new JLabel("Radio:");
             JTextField radioField = new JTextField(10);
             infoPanel.add(radioLabel);
             infoPanel.add(radioField);
+
+            JLabel anguloInicioLabel = new JLabel("θ1:");
+            JTextField anguloInicioField = new JTextField(10);
+            infoPanel.add(anguloInicioLabel);
+            infoPanel.add(anguloInicioField);
+
+            JLabel anguloFinLabel = new JLabel("θ2:");
+            JTextField anguloFinField = new JTextField(10);
+            infoPanel.add(anguloFinLabel);
+            infoPanel.add(anguloFinField);
+
+
         }
     }
     private void calculateAndDrawFigure() {
@@ -365,39 +369,31 @@ public class DrawingFrameAngulos extends JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
-    private Component getComponentByName(Container container, String labelText) {
-        for (Component comp : container.getComponents()) {
-            if (comp instanceof JLabel && ((JLabel) comp).getText().equals(labelText)) {
-                int index = Arrays.asList(container.getComponents()).indexOf(comp);
-                if (index + 1 < container.getComponents().length) {
-                    return container.getComponents()[index + 1];
-                }
-            }
-        }
-        return null;
-    }
 
     private void drawArco(String metodo, Punto puntoInicio) {
         JTextField radioField = (JTextField) getComponentByName(infoPanel, "Radio:");
         int radio = Integer.parseInt(radioField.getText());
 
         if (metodo.equals("Polinomial")) {
-            JTextField x1Field = (JTextField) getComponentByName(infoPanel, "X1:");
-            JTextField x2Field = (JTextField) getComponentByName(infoPanel, "X2:");
+            JTextField xOrigenField = (JTextField) getComponentByName(infoPanel, "X origen:");
+            JTextField yOrigenField = (JTextField) getComponentByName(infoPanel, "Y origen:");
+            JTextField anguloInicioField = (JTextField) getComponentByName(infoPanel, "θ1:");
+            JTextField anguloFinField = (JTextField) getComponentByName(infoPanel, "θ2:");
 
-            int x1 = Integer.parseInt(x1Field.getText());
-            int x2 = Integer.parseInt(x2Field.getText());
+            int xOrigen = Integer.parseInt(xOrigenField.getText());
+            int yOrigen = Integer.parseInt(yOrigenField.getText());
+            double anguloInicio = Double.parseDouble(anguloInicioField.getText());
+            double anguloFin = Double.parseDouble(anguloFinField.getText());
 
             configurarColumnas(false);
-            calcularPuntosArcoPolinomio(puntoInicio.getX(), puntoInicio.getY(), radio, x1, x2);
-
-            Arco nuevoArco = new Arco(puntoInicio, radio, x1, x2);
+            calcularPuntosArcoPolinomio((double) xOrigen, (double) yOrigen, (double) radio, anguloInicio, anguloFin);
+            Arco nuevoArco = new Arco(new Punto(xOrigen, yOrigen), radio, anguloInicio, anguloFin);
             planoCartesiano.addArco(nuevoArco);
         } else {
             JTextField xOrigenField = (JTextField) getComponentByName(infoPanel, "X origen:");
             JTextField yOrigenField = (JTextField) getComponentByName(infoPanel, "Y origen:");
-            JTextField anguloInicioField = (JTextField) getComponentByName(infoPanel, "Ángulo Inicio (°):");
-            JTextField anguloFinField = (JTextField) getComponentByName(infoPanel, "Ángulo Fin (°):");
+            JTextField anguloInicioField = (JTextField) getComponentByName(infoPanel, "θ1:");
+            JTextField anguloFinField = (JTextField) getComponentByName(infoPanel, "θ2:");
 
             int xOrigen = Integer.parseInt(xOrigenField.getText());
             int yOrigen = Integer.parseInt(yOrigenField.getText());
@@ -446,22 +442,29 @@ public class DrawingFrameAngulos extends JFrame {
         double startRad = Math.toRadians(anguloInicio);
         double endRad = Math.toRadians(anguloFin);
 
-        boolean esCirculoCompleto = (anguloInicio == 0 && anguloFin == 360);
+        // Calcular el deltaRad, asegurando que se incluye el último punto
+        double deltaRad = (endRad - startRad) / (numSteps - 1);
 
         for (int i = 0; i < numSteps; i++) {
-            double t = startRad + (endRad - startRad) * i / (numSteps - 1);
+            double t = startRad + deltaRad * i; // Incrementar el ángulo
 
-            if (esCirculoCompleto || (t >= startRad && t <= endRad)) {
-                double x = centerX + radio * Math.cos(t);
-                double y = centerY + radio * Math.sin(t);
+            double x = centerX + radio * Math.cos(t);
+            double y = centerY + radio * Math.sin(t);
 
-                int xRounded = (int) Math.round(x);
-                int yRounded = (int) Math.round(y);
-
-                tableModel.addRow(new Object[]{"P" + (i + 1), (Object) xRounded, (Object) yRounded});
+            // Redondear únicamente el último punto
+            if (i == numSteps - 1) {
+                x = Math.round(x);
+                y = Math.round(y);
             }
+
+            // Añadir las coordenadas a la tabla (x e y pueden estar redondeados o no)
+            tableModel.addRow(new Object[]{"P" + (i + 1), x, y});
         }
     }
+
+
+
+
     private void calcularPuntosArcoTrigonometrico(double centerX, double centerY, double radio, double anguloInicio, double anguloFin) {
         int numSteps = 8;
         double startRad = Math.toRadians(anguloInicio);
@@ -486,7 +489,7 @@ public class DrawingFrameAngulos extends JFrame {
     private void configurarColumnas(boolean esTrigonometria) {
         String[] columnNames;
         if (esTrigonometria) {
-            columnNames = new String[]{"Punto", "r", "Ángulo (°)"};
+            columnNames = new String[]{"Punto", "r", "θ"};
         } else {
             columnNames = new String[]{"Punto", "X", "Y"};
         }
@@ -496,6 +499,18 @@ public class DrawingFrameAngulos extends JFrame {
         for (String columnName : columnNames) {
             tableModel.addColumn(columnName);
         }
+    }
+
+    private Component getComponentByName(Container container, String labelText) {
+        for (Component comp : container.getComponents()) {
+            if (comp instanceof JLabel && ((JLabel) comp).getText().equals(labelText)) {
+                int index = Arrays.asList(container.getComponents()).indexOf(comp);
+                if (index + 1 < container.getComponents().length) {
+                    return container.getComponents()[index + 1];
+                }
+            }
+        }
+        return null;
     }
 
     private void addNumericOnlyFilterToAll(Container container) {
