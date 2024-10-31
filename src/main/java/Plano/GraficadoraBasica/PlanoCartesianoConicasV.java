@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.List;
 import formasADibujar.Rotacion.*;
@@ -28,6 +29,8 @@ public class PlanoCartesianoConicasV extends JPanel {
     private boolean isDarkMode = false; // Flag to track dark mode status
     private List<Punto> puntos = new ArrayList<>();
     private List<Linea> lineas = new ArrayList<>();
+
+    public boolean isTrigonometrico = false;
 
     public PlanoCartesianoConicasV() {
         setupMouseListeners();
@@ -333,8 +336,11 @@ public class PlanoCartesianoConicasV extends JPanel {
             g2.drawOval(xCentro - radio, yCentro - radio, radio * 2, radio * 2);
 
             // Dibujar los puntos usando simetría polinomial
-            drawCirclePoints(g2, xCentro, yCentro, radio);
-
+            if (isTrigonometrico) {
+                drawCirclePointsTrigonometrico(g2, xCentro, yCentro, radio);
+            } else {
+                drawCirclePoints(g2, xCentro, yCentro, radio);
+            }
 
         }
     }
@@ -355,7 +361,63 @@ public class PlanoCartesianoConicasV extends JPanel {
         return puntos;
     }
 
-    // Update the drawCirclePoints method in the PlanoCartesiano class
+    private void drawCirclePointsTrigonometrico(Graphics2D g2, int xCentro, int yCentro, int radio) {
+        List<Punto> puntos = calcularPuntosCirculo(xCentro, yCentro, radio);
+        g2.setColor(Color.RED); // Color para los puntos
+        String[] etiquetas = {"P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"};
+
+        for (int i = 0; i < puntos.size(); i++) {
+            Punto punto = puntos.get(i);
+            int x = (int) punto.getX();
+            int y = (int) punto.getY();
+            g2.fillOval(x - 2, y - 2, 8, 8); // Ajuste para centrar el punto
+
+            // Dibujar la etiqueta del punto
+            g2.drawString(etiquetas[i], x + 5, y - 5); // Etiquetar el punto
+        }
+
+        // Dibujar líneas desde el centro a P1 y P2
+        g2.setColor(Color.BLUE); // Color para las líneas
+
+        // Primer punto (P1)
+        Punto primerPunto = puntos.get(0);
+        g2.drawLine(xCentro, yCentro, (int)primerPunto.getX(), (int)primerPunto.getY());
+
+        // Segundo punto (P2)
+        Punto segundoPunto = puntos.get(1);
+        g2.drawLine(xCentro, yCentro, (int)segundoPunto.getX(), (int)segundoPunto.getY());
+
+        // Dibujar arcos solo si está en modo trigonométrico
+
+        g2.setColor(Color.GREEN); // Color para los arcos
+
+        // Arco para P1
+        Arc2D arcP1 = new Arc2D.Double(
+                xCentro - radio,
+                yCentro - radio,
+                radio * 2,
+                radio * 2,
+                0,    // Ángulo de inicio
+                45,   // Ángulo del arco (ajusta según necesites)
+                Arc2D.OPEN
+        );
+        g2.draw(arcP1);
+
+        // Arco para P2
+        Arc2D arcP2 = new Arc2D.Double(
+                xCentro - radio,
+                yCentro - radio,
+                radio * 2,
+                radio * 2,
+                45,   // Ángulo de inicio
+                45,   // Ángulo del arco (ajusta según necesites)
+                Arc2D.OPEN
+        );
+        g2.draw(arcP2);
+
+    }
+
+
     private void drawCirclePoints(Graphics2D g2, int xCentro, int yCentro, int radio) {
         List<Punto> puntos = calcularPuntosCirculo(xCentro, yCentro, radio);
         g2.setColor(Color.RED); // Color para los puntos
@@ -371,6 +433,7 @@ public class PlanoCartesianoConicasV extends JPanel {
             g2.drawString(etiquetas[i], x + 5, y - 5); // Etiquetar el punto
         }
     }
+
 
     private List<int[]> calcularPuntosElipse(int xCentro, int yCentro, int semiEjeMayor, int semiEjeMenor) {
         List<int[]> puntos = new ArrayList<>();
@@ -458,6 +521,43 @@ public class PlanoCartesianoConicasV extends JPanel {
         return new Point(x, y);
     }
 
+    private void drawPolinomio(Graphics2D g2, int xOrigen, int yOrigen, int x1, int x2, int radio, int anguloInicio, int anguloFin) {
+        g2.setColor(Color.BLUE);
+
+        // Calculamos el centro del arco basado en xOrigen, yOrigen y el radio
+        int xCentro = xOrigen;
+        int yCentro = yOrigen;
+
+        // Se asegura que el radio no sea negativo
+        if (radio < 0) {
+            radio = Math.abs(radio);
+        }
+
+        // Dibujar el arco
+        g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFin - anguloInicio);
+
+        // Calcular y dibujar los 8 puntos distribuidos uniformemente
+        int numPuntos = 8;
+        double deltaAngulo = (anguloFin - anguloInicio) / (double)(numPuntos - 1);
+
+        for (int i = 0; i < numPuntos; i++) {
+            int anguloActual = (int)(anguloInicio + deltaAngulo * i);
+            Point punto = calcularPuntoEnArco(xCentro, yCentro, radio, anguloActual);
+
+            // Dibujar el punto
+            g2.fillOval(punto.x - 3, punto.y - 3, 6, 6);
+            g2.setColor(Color.RED);
+            // Etiquetar el punto
+            g2.drawString("P" + (i + 1), punto.x + 5, punto.y - 5);
+        }
+
+        // Dibujar las líneas desde los puntos inicial y final hacia el centro
+        Point puntoInicial = calcularPuntoEnArco(xCentro, yCentro, radio, anguloInicio);
+        Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFin);
+        g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);
+        g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);
+    }
+
     public void addLinea(Linea linea) {
         Linea.getLineas().add(linea);
         repaint(); // Redibujar el plano para reflejar los cambios
@@ -477,10 +577,6 @@ public class PlanoCartesianoConicasV extends JPanel {
     }
 
 
-    public void setDarkMode(boolean darkMode) {
-        isDarkMode = darkMode;
-        repaint(); // Redibujar el plano al cambiar el modo
-    }
 
 
     public void addCirculo(Circulo circulo) {
@@ -488,9 +584,7 @@ public class PlanoCartesianoConicasV extends JPanel {
         repaint();
     }
 
-    public int getGridSize() {
-        return gridSize;
-    }
+
 
     public void setGridSize(int newSize) {
         this.gridSize = newSize;
@@ -561,23 +655,6 @@ public class PlanoCartesianoConicasV extends JPanel {
             g2.setColor(originalColor);
             g2.setFont(originalFont);
 
-        } else if (currentCoordSystem == CoordinateSystem.Type.POLAR_RELATIVE) {
-            // Código existente para coordenadas polares relativas
-            g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                    0, new float[]{5}, 0));
-            Punto puntoAnterior = null;
-            for (Punto punto : Punto.getPuntos()) {
-                int x = (int) (punto.getX() * GRID_SIZE);
-                int y = (int) (-punto.getY() * GRID_SIZE);
-                if (puntoAnterior == null) {
-                    g2.drawLine(0, 0, x, y);
-                } else {
-                    int xAnt = (int) (puntoAnterior.getX() * GRID_SIZE);
-                    int yAnt = (int) (-puntoAnterior.getY() * GRID_SIZE);
-                    g2.drawLine(xAnt, yAnt, x, y);
-                }
-                puntoAnterior = punto;
-            }
         }
         // Restaurar el trazo normal
         g2.setStroke(new BasicStroke());

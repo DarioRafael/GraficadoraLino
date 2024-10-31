@@ -220,7 +220,6 @@ public class PlanoCartesianoLineas extends JPanel {
             // Verificar si el nombre no es null antes de dibujar
             String nombrePunto = punto.getNombrePunto();
             if (nombrePunto != null) {
-                g2.drawString(nombrePunto, x + 5, y - 5);
             }
         }
     }

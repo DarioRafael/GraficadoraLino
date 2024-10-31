@@ -40,13 +40,13 @@ public class PaginaPrincipal extends JFrame {
         // Botones
         JButton goToLineButton = createStyledButton("Graficadora de Líneas", "Acceso a la graficadora de líneas");
         goToLineButton.addActionListener(e -> {
-            new DrawingFrameLineas().setVisible(true);
+            new MenuDeLineas().setVisible(true);
             dispose(); // Cierra la ventana actual
         });
 
         JButton goToConicsButton = createStyledButton("Graficadora de Cónicas", "Acceso a la graficadora de cónicas");
         goToConicsButton.addActionListener(e -> {
-            new DrawingFrameConicas().setVisible(true);
+            new MenuDeConicas().setVisible(true);
             dispose(); // Cierra la ventana actual
         });
 

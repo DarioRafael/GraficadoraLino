@@ -418,7 +418,7 @@ public class DrawingFrame extends JFrame {
         infoPanel.repaint();
     }
 
-    private void handlerclear(){
+    public void handlerclear(){
         planoCartesiano.clear(); // Llamar al método clear() del plano cartesiano
         tableModel.setRowCount(0); // Limpiar la tabla
         figurasComboBox.removeAllItems();

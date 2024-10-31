@@ -1,4 +1,4 @@
-package DrawingClasses.GraficadoraBasica.Lineas;
+package DrawingClasses.GraficadoraBasica.Lineas.Separadas;
 
 
 import PaginaPrincipalFolder.GraficadoraBasica.CreditosParaFG;
@@ -6,7 +6,8 @@ import PaginaPrincipalFolder.GraficadoraBasica.MenuDeConicas;
 import PaginaPrincipalFolder.GraficadoraBasica.MenuDeLineas;
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 import Plano.GraficadoraBasica.PlanoCartesianoLineas;
-import formasADibujar.Rotacion.*;
+import formasADibujar.Rotacion.Linea;
+import formasADibujar.Rotacion.Punto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,8 +17,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DrawingFrameLineas extends JFrame {
+public class DrawingFrameVertical extends JFrame {
 
     private PlanoCartesianoLineas planoCartesiano;
     private Punto puntoActual;
@@ -45,7 +44,7 @@ public class DrawingFrameLineas extends JFrame {
     private JComboBox<String> figurasComboBox;
     private Map<String, List<Punto>> figurasMap = new HashMap<>();
 
-    public DrawingFrameLineas() {
+    public DrawingFrameVertical() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,9 +113,17 @@ public class DrawingFrameLineas extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
 
         titlePanel = new JPanel();
-        titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+
+        titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - Lineas");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        titlePanel.add(titleLabel);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
+        titlePanel.add(titleLabel); // Agregar el JLabel del título al panel
+
+        JLabel circleLabel = new JLabel("Linea vertical");
+        circleLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        circleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titlePanel.add(circleLabel);
 
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
@@ -139,8 +146,6 @@ public class DrawingFrameLineas extends JFrame {
         infoPanel.add(lineaLabel);
 
         figurasComboBox.addItem("Vertical");
-        figurasComboBox.addItem("Horizontal");
-        figurasComboBox.addItem("Diagonal");
 
         infoPanel.add(figurasComboBox);
 
@@ -250,20 +255,13 @@ public class DrawingFrameLineas extends JFrame {
 
             // Habilitar campos finales según el tipo de línea
             switch (lineType) {
-                case "Horizontal":
-                    xFinField.setEnabled(true);
-                    yFinField.setEnabled(false);
-                    yFinField.setText(String.valueOf(yInicio)); // Mantener mismo valor Y
-                    break;
+
                 case "Vertical":
                     xFinField.setEnabled(false);
                     yFinField.setEnabled(true);
                     xFinField.setText(String.valueOf(xInicio)); // Mantener mismo valor X
                     break;
-                case "Diagonal":
-                    xFinField.setEnabled(true);
-                    yFinField.setEnabled(true);
-                    break;
+
             }
 
             endDraw.setEnabled(true);
@@ -486,7 +484,7 @@ public class DrawingFrameLineas extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new DrawingFrameLineas();
+            new DrawingFrameVertical();
         });
     }
 }
