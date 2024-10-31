@@ -1,7 +1,7 @@
 package Plano.GraficadoraBasica;
 
 import Plano.GenericsPlano.CoordinateSystem;
-import formasADibujar.*;
+import formasADibujar.Rotacion.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -156,13 +156,13 @@ public class PlanoCartesianoLineas extends JPanel {
         g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0);
         g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2));
 
-        g2.setFont(new Font("Arial", Font.PLAIN, 12));
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
         g2.drawString("X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
         g2.drawString("-X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
         g2.drawString("Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
         g2.drawString("-Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
 
-        g2.setFont(new Font("Arial", Font.PLAIN, 10));
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
 
         int startX = (int) Math.floor((-offsetX - viewportWidth / 2) / GRID_SIZE);
         int endX = (int) Math.ceil((-offsetX + viewportWidth / 2) / GRID_SIZE);
@@ -212,8 +212,8 @@ public class PlanoCartesianoLineas extends JPanel {
         List<Punto> puntos = Punto.getPuntos();
 
         for (Punto punto : puntos) {
-            int x = punto.getX() * GRID_SIZE;
-            int y = -punto.getY() * GRID_SIZE;
+            int x = (int)punto.getX() * GRID_SIZE;
+            int y = (int)-punto.getY() * GRID_SIZE;
 
             g2.fillOval(x - 3, y - 3, 6, 6);
 
@@ -233,57 +233,32 @@ public class PlanoCartesianoLineas extends JPanel {
     }
 
     private void drawLines(Graphics2D g2) {
-
         g2.setStroke(new BasicStroke(2));
+        g2.setColor(Color.BLACK);
 
         List<Linea> lineas = Linea.getLineas();
-
 
         for (Linea linea : lineas) {
             Punto inicio = linea.getPuntoInicio();
             Punto fin = linea.getPuntoFin();
-            int x1 = inicio.getX() * GRID_SIZE;
-            int y1 = -inicio.getY() * GRID_SIZE;
-            int x2 = fin.getX() * GRID_SIZE;
-            int y2 = -fin.getY() * GRID_SIZE;
+            int x1 = (int) inicio.getX() * GRID_SIZE;
+            int y1 = (int) -inicio.getY() * GRID_SIZE;
+            int x2 = (int) fin.getX() * GRID_SIZE;
+            int y2 = (int) -fin.getY() * GRID_SIZE;
 
             g2.drawLine(x1, y1, x2, y2);
-            //g2.drawString("P" + 1, x1 + 5, y1 - 5);
+            g2.setColor(Color.RED);
 
-            // Dibujar todos los puntos intermedios
-            int puntoCounter = 1; // Contador para los nombres de los puntos
-
-            if (linea.isEsParteDeFiguraAnonima()) {
-                List<Punto> puntos = Punto.getPuntos();
-
-                for (Punto punto : puntos) {
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
-
-                    g2.fillOval(x - 3, y - 3, 6, 6);
-
-                    // Verificar si el nombre no es null antes de dibujar
-                    String nombrePunto = punto.getNombrePunto();
-                    if (nombrePunto != null) {
-                        g2.drawString(nombrePunto, x + 5, y - 5);
-                    }
-                }
-            } else {
-                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
-                for (Punto punto : puntosIntermedios) {
-
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
-                    g2.fillOval(x - 3, y - 3, 6, 6);
-
-                    // Dibujar el nombre del punto
-                    g2.drawString("P" + puntoCounter++, x + 5, y - 5); // Etiquetar el punto
-                }
+            List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios(inicio, fin);
+            int puntoCounter = 1;
+            for (Punto punto : puntosIntermedios) {
+                int x = (int) punto.getX() * GRID_SIZE;
+                int y = (int) -punto.getY() * GRID_SIZE;
+                g2.fillOval(x - 3, y - 3, 6, 6);
+                g2.drawString("P" + puntoCounter++, x + 5, y - 5);
             }
         }
     }
-
-
 
 
     public void addLinea(Linea linea) {

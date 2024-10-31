@@ -72,28 +72,26 @@ public class Linea {
         return puntos;
     }
 
-    public List<Punto> calcularPuntosIntermedios() {
-        if (esParteDeFiguraAnonima) {
-            return new ArrayList<>(); // Retornar una lista vacía si es parte de la figura anónima
-        }
+    public List<Punto> calcularPuntosIntermedios(Punto inicio, Punto fin) {
+        List<Punto> puntosIntermedios = new ArrayList<>();
+        int x1 = (int) inicio.getX();
+        int y1 = (int) inicio.getY();
+        int x2 = (int) fin.getX();
+        int y2 = (int) fin.getY();
 
-        List<Punto> puntos = new ArrayList<>();
-        double x1 = puntoInicio.getX();
-        double y1 = puntoInicio.getY();
-        double x2 = puntoFin.getX();
-        double y2 = puntoFin.getY();
-
-        double dx = Math.abs(x2 - x1);
-        double dy = Math.abs(y2 - y1);
-        double sx = x1 < x2 ? 1 : -1;
-        double sy = y1 < y2 ? 1 : -1;
-        double err = dx - dy;
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+        int sx = x1 < x2 ? 1 : -1;
+        int sy = y1 < y2 ? 1 : -1;
+        int err = dx - dy;
+        int puntoNumero = 1;
 
         while (true) {
-            puntos.add(new Punto(x1, y1));
-            if (Math.abs(x1 - x2) < 0.0001 && Math.abs(y1 - y2) < 0.0001) break;
-
-            double e2 = 2 * err;
+            Punto punto = new Punto(x1, y1);
+            punto.setNombrePunto("P" + puntoNumero++);
+            puntosIntermedios.add(punto);
+            if (x1 == x2 && y1 == y2) break;
+            int e2 = 2 * err;
             if (e2 > -dy) {
                 err -= dy;
                 x1 += sx;
@@ -103,9 +101,9 @@ public class Linea {
                 y1 += sy;
             }
         }
-
-        return puntos;
+        return puntosIntermedios;
     }
+
     public boolean isEsParteDeFiguraAnonima() {
         return esParteDeFiguraAnonima;
     }

@@ -1,9 +1,10 @@
 package DrawingClasses.GraficadoraBasica.Lineas;
 
 
+import PaginaPrincipalFolder.GraficadoraBasica.CreditosParaFG;
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 import Plano.GraficadoraBasica.PlanoCartesianoLineas;
-import formasADibujar.*;
+import formasADibujar.Rotacion.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -26,9 +27,8 @@ public class DrawingFrameLineas extends JFrame {
 
     private PlanoCartesianoLineas planoCartesiano;
     private Punto puntoActual;
-    private JPopupMenu lineTypeMenu;
     private JLabel metodoLabel,titleLabel;
-    private JButton clearButton,menuButton,drawPointButton,drawLineButton,creditosButton;
+    private JButton clearButton,menuButton,drawPointButton,creditosButton;
     private JButton originDraw, endDraw;
     JPanel optionsPanel;
     JScrollPane scrollPane;
@@ -44,7 +44,7 @@ public class DrawingFrameLineas extends JFrame {
     private Map<String, List<Punto>> figurasMap = new HashMap<>();
 
     public DrawingFrameLineas() {
-        setTitle("Graficación Básica por Computadora");
+        setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
@@ -69,14 +69,7 @@ public class DrawingFrameLineas extends JFrame {
 
         drawPointButton = new JButton("Dibujar Punto");
 
-        drawLineButton = new JButton("Tipos de Lineas");
-        lineTypeMenu = new JPopupMenu();
-        String[] lineTypes = {"Vertical", "Horizontal", "Diagonal"};
-        for (String type : lineTypes) {
-            JMenuItem item = new JMenuItem(type);
-            item.addActionListener(e -> drawLineBasedOnType(type));
-            lineTypeMenu.add(item);
-        }
+
 
 
         clearButton = new JButton("Limpiar");
@@ -119,13 +112,12 @@ public class DrawingFrameLineas extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
 
         titlePanel = new JPanel();
-        titleLabel = new JLabel("Graficación Básica por Computadora");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titlePanel.add(titleLabel);
 
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
-        optionsPanel.add(drawLineButton);
         optionsPanel.add(clearButton);
         optionsPanel.add(creditosButton);
 
@@ -203,65 +195,122 @@ public class DrawingFrameLineas extends JFrame {
         rightPanel.add(scrollPane, BorderLayout.SOUTH);
 
 
-
         add(rightPanel, BorderLayout.EAST);
+
+        figurasComboBox.addActionListener(e -> {
+            String selectedType = (String) figurasComboBox.getSelectedItem();
+            resetFields();
+            enableFields(selectedType);
+        });
+
+        // Agregar listeners a los botones de dibujo
+        originDraw.addActionListener(e -> handleOriginDraw());
+        endDraw.addActionListener(e -> handleEndDraw());
+
+        // Deshabilitar campos finales inicialmente
+        xFinField.setEnabled(false);
+        yFinField.setEnabled(false);
+        endDraw.setEnabled(false);
     }
     private void addActionListeners() {
         drawPointButton.addActionListener(e -> handleDrawPointAction());
-        drawLineButton.addActionListener(e -> lineTypeMenu.show(drawLineButton, 0, drawLineButton.getHeight()));
         menuButton.addActionListener(e -> {
             dispose();
             new PaginaPrincipal().setVisible(true);
         });
-        creditosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Créditos:\n\nDesarrollado por: Dario Rafael García Bárcenas y Juan Carlos Torres Reyna\nVersión: 1.0", "Créditos", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
 
     }
 
-    private void updateInfoPanel(String tipoFigura, Map<String, String> datos) {
-        infoPanel.removeAll();
-        infoPanel.setLayout(new GridLayout(0, 2, 5, 5)); // Rows, 2 columns, gaps
-
-
-        if (tipoFigura.contains("circulo") || tipoFigura.contains("elipse") ||
-                tipoFigura.contains("arco")) {
-            infoPanel.add(new JLabel("Método:"));
-            String metodo = tipoFigura.contains("Trigonometrico") ? "Trigonométrico" : "Polinomial";
-            metodoLabel.setText("<html><b>" + metodo + "</b></html>");
-            infoPanel.add(metodoLabel);
-        } else if(tipoFigura.contains("figuraAnonimaCartesiana")){
-            // Añadir el label del método al principio del panel
-            infoPanel.add(new JLabel("Método:"));
-        }
-
-        switch (tipoFigura) {
-            case "linea":
-
-                break;
-        }
-
-
-
-
-        for (Component comp : infoPanel.getComponents()) {
-            if (comp instanceof JTextField) {
-                addNumericOnlyFilter((JTextField) comp);
-            }
-        }
-
-        infoPanel.revalidate();
-        infoPanel.repaint();
+    private void resetFields() {
+        xInicioField.setText("");
+        yInicioField.setText("");
+        xFinField.setText("");
+        yFinField.setText("");
+        xFinField.setEnabled(false);
+        yFinField.setEnabled(false);
+        endDraw.setEnabled(false);
     }
 
+    private void enableFields(String lineType) {
+        xInicioField.setEnabled(true);
+        yInicioField.setEnabled(true);
+    }
+
+    private void handleOriginDraw() {
+        handlerclear();
+        try {
+            int xInicio = Integer.parseInt(xInicioField.getText());
+            int yInicio = Integer.parseInt(yInicioField.getText());
+
+            String lineType = (String) figurasComboBox.getSelectedItem();
+
+            // Habilitar campos finales según el tipo de línea
+            switch (lineType) {
+                case "Horizontal":
+                    xFinField.setEnabled(true);
+                    yFinField.setEnabled(false);
+                    yFinField.setText(String.valueOf(yInicio)); // Mantener mismo valor Y
+                    break;
+                case "Vertical":
+                    xFinField.setEnabled(false);
+                    yFinField.setEnabled(true);
+                    xFinField.setText(String.valueOf(xInicio)); // Mantener mismo valor X
+                    break;
+                case "Diagonal":
+                    xFinField.setEnabled(true);
+                    yFinField.setEnabled(true);
+                    break;
+            }
+
+            endDraw.setEnabled(true);
+
+            // Dibujar punto inicial
+            puntoActual = new Punto(xInicio, yInicio);
+            planoCartesiano.addPunto(puntoActual);
+            planoCartesiano.repaint();
+
+            // Actualizar tabla
+            tableModel.setRowCount(0);
+            tableModel.addRow(new Object[]{"P1", xInicio, yInicio});
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, ingrese valores numéricos válidos para el punto inicial.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void handleEndDraw() {
+        handlerclear();
+        try {
+            int xInicio = Integer.parseInt(xInicioField.getText());
+            int yInicio = Integer.parseInt(yInicioField.getText());
+            int xFin = Integer.parseInt(xFinField.getText());
+            int yFin = Integer.parseInt(yFinField.getText());
+
+            // Crear puntos
+            Punto puntoInicio = new Punto(xInicio, yInicio);
+            Punto puntoFin = new Punto(xFin, yFin);
+
+            // Crear y dibujar la línea
+            Linea nuevaLinea = new Linea(puntoInicio, puntoFin, false);
+            planoCartesiano.repaint();
+
+            // Actualizar la tabla con los puntos intermedios
+            List<Punto> puntosIntermedios = calcularPuntosIntermedios(puntoInicio, puntoFin);
+            updateTableWithPoints(puntosIntermedios);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, ingrese valores numéricos válidos para el punto final.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void handlerclear(){
         planoCartesiano.clear();
         tableModel.setRowCount(0); // Limpiar la tabla
-        figurasComboBox.removeAllItems();
     }
 
     private void handleDrawPointAction() {
@@ -304,6 +353,82 @@ public class DrawingFrameLineas extends JFrame {
                 }
             }
         }
+    }
+
+
+
+
+
+
+    private void updateTableWithPoints(List<Punto> puntos) {
+        tableModel.setRowCount(0);
+        int puntoNumero = 1;
+        for (Punto punto : puntos) {
+            tableModel.addRow(new Object[]{"P" + puntoNumero++, punto.getX(), punto.getY()});
+        }
+    }
+
+    // Method to calculate intermediate points of a line
+// Método para calcular puntos intermedios de una línea
+    public List<Punto> calcularPuntosIntermedios(Punto inicio, Punto fin) {
+        List<Punto> puntosIntermedios = new ArrayList<>();
+
+        int x1 = (int) inicio.getX();
+        int y1 = (int) inicio.getY();
+        int x2 = (int) fin.getX();
+        int y2 = (int) fin.getY();
+
+        // Determinar si la pendiente es mayor a 1 o menor a -1
+        boolean pendientePronunciada = Math.abs(y2 - y1) > Math.abs(x2 - x1);
+
+        // Si la pendiente es pronunciada, intercambiamos x y y
+        if (pendientePronunciada) {
+            int temp = x1;
+            x1 = y1;
+            y1 = temp;
+
+            temp = x2;
+            x2 = y2;
+            y2 = temp;
+        }
+
+        // Si el punto inicial está después del final, intercambiarlos
+        if (x1 > x2) {
+            int temp = x1;
+            x1 = x2;
+            x2 = temp;
+
+            temp = y1;
+            y1 = y2;
+            y2 = temp;
+        }
+
+        int dx = x2 - x1;
+        int dy = Math.abs(y2 - y1);
+        int error = dx / 2;
+
+        int y = y1;
+        int ystep = (y1 < y2) ? 1 : -1;
+
+        // Iterar sobre cada punto en x
+        for (int x = x1; x <= x2; x++) {
+            Punto punto;
+            if (pendientePronunciada) {
+                punto = new Punto(y, x);
+            } else {
+                punto = new Punto(x, y);
+            }
+            punto.setNombrePunto("P" + (puntosIntermedios.size() + 1));
+            puntosIntermedios.add(punto);
+
+            error -= dy;
+            if (error < 0) {
+                y += ystep;
+                error += dx;
+            }
+        }
+
+        return puntosIntermedios;
     }
 
 
@@ -354,156 +479,6 @@ public class DrawingFrameLineas extends JFrame {
                 }
             }
         });
-    }
-
-
-
-
-    private void drawLineBasedOnType(String lineType) {
-        Punto puntoInicio = null;
-        Punto puntoFin = null;
-
-        // Solicitar el punto de inicio
-        JPanel panelInicio = new JPanel(new GridLayout(2, 2));
-        JTextField xInicioField = new JTextField(5);
-        JTextField yInicioField = new JTextField(5);
-        panelInicio.add(new JLabel("X inicial:"));
-        panelInicio.add(xInicioField);
-        panelInicio.add(new JLabel("Y inicial:"));
-        panelInicio.add(yInicioField);
-        addNumericOnlyFilter(xInicioField);
-        addNumericOnlyFilter(yInicioField);
-
-        int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio,
-                "Ingrese el punto de inicio", JOptionPane.OK_CANCEL_OPTION);
-
-        if (resultInicio == JOptionPane.OK_OPTION) {
-            try {
-                int xInicio = Integer.parseInt(xInicioField.getText());
-                int yInicio = Integer.parseInt(yInicioField.getText());
-                puntoInicio = new Punto(xInicio, yInicio);
-
-                // Solicitar el punto final basado en el tipo de línea
-                JPanel panelFin = new JPanel(new GridLayout(2, 2));
-                JTextField xFinField = new JTextField(5);
-                JTextField yFinField = new JTextField(5);
-                addNumericOnlyFilter(xFinField);
-                addNumericOnlyFilter(yFinField);
-
-                switch (lineType) {
-                    case "Vertical":
-                        panelFin.add(new JLabel("X final (fijo):"));
-                        xFinField.setText(String.valueOf(xInicio));
-                        xFinField.setEditable(false);
-                        panelFin.add(xFinField);
-                        panelFin.add(new JLabel("Y final:"));
-                        panelFin.add(yFinField);
-                        break;
-                    case "Horizontal":
-                        panelFin.add(new JLabel("X final:"));
-                        panelFin.add(xFinField);
-                        panelFin.add(new JLabel("Y final (fijo):"));
-                        yFinField.setText(String.valueOf(yInicio));
-                        yFinField.setEditable(false);
-                        panelFin.add(yFinField);
-                        break;
-                    case "Diagonal":
-                        panelFin.add(new JLabel("X final:"));
-                        panelFin.add(xFinField);
-                        panelFin.add(new JLabel("Y final:"));
-                        panelFin.add(yFinField);
-                        break;
-                }
-
-
-                int resultFin = JOptionPane.showConfirmDialog(null, panelFin,
-                        "Ingrese el punto final", JOptionPane.OK_CANCEL_OPTION);
-
-                if (resultFin == JOptionPane.OK_OPTION) {
-                    int xFin = Integer.parseInt(xFinField.getText());
-                    int yFin = Integer.parseInt(yFinField.getText());
-                    puntoFin = new Punto(xFin, yFin);
-
-                    // Crear y dibujar la línea
-                    Linea nuevaLinea = new Linea(puntoInicio, puntoFin, false);
-                    planoCartesiano.repaint();
-                    configurarColumnas(false);
-                    // Actualizar la tabla con los puntos de la nueva línea
-                    updateTableWithLinePoints(nuevaLinea);
-
-                    // Agregar esta llamada para actualizar el panel de información
-                    Map<String, String> datos = new HashMap<>();
-                    datos.put("xInicio", String.valueOf(puntoInicio.getX()));
-                    datos.put("yInicio", String.valueOf(puntoInicio.getY()));
-                    datos.put("xFin", String.valueOf(puntoFin.getX()));
-                    datos.put("yFin", String.valueOf(puntoFin.getY()));
-                    updateInfoPanel("linea", datos);
-
-                    List<Punto> puntosLinea = calcularPuntosIntermedios(puntoInicio, puntoFin);
-
-
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese valores numéricos válidos.");
-            }
-        }
-    }
-
-    // Method to calculate intermediate points of a line
-    public List<Punto> calcularPuntosIntermedios(Punto inicio, Punto fin) {
-        List<Punto> puntosIntermedios = new ArrayList<>();
-        int x1 = inicio.getX();
-        int y1 = inicio.getY();
-        int x2 = fin.getX();
-        int y2 = fin.getY();
-
-        int dx = Math.abs(x2 - x1);
-        int dy = Math.abs(y2 - y1);
-        int sx = x1 < x2 ? 1 : -1;
-        int sy = y1 < y2 ? 1 : -1;
-        int err = dx - dy;
-        int puntoNumero = 1;
-
-        while (true) {
-            Punto punto = new Punto(x1, y1);
-            punto.setNombrePunto("P" + puntoNumero++);
-            puntosIntermedios.add(punto);
-            if (x1 == x2 && y1 == y2) break;
-            int e2 = 2 * err;
-            if (e2 > -dy) {
-                err -= dy;
-                x1 += sx;
-            }
-            if (e2 < dx) {
-                err += dx;
-                y1 += sy;
-            }
-        }
-        return puntosIntermedios;
-    }
-
-
-    public void updateTableWithLinePoints(Linea linea) {
-        DefaultTableModel tableModel = (DefaultTableModel) infoTable.getModel();
-        tableModel.setRowCount(0); // Limpiar la tabla
-        int puntoNumero = 1; // Inicializar el número del punto
-        for (Punto punto : linea.calcularPuntosIntermedios()) {
-            tableModel.addRow(new Object[]{"P" + puntoNumero++, (Object) punto.getX(), (Object) punto.getY()});
-        }
-    }
-
-
-    private void configurarColumnas(boolean esTrigonometria) {
-        String[] columnNames;
-
-            columnNames = new String[]{"Punto", "X", "Y"}; // Nombres por defecto
-
-
-
-        tableModel.setColumnCount(0); // Limpiar columnas anteriores
-        for (String columnName : columnNames) {
-            tableModel.addColumn(columnName); // Agregar nuevas columnas
-        }
     }
 
 

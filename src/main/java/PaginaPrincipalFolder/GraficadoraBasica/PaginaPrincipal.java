@@ -14,7 +14,7 @@ public class PaginaPrincipal extends JFrame {
 
     public PaginaPrincipal() {
         setTitle("Página Principal");
-        setSize(800, 600);
+        setSize(1280, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
 
@@ -27,7 +27,7 @@ public class PaginaPrincipal extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Graficación Básica por Computadora", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
@@ -51,7 +51,7 @@ public class PaginaPrincipal extends JFrame {
         });
 
         JButton creditsButton = createStyledButton("Créditos", "Ver créditos del proyecto");
-        creditsButton.addActionListener(e -> showCredits());
+        creditsButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
 
         buttonPanel.add(goToLineButton);
         buttonPanel.add(goToConicsButton);
@@ -110,10 +110,7 @@ public class PaginaPrincipal extends JFrame {
         return button;
     }
 
-    private void showCredits() {
-        JOptionPane.showMessageDialog(this,
-                "Créditos:\n\nDesarrollado por: Dario Rafael García Bárcenas y Juan Carlos Torres Reyna\nVersión: 1.0", "Créditos", JOptionPane.INFORMATION_MESSAGE);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new PaginaPrincipal().setVisible(true));

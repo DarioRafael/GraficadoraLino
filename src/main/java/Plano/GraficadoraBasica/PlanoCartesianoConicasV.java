@@ -1,6 +1,6 @@
-package Plano.GenericsPlano;
+package Plano.GraficadoraBasica;
 
-import formasADibujar.*;
+import Plano.GenericsPlano.CoordinateSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +10,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+import formasADibujar.Rotacion.*;
 
-public class PlanoCartesiano extends JPanel {
+public class PlanoCartesianoConicasV extends JPanel {
 
     private double offsetX = 0, offsetY = 0;
     private int gridSize = 50;
@@ -28,7 +29,7 @@ public class PlanoCartesiano extends JPanel {
     private List<Punto> puntos = new ArrayList<>();
     private List<Linea> lineas = new ArrayList<>();
 
-    public PlanoCartesiano() {
+    public PlanoCartesianoConicasV() {
         setupMouseListeners();
     }
 
@@ -182,13 +183,13 @@ public class PlanoCartesiano extends JPanel {
         g2.drawLine((int) (-offsetX - viewportWidth / 2), 0, (int) (-offsetX + viewportWidth / 2), 0);
         g2.drawLine(0, (int) (-offsetY - viewportHeight / 2), 0, (int) (-offsetY + viewportHeight / 2));
 
-        g2.setFont(new Font("Arial", Font.PLAIN, 12));
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
         g2.drawString("X", (int) (-offsetX + viewportWidth / 2) - LABEL_OFFSET, -LABEL_OFFSET);
         g2.drawString("-X", (int) (-offsetX - viewportWidth / 2) + LABEL_OFFSET, -LABEL_OFFSET);
         g2.drawString("Y", LABEL_OFFSET, (int) (-offsetY - viewportHeight / 2) + LABEL_OFFSET);
         g2.drawString("-Y", LABEL_OFFSET, (int) (-offsetY + viewportHeight / 2) - LABEL_OFFSET);
 
-        g2.setFont(new Font("Arial", Font.PLAIN, 10));
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
 
         int startX = (int) Math.floor((-offsetX - viewportWidth / 2) / GRID_SIZE);
         int endX = (int) Math.ceil((-offsetX + viewportWidth / 2) / GRID_SIZE);
@@ -242,8 +243,8 @@ public class PlanoCartesiano extends JPanel {
         List<Punto> puntos = Punto.getPuntos();
 
         for (Punto punto : puntos) {
-            int x = punto.getX() * GRID_SIZE;
-            int y = -punto.getY() * GRID_SIZE;
+            int x = (int) (punto.getX() * GRID_SIZE);
+            int y = (int) (-punto.getY() * GRID_SIZE);
 
             g2.fillOval(x - 3, y - 3, 6, 6);
 
@@ -272,14 +273,13 @@ public class PlanoCartesiano extends JPanel {
 
         List<Linea> lineas = Linea.getLineas();
 
-
         for (Linea linea : lineas) {
             Punto inicio = linea.getPuntoInicio();
             Punto fin = linea.getPuntoFin();
-            int x1 = inicio.getX() * GRID_SIZE;
-            int y1 = -inicio.getY() * GRID_SIZE;
-            int x2 = fin.getX() * GRID_SIZE;
-            int y2 = -fin.getY() * GRID_SIZE;
+            int x1 = (int) (inicio.getX() * GRID_SIZE);
+            int y1 = (int) (-inicio.getY() * GRID_SIZE);
+            int x2 = (int) (fin.getX() * GRID_SIZE);
+            int y2 = (int) (-fin.getY() * GRID_SIZE);
 
             g2.drawLine(x1, y1, x2, y2);
             //g2.drawString("P" + 1, x1 + 5, y1 - 5);
@@ -291,8 +291,8 @@ public class PlanoCartesiano extends JPanel {
                 List<Punto> puntos = Punto.getPuntos();
 
                 for (Punto punto : puntos) {
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
+                    int x = (int) (punto.getX() * GRID_SIZE);
+                    int y = (int) (-punto.getY() * GRID_SIZE);
 
                     g2.fillOval(x - 3, y - 3, 6, 6);
 
@@ -303,56 +303,14 @@ public class PlanoCartesiano extends JPanel {
                     }
                 }
             } else {
-                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
+                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios(inicio, fin);
                 for (Punto punto : puntosIntermedios) {
-
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
+                    int x = (int) (punto.getX() * GRID_SIZE);
+                    int y = (int) (-punto.getY() * GRID_SIZE);
                     g2.fillOval(x - 3, y - 3, 6, 6);
 
                     // Dibujar el nombre del punto
                     g2.drawString("P" + puntoCounter++, x + 5, y - 5); // Etiquetar el punto
-                }
-            }
-        }
-    }
-
-    private void drawLinesfk(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.CYAN);
-        } else {
-            g2.setColor(Color.BLUE);
-        }
-        g2.setStroke(new BasicStroke(2));
-
-        List<Linea> lineas = Linea.getLineas();
-        int puntoCounter = 1; // Contador global para los nombres de los puntos
-
-        for (Linea linea : lineas) {
-            Punto inicio = linea.getPuntoInicio();
-            Punto fin = linea.getPuntoFin();
-            int x1 = inicio.getX() * GRID_SIZE;
-            int y1 = -inicio.getY() * GRID_SIZE;
-            int x2 = fin.getX() * GRID_SIZE;
-            int y2 = -fin.getY() * GRID_SIZE;
-
-            g2.drawLine(x1, y1, x2, y2);
-// Etiquetar el punto de inicio
-
-            if (linea.isEsParteDeFiguraAnonima()) {
-                // Para la figura anónima, solo dibujamos y etiquetamos los puntos de inicio y fin
-                g2.fillOval(x1 - 3, y1 - 3, 6, 6);
-                g2.fillOval(x2 - 3, y2 - 3, 6, 6);
-                g2.drawString("P" + puntoCounter++, x1 + 5, y1 - 5);
-                g2.drawString("P" + puntoCounter++, x2 + 5, y2 - 5);
-            } else {
-                // Para líneas normales, dibujamos todos los puntos intermedios
-                List<Punto> puntosIntermedios = linea.calcularPuntosIntermedios();
-                for (Punto punto : puntosIntermedios) {
-                    int x = punto.getX() * GRID_SIZE;
-                    int y = -punto.getY() * GRID_SIZE;
-                    g2.fillOval(x - 3, y - 3, 6, 6);
-                    g2.drawString("P" + puntoCounter++, x + 5, y - 5);
                 }
             }
         }
@@ -367,8 +325,8 @@ public class PlanoCartesiano extends JPanel {
             g2.setColor(Color.GREEN);
         }
         for (Circulo circulo : Circulo.getCirculos()) {
-            int xCentro = circulo.getCentro().getX() * GRID_SIZE;
-            int yCentro = -circulo.getCentro().getY() * GRID_SIZE;
+            int xCentro = (int) (circulo.getCentro().getX() * GRID_SIZE);
+            int yCentro = (int) (-circulo.getCentro().getY() * GRID_SIZE);
             int radio = circulo.getRadio() * GRID_SIZE;
 
             // Dibujar el círculo completo
@@ -405,8 +363,8 @@ public class PlanoCartesiano extends JPanel {
 
         for (int i = 0; i < puntos.size(); i++) {
             Punto punto = puntos.get(i);
-            int x = punto.getX();
-            int y = punto.getY();
+            int x = (int) punto.getX();
+            int y = (int) punto.getY();
             g2.fillOval(x - 2, y - 2, 8, 8); // Ajuste para centrar el punto
 
             // Dibujar la etiqueta del punto
@@ -428,14 +386,12 @@ public class PlanoCartesiano extends JPanel {
     }
 
     private void drawElipses(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.PINK);
-        } else {
-            g2.setColor(Color.MAGENTA);
-        }
+
+            g2.setColor(Color.BLUE);
+
         for (Elipse elipse : Elipse.getElipses()) {
-            int xCentro = elipse.getCentro().getX() * GRID_SIZE;
-            int yCentro = -elipse.getCentro().getY() * GRID_SIZE;
+            int xCentro = (int) (elipse.getCentro().getX() * GRID_SIZE);
+            int yCentro = (int) (-elipse.getCentro().getY() * GRID_SIZE);
             int semiEjeMayor = elipse.getSemiEjeMayor() * GRID_SIZE;
             int semiEjeMenor = elipse.getSemiEjeMenor() * GRID_SIZE;
 
@@ -460,44 +416,45 @@ public class PlanoCartesiano extends JPanel {
 
 
     private void drawArcos(Graphics2D g2) {
-        if (isDarkMode) {
-            g2.setColor(Color.ORANGE);
-        } else {
-            g2.setColor(Color.RED);
-        }
+        g2.setColor(Color.BLUE);
 
         for (Arco arco : Arco.getArcos()) {
-            int xCentro = arco.getCentro().getX() * GRID_SIZE;
-            int yCentro = -arco.getCentro().getY() * GRID_SIZE;
-            int radio = arco.getRadio() * GRID_SIZE;
+            int xCentro = (int) (arco.getCentro().getX() * GRID_SIZE);
+            int yCentro = (int) (-arco.getCentro().getY() * GRID_SIZE);
+            int radio = (int) (arco.getRadio() * GRID_SIZE);
             int anguloInicio = (int) arco.getAnguloInicio();
             int anguloFinal = (int) arco.getAnguloFin();
 
             // Dibujar el arco
             g2.drawArc(xCentro - radio, yCentro - radio, radio * 2, radio * 2, anguloInicio, anguloFinal - anguloInicio);
 
-            // Dibujar los puntos inicial y final del arco
+            // Calcular y dibujar los 8 puntos distribuidos uniformemente
+            int numPuntos = 8;
+            double deltaAngulo = (anguloFinal - anguloInicio) / (double)(numPuntos - 1);
+
+            for (int i = 0; i < numPuntos; i++) {
+                int anguloActual = (int)(anguloInicio + deltaAngulo * i);
+                Point punto = calcularPuntoEnArco(xCentro, yCentro, radio, anguloActual);
+
+                // Dibujar el punto
+                g2.fillOval(punto.x - 3, punto.y - 3, 6, 6);
+                g2.setColor(Color.RED);
+                // Etiquetar el punto
+                g2.drawString("P" + (i + 1), punto.x + 5, punto.y - 5);
+            }
+
+            // Dibujar las líneas desde los puntos inicial y final hacia el centro
             Point puntoInicial = calcularPuntoEnArco(xCentro, yCentro, radio, anguloInicio);
             Point puntoFinal = calcularPuntoEnArco(xCentro, yCentro, radio, anguloFinal);
-
-            g2.fillOval(puntoInicial.x - 3, puntoInicial.y - 3, 6, 6);
-            g2.fillOval(puntoFinal.x - 3, puntoFinal.y - 3, 6, 6);
-
-            // Etiquetar los puntos
-            g2.drawString("Inicio", puntoInicial.x + 5, puntoInicial.y - 5);
-            g2.drawString("Fin", puntoFinal.x + 5, puntoFinal.y - 5);
-
-            // Dibujar las líneas desde los puntos inicial y final hacia el centro (simulando la rebanada de pizza)
-            g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);  // Línea desde el centro al punto inicial
-            g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);      // Línea desde el centro al punto final
+            g2.drawLine(xCentro, yCentro, puntoInicial.x, puntoInicial.y);
+            g2.drawLine(xCentro, yCentro, puntoFinal.x, puntoFinal.y);
         }
     }
 
-    // Método auxiliar para calcular un punto en el arco dado el ángulo
     private Point calcularPuntoEnArco(int xCentro, int yCentro, int radio, int angulo) {
         double anguloRadianes = Math.toRadians(angulo);
         int x = (int) (xCentro + radio * Math.cos(anguloRadianes));
-        int y = (int) (yCentro - radio * Math.sin(anguloRadianes)); // Y invertido en gráficos
+        int y = (int) (yCentro - radio * Math.sin(anguloRadianes));
         return new Point(x, y);
     }
 
@@ -568,8 +525,8 @@ public class PlanoCartesiano extends JPanel {
             g2.setFont(new Font("Arial", Font.PLAIN, 12));
 
             for (Punto punto : Punto.getPuntos()) {
-                int x = punto.getX() * GRID_SIZE;
-                int y = -punto.getY() * GRID_SIZE;
+                int x = (int) (punto.getX() * GRID_SIZE);
+                int y = (int) (-punto.getY() * GRID_SIZE);
 
                 // Dibujar línea punteada desde origen al punto
                 g2.drawLine(0, 0, x, y);
@@ -610,13 +567,13 @@ public class PlanoCartesiano extends JPanel {
                     0, new float[]{5}, 0));
             Punto puntoAnterior = null;
             for (Punto punto : Punto.getPuntos()) {
-                int x = punto.getX() * GRID_SIZE;
-                int y = -punto.getY() * GRID_SIZE;
+                int x = (int) (punto.getX() * GRID_SIZE);
+                int y = (int) (-punto.getY() * GRID_SIZE);
                 if (puntoAnterior == null) {
                     g2.drawLine(0, 0, x, y);
                 } else {
-                    int xAnt = puntoAnterior.getX() * GRID_SIZE;
-                    int yAnt = -puntoAnterior.getY() * GRID_SIZE;
+                    int xAnt = (int) (puntoAnterior.getX() * GRID_SIZE);
+                    int yAnt = (int) (-puntoAnterior.getY() * GRID_SIZE);
                     g2.drawLine(xAnt, yAnt, x, y);
                 }
                 puntoAnterior = punto;
