@@ -222,7 +222,10 @@ public class DrawingFrameCirculos extends JFrame {
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();
-            new MenuDeConicas().setVisible(true);
+            MenuDeConicas menuDeConicas = new MenuDeConicas();
+            menuDeConicas.setLocationRelativeTo(null); // Centra la ventana en pantalla
+            menuDeConicas.setVisible(true);
+            dispose(); // Cierra la ventana actual
         });
         figurasComboBox.addActionListener(e -> updateFieldsBasedOnSelection());
 

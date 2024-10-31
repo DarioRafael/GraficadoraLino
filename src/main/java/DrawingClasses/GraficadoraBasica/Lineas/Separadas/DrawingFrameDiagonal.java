@@ -258,7 +258,10 @@ public class DrawingFrameDiagonal extends JFrame {
         drawPointButton.addActionListener(e -> handleDrawPointAction());
         menuButton.addActionListener(e -> {
             dispose();
-            new MenuDeLineas().setVisible(true);
+            MenuDeLineas menuDeLineas = new MenuDeLineas();
+            menuDeLineas.setLocationRelativeTo(null); // Centra la ventana en pantalla
+            menuDeLineas.setVisible(true);
+            dispose(); // Cierra la ventana actual
         });
         creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());

@@ -70,6 +70,8 @@ public class DrawingFrameElipse extends JFrame {
         addNumericOnlyFilterToAll(this.getContentPane());
 
         addActionListeners();
+        calculateAndDrawFigure();
+
 
         setVisible(true);
     }
@@ -212,7 +214,10 @@ public class DrawingFrameElipse extends JFrame {
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();
-            new MenuDeConicas().setVisible(true);
+            MenuDeConicas menuDeConicas = new MenuDeConicas();
+            menuDeConicas.setLocationRelativeTo(null); // Centra la ventana en pantalla
+            menuDeConicas.setVisible(true);
+            dispose(); // Cierra la ventana actual
         });
         figurasComboBox.addActionListener(e -> updateFieldsBasedOnSelection());
 
@@ -255,7 +260,6 @@ public class DrawingFrameElipse extends JFrame {
             case "Elipse":
                 addElipseFields(selectedMetodo);
                 break;
-
         }
 
         // Add calculate button
@@ -271,43 +275,41 @@ public class DrawingFrameElipse extends JFrame {
         infoPanel.revalidate();
         infoPanel.repaint();
         handlerclear();
-    }
 
+        // Draw default figure
+        calculateAndDrawFigure();
+    }
 
     private void addElipseFields(String metodo) {
         JLabel hLabel = new JLabel("h:");
-        JTextField hField = new JTextField(10);
+        JTextField hField = new JTextField("0", 10); // Valor predeterminado
         hField.setName("hField");
         infoPanel.add(hLabel);
         infoPanel.add(hField);
 
         JLabel kLabel = new JLabel("k:");
-        JTextField kField = new JTextField(10);
+        JTextField kField = new JTextField("0", 10); // Valor predeterminado
         kField.setName("kField");
         infoPanel.add(kLabel);
         infoPanel.add(kField);
 
         JLabel radioXLabel = new JLabel("a (longitud del eje mayor):");
-        JTextField radioXField = new JTextField(10);
+        JTextField radioXField = new JTextField("5", 10); // Valor predeterminado
         radioXField.setName("radioXField");
         infoPanel.add(radioXLabel);
         infoPanel.add(radioXField);
 
         JLabel radioYLabel = new JLabel("b (longitud del eje menor):");
-        JTextField radioYField = new JTextField(10);
+        JTextField radioYField = new JTextField("2", 10); // Valor predeterminado
         radioYField.setName("radioYField");
         infoPanel.add(radioYLabel);
         infoPanel.add(radioYField);
 
         if (metodo.equals("Trigonometrico")) {
-            JLabel anguloLabel = new JLabel("Ángulo:");
-            JTextField anguloField = new JTextField(10);
-            anguloField.setName("anguloField");
-            infoPanel.add(anguloLabel);
-            infoPanel.add(anguloField);
+
+
         }
     }
-
     private void calculateAndDrawFigure() {
         try {
             String selectedFigura = (String) figurasComboBox.getSelectedItem();
@@ -376,10 +378,9 @@ public class DrawingFrameElipse extends JFrame {
             configurarColumnas(false);
             calcularPuntosElipsePolinomio(h, k, radioX, radioY);
         } else {
-            JTextField anguloField = (JTextField) getComponentByName(infoPanel, "Ángulo:");
-            double angulo = Double.parseDouble(anguloField.getText());
+
             configurarColumnas(true);
-            calcularPuntosElipseTrigonometrico(h, k, radioX, radioY, angulo);
+            calcularPuntosElipseTrigonometrico(h, k, radioX, radioY, 0);
         }
 
         Elipse nuevaElipse = new Elipse(new Punto(h, k), radioX, radioY);

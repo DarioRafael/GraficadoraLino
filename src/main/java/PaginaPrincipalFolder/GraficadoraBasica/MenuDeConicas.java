@@ -79,7 +79,6 @@ public class MenuDeConicas extends JFrame {
             dispose();
 
             DrawingFrameElipse frame = new DrawingFrameElipse();
-            frame.handlerclear();
             frame.setVisible(true);
         });
 

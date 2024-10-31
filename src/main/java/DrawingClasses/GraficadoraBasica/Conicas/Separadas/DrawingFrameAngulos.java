@@ -71,6 +71,14 @@ public class DrawingFrameAngulos extends JFrame {
 
         addActionListeners();
 
+        // Dibujar el arco inicial automáticamente
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                updateFieldsBasedOnSelection();
+            }
+        });
+
         setVisible(true);
     }
 
@@ -206,21 +214,29 @@ public class DrawingFrameAngulos extends JFrame {
 
         add(rightPanel, BorderLayout.EAST);
     }
+
+
     private void addActionListeners() {
         creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();
-            new MenuDeConicas().setVisible(true);
+            MenuDeConicas menuDeConicas = new MenuDeConicas();
+            menuDeConicas.setLocationRelativeTo(null);
+            menuDeConicas.setVisible(true);
+            dispose();
         });
+
         figurasComboBox.addActionListener(e -> updateFieldsBasedOnSelection());
 
-        metodoComboBox.addActionListener(e -> updateFieldsBasedOnSelection());
+        // Modificar el listener del metodoComboBox para que actualice y dibuje
+        metodoComboBox.addActionListener(e -> {
+            updateFieldsBasedOnSelection();
+        });
 
         calcularButton.addActionListener(e -> calculateAndDrawFigure());
-
-
     }
+
     // Método para activar el modo trigonométrico
     public void activarModoTrigonometrico() {
         planoCartesiano.isTrigonometrico = true;
@@ -252,7 +268,63 @@ public class DrawingFrameAngulos extends JFrame {
         // Add specific fields based on selection
         switch (selectedFigura) {
             case "Arco":
-                addArcoFields(selectedMetodo);
+                if (selectedMetodo.equals("Polinomial")) {
+                    // Valores precargados para método polinomial
+                    JLabel xOrigenLabel = new JLabel("X origen:");
+                    JTextField xOrigenField = new JTextField("0", 10);
+                    infoPanel.add(xOrigenLabel);
+                    infoPanel.add(xOrigenField);
+
+                    JLabel yOrigenLabel = new JLabel("Y origen:");
+                    JTextField yOrigenField = new JTextField("0", 10);
+                    infoPanel.add(yOrigenLabel);
+                    infoPanel.add(yOrigenField);
+
+                    JLabel radioLabel = new JLabel("Radio:");
+                    JTextField radioField = new JTextField("5", 10);
+                    infoPanel.add(radioLabel);
+                    infoPanel.add(radioField);
+
+                    JLabel anguloInicioLabel = new JLabel("θ1:");
+                    JTextField anguloInicioField = new JTextField("0", 10);
+                    infoPanel.add(anguloInicioLabel);
+                    infoPanel.add(anguloInicioField);
+
+                    JLabel anguloFinLabel = new JLabel("θ2:");
+                    JTextField anguloFinField = new JTextField("90", 10);
+                    infoPanel.add(anguloFinLabel);
+                    infoPanel.add(anguloFinField);
+
+                    desactivarModoTrigonometrico();
+                } else {
+                    // Valores precargados para método trigonométrico
+                    JLabel xOrigenLabel = new JLabel("X origen:");
+                    JTextField xOrigenField = new JTextField("3", 10);
+                    infoPanel.add(xOrigenLabel);
+                    infoPanel.add(xOrigenField);
+
+                    JLabel yOrigenLabel = new JLabel("Y origen:");
+                    JTextField yOrigenField = new JTextField("3", 10);
+                    infoPanel.add(yOrigenLabel);
+                    infoPanel.add(yOrigenField);
+
+                    JLabel radioLabel = new JLabel("Radio:");
+                    JTextField radioField = new JTextField("4", 10);
+                    infoPanel.add(radioLabel);
+                    infoPanel.add(radioField);
+
+                    JLabel anguloInicioLabel = new JLabel("θ1:");
+                    JTextField anguloInicioField = new JTextField("0", 10);
+                    infoPanel.add(anguloInicioLabel);
+                    infoPanel.add(anguloInicioField);
+
+                    JLabel anguloFinLabel = new JLabel("θ2:");
+                    JTextField anguloFinField = new JTextField("90", 10);
+                    infoPanel.add(anguloFinLabel);
+                    infoPanel.add(anguloFinField);
+
+                    activarModoTrigonometrico();
+                }
                 break;
         }
 
@@ -269,9 +341,15 @@ public class DrawingFrameAngulos extends JFrame {
         infoPanel.revalidate();
         infoPanel.repaint();
         handlerclear();
+
+        // Dibujar automáticamente después de configurar los campos
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                calculateAndDrawFigure();
+            }
+        });
     }
-
-
 
     private void addArcoFields(String metodo) {
 

@@ -23,10 +23,15 @@ public class PaginaPrincipal extends JFrame {
         mainPanel.setBackground(BACKGROUND_COLOR);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
-        // Panel superior con título
+        // Panel superior con banner y título
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
+        // Cargar la imagen del banner
+        JLabel bannerLabel = new JLabel(new ImageIcon(getClass().getResource("/images/bannerTec.jpeg")));
+        headerPanel.add(bannerLabel, BorderLayout.NORTH);
+
+        // Título
         JLabel titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
@@ -40,14 +45,18 @@ public class PaginaPrincipal extends JFrame {
         // Botones
         JButton goToLineButton = createStyledButton("Graficadora de Líneas", "Acceso a la graficadora de líneas");
         goToLineButton.addActionListener(e -> {
-            new MenuDeLineas().setVisible(true);
-            dispose(); // Cierra la ventana actual
+            MenuDeLineas menuDeLineas = new MenuDeLineas();
+            menuDeLineas.setLocationRelativeTo(null);
+            menuDeLineas.setVisible(true);
+            dispose();
         });
 
         JButton goToConicsButton = createStyledButton("Graficadora de Cónicas", "Acceso a la graficadora de cónicas");
         goToConicsButton.addActionListener(e -> {
-            new MenuDeConicas().setVisible(true);
-            dispose(); // Cierra la ventana actual
+            MenuDeConicas menuDeConicas = new MenuDeConicas();
+            menuDeConicas.setLocationRelativeTo(null);
+            menuDeConicas.setVisible(true);
+            dispose();
         });
 
         JButton creditsButton = createStyledButton("Créditos", "Ver créditos del proyecto");
@@ -109,8 +118,6 @@ public class PaginaPrincipal extends JFrame {
 
         return button;
     }
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new PaginaPrincipal().setVisible(true));
