@@ -160,7 +160,7 @@ public class DrawingFrameConicas extends JFrame {
         infoPanel.add(metodoLabel);
 
 
-
+//
 
         infoPanel.add(metodoComboBox);
 
