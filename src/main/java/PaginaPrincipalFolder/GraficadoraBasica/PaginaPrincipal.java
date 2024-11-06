@@ -87,11 +87,18 @@ public class PaginaPrincipal extends JFrame {
                 menuPolilineas.setLocationRelativeTo(null);
                 menuPolilineas.setVisible(true);
                 menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                dispose();        }
+                dispose();
+            }
         });
 
-        creditsButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
-
+        creditsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreditosParaFG menuPolilineas = new CreditosParaFG();
+                menuPolilineas.setVisible(true);
+                dispose();
+            }
+        });
 
 
         buttonPanel.add(goToLineButton);
@@ -137,6 +144,7 @@ public class PaginaPrincipal extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 button.setBackground(HOVER_COLOR);
             }
+
             public void mouseExited(java.awt.event.MouseEvent e) {
                 button.setBackground(BUTTON_COLOR);
             }

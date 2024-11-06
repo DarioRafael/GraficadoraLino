@@ -267,7 +267,7 @@ public class DrawingFrameLineas extends JFrame {
             menuDeLineas.setVisible(true);
             dispose(); // Cierra la ventana actual
         });
-        creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
+        //creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
 
     }

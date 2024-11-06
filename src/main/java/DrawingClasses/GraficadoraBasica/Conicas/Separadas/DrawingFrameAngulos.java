@@ -218,7 +218,7 @@ public class DrawingFrameAngulos extends JFrame {
 
 
     private void addActionListeners() {
-        creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
+       // creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();

@@ -4,16 +4,21 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class CreditosParaFG {
+public class CreditosParaFG extends JFrame {
 
-    public CreditosParaFG(){
-    }
+    public CreditosParaFG() {
+        // Configuración del JFrame
+        setTitle("Créditos");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    public static void mostrarCreditos(Component parent) {
-        // Crear el panel principal
-        JPanel creditPanel = new JPanel();
-        creditPanel.setLayout(new BoxLayout(creditPanel, BoxLayout.Y_AXIS));
-        creditPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+        // Tamaño adaptable a la pantalla
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza en pantallas grandes
+
+        // Crear el panel principal con GridBagLayout
+        JPanel creditPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10); // Espaciado
         creditPanel.setBackground(Color.WHITE);
 
         // Estilo de fuente
@@ -21,179 +26,141 @@ public class CreditosParaFG {
         Font headerFont = new Font("Segoe UI", Font.BOLD, 20);
         Font textFont = new Font("Segoe UI", Font.PLAIN, 18);
 
-        // Encabezado
-        JLabel tituloLabel = new JLabel("Software Utilizado para Crear Figuras Geométricas");
+        // Título
+        JLabel tituloLabel = new JLabel("Software Utilizado para Crear Figuras Geométricas", SwingConstants.CENTER);
         tituloLabel.setFont(titleFont);
-        tituloLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar título
-        creditPanel.add(tituloLabel);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        creditPanel.add(tituloLabel, gbc);
 
-        creditPanel.add(Box.createVerticalStrut(15));
-
-        // Logos (usando texto, reemplaza con imágenes si tienes)
+        // Logos
         JPanel logoPanel = new JPanel();
         logoPanel.setBackground(Color.WHITE);
-        logoPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centrar elementos en logoPanel
-        // Asegúrate de que las imágenes existan en la ruta especificada
-        ImageIcon javaIcon = new ImageIcon(CreditosParaFG.class.getResource("/images/Java.png"));
-        ImageIcon netbeansIcon = new ImageIcon(CreditosParaFG.class.getResource("/images/netbeans.png"));
-
-        JLabel javaLogoLabel = new JLabel("", javaIcon, JLabel.CENTER);  // Etiqueta con texto e imagen
-        JLabel netbeansLogoLabel = new JLabel("", netbeansIcon, JLabel.CENTER);  // Etiqueta con texto e imagen
-
-        logoPanel.add(javaLogoLabel);
-        logoPanel.add(netbeansLogoLabel);
-        creditPanel.add(logoPanel);
-
-        creditPanel.add(Box.createVerticalStrut(15));
+        ImageIcon javaIcon = new ImageIcon(getClass().getResource("/images/Java.png"));
+        ImageIcon netbeansIcon = new ImageIcon(getClass().getResource("/images/netbeans.png"));
+        logoPanel.add(new JLabel(javaIcon));
+        logoPanel.add(new JLabel(netbeansIcon));
+        gbc.gridy = 1;
+        creditPanel.add(logoPanel, gbc);
 
         // Integrantes del equipo
-        JLabel integrantesLabel = new JLabel("INTEGRANTES DEL EQUIPO:");
+        JLabel integrantesLabel = new JLabel("INTEGRANTES DEL EQUIPO:", SwingConstants.CENTER);
         integrantesLabel.setFont(headerFont);
-        integrantesLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar encabezado de integrantes
-        creditPanel.add(integrantesLabel);
+        gbc.gridy = 2;
+        creditPanel.add(integrantesLabel, gbc);
 
-        JTextArea integrantesText = new JTextArea(
-                "22380382 --- Dario Rafael García Bárcenas\n" +
-                        "22380426 --- Juan Carlos Torres Reyna"
-        );
-        integrantesText.setFont(textFont);
-        integrantesText.setLineWrap(true);
-        integrantesText.setWrapStyleWord(true);
-        integrantesText.setEditable(false);
-        integrantesText.setBackground(creditPanel.getBackground());
-        integrantesText.setBorder(new EmptyBorder(5, 10, 5, 10));
-        integrantesText.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar texto de integrantes
-        creditPanel.add(integrantesText);
-
-        creditPanel.add(Box.createVerticalStrut(15));
+        JTextArea integrantesText = createTextArea(
+                "22380382 --- Dario Rafael García Bárcenas\n22380426 --- Juan Carlos Torres Reyna",
+                textFont, creditPanel.getBackground());
+        JScrollPane integrantesScroll = new JScrollPane(integrantesText);
+        gbc.gridy = 3;
+        creditPanel.add(integrantesScroll, gbc);
 
         // Copyright
-        JLabel copyrightLabel = new JLabel("Copyright:");
+        JLabel copyrightLabel = new JLabel("Copyright:", SwingConstants.CENTER);
         copyrightLabel.setFont(headerFont);
-        copyrightLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar encabezado de copyright
-        creditPanel.add(copyrightLabel);
+        gbc.gridy = 4;
+        creditPanel.add(copyrightLabel, gbc);
 
-        JTextArea copyrightText = new JTextArea(
-                "Este software es una obra intelectual desarrollada por alumnos de la carrera de Ing. en Sistemas Computacionales del Instituto Tecnológico de Ciudad Victoria. " +
-                        "Prohibida su reproducción total o parcial sin consentimiento de los autores. Los autores de este tipo de producto no se hacen responsables por el uso indebido de esta información. " +
-                        "Prohibida su comercialización, ya que es un software de propósito Educativo."
-        );
-        copyrightText.setFont(textFont);
-        copyrightText.setLineWrap(true);
-        copyrightText.setWrapStyleWord(true);
-        copyrightText.setEditable(false);
-        copyrightText.setBackground(creditPanel.getBackground());
-        copyrightText.setBorder(new EmptyBorder(5, 10, 5, 10));
-        copyrightText.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar texto de copyright
-        creditPanel.add(copyrightText);
+        JTextArea copyrightText = createTextArea(
+                "Este software es una obra intelectual desarrollada por alumnos de la carrera de Ing. en Sistemas Computacionales del Instituto Tecnológico de Ciudad Victoria...",
+                textFont, creditPanel.getBackground());
+        JScrollPane copyrightScroll = new JScrollPane(copyrightText);
+        gbc.gridy = 5;
+        creditPanel.add(copyrightScroll, gbc);
 
-        creditPanel.add(Box.createVerticalStrut(15));
-
-// Fila de iconos
+        // Fila de iconos
         JPanel iconPanel = new JPanel();
-        iconPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centrar iconos
-        iconPanel.setBackground(Color.WHITE); // Color de fondo para el panel de iconos
-
-// Asegúrate de que las imágenes existan en la ruta especificada
-        ImageIcon icon1 = resizeIcon(new ImageIcon(CreditosParaFG.class.getResource("/images/mexico.png")), 100, 50);
-        ImageIcon icon2 = resizeIcon(new ImageIcon(CreditosParaFG.class.getResource("/images/tec.jpg")), 80, 80);
-        ImageIcon icon3 = resizeIcon(new ImageIcon(CreditosParaFG.class.getResource("/images/hechoMexico.png")), 80, 80);
-        ImageIcon icon4 = resizeIcon(new ImageIcon(CreditosParaFG.class.getResource("/images/tamaulipas.png")), 80, 80);
-
-        JLabel iconLabel1 = new JLabel(icon1);
-        JLabel iconLabel2 = new JLabel(icon2);
-        JLabel iconLabel3 = new JLabel(icon3);
-        JLabel iconLabel4 = new JLabel(icon4);
-
-        iconPanel.add(iconLabel1);
-        iconPanel.add(iconLabel2);
-        iconPanel.add(iconLabel3);
-        iconPanel.add(iconLabel4);
-
-        creditPanel.add(iconPanel);
-
+        iconPanel.setBackground(Color.WHITE);
+        ImageIcon icon1 = resizeIcon(new ImageIcon(getClass().getResource("/images/mexico.png")), 100, 50);
+        ImageIcon icon2 = resizeIcon(new ImageIcon(getClass().getResource("/images/tec.jpg")), 80, 80);
+        ImageIcon icon3 = resizeIcon(new ImageIcon(getClass().getResource("/images/hechoMexico.png")), 80, 80);
+        ImageIcon icon4 = resizeIcon(new ImageIcon(getClass().getResource("/images/tamaulipas.png")), 80, 80);
+        iconPanel.add(new JLabel(icon1));
+        iconPanel.add(new JLabel(icon2));
+        iconPanel.add(new JLabel(icon3));
+        iconPanel.add(new JLabel(icon4));
+        gbc.gridy = 6;
+        creditPanel.add(iconPanel, gbc);
 
         // Requerimientos de Hardware
-        JLabel hardwareReqLabel = new JLabel("REQUERIMIENTOS DEL HARDWARE:");
+        JLabel hardwareReqLabel = new JLabel("REQUERIMIENTOS DEL HARDWARE:", SwingConstants.CENTER);
         hardwareReqLabel.setFont(headerFont);
-        hardwareReqLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar encabezado de hardware
-        creditPanel.add(hardwareReqLabel);
+        gbc.gridy = 7;
+        creditPanel.add(hardwareReqLabel, gbc);
 
-        JTextArea hardwareReq = new JTextArea(
-                "- Procesador: Pentium II 600 MHz.\n" +
-                        "- Disco Duro: Mb espacio ocupado.\n" +
-                        "- Resolución de Pantalla: 1650 x 960 Pixeles mínimo.\n" +
-                        "- Unidad de USB."
-        );
-        hardwareReq.setFont(textFont);
-        hardwareReq.setLineWrap(true);
-        hardwareReq.setWrapStyleWord(true);
-        hardwareReq.setEditable(false);
-        hardwareReq.setBackground(creditPanel.getBackground());
-        hardwareReq.setBorder(new EmptyBorder(5, 10, 5, 10));
-        hardwareReq.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar texto de hardware
-        creditPanel.add(hardwareReq);
-
-        creditPanel.add(Box.createVerticalStrut(15));
+        JTextArea hardwareReq = createTextArea(
+                "- Procesador: Pentium II 600 MHz.\n- Disco Duro: Mb espacio ocupado...\n",
+                textFont, creditPanel.getBackground());
+        JScrollPane hardwareReqScroll = new JScrollPane(hardwareReq);
+        gbc.gridy = 8;
+        creditPanel.add(hardwareReqScroll, gbc);
 
         // Requerimientos de Software
-        JLabel softwareReqLabel = new JLabel("REQUERIMIENTOS DEL SOFTWARE:");
+        JLabel softwareReqLabel = new JLabel("REQUERIMIENTOS DEL SOFTWARE:", SwingConstants.CENTER);
         softwareReqLabel.setFont(headerFont);
-        softwareReqLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar encabezado de software
-        creditPanel.add(softwareReqLabel);
+        gbc.gridy = 9;
+        creditPanel.add(softwareReqLabel, gbc);
 
-        JTextArea softwareReq = new JTextArea(
+        JTextArea softwareReq = createTextArea(
                 "- Sistema Operativo: Windows XP, Vista, Windows 7, Windows 8, Windows 10, Windows 11\n" +
-                        "- Lenguaje de Programación: Java (NetBeans)"
-        );
-        softwareReq.setFont(textFont);
-        softwareReq.setLineWrap(true);
-        softwareReq.setWrapStyleWord(true);
-        softwareReq.setEditable(false);
-        softwareReq.setBackground(creditPanel.getBackground());
-        softwareReq.setBorder(new EmptyBorder(5, 10, 5, 10));
-        softwareReq.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar texto de software
-        creditPanel.add(softwareReq);
-
-        creditPanel.add(Box.createVerticalStrut(15));
+                        "- Lenguaje de Programación: Java (NetBeans)",
+                textFont, creditPanel.getBackground());
+        JScrollPane softwareReqScroll = new JScrollPane(softwareReq);
+        gbc.gridy = 10;
+        creditPanel.add(softwareReqScroll, gbc);
 
         // Ejecución de las figuras geométricas
-        JLabel ejecucionLabel = new JLabel("EJECUCIÓN DE LAS FIGURAS GEOMÉTRICAS:");
+        JLabel ejecucionLabel = new JLabel("EJECUCIÓN DE LAS FIGURAS GEOMÉTRICAS:", SwingConstants.CENTER);
         ejecucionLabel.setFont(headerFont);
-        ejecucionLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar encabezado de ejecución
-        creditPanel.add(ejecucionLabel);
+        gbc.gridy = 11;
+        creditPanel.add(ejecucionLabel, gbc);
 
-        JTextArea ejecucionText = new JTextArea(
-                "- Insertar la USB con el archivo.\n" +
-                        "- Ejecutar el Programa: FiGeo.exe"
-        );
-        ejecucionText.setFont(textFont);
-        ejecucionText.setLineWrap(true);
-        ejecucionText.setWrapStyleWord(true);
-        ejecucionText.setEditable(false);
-        ejecucionText.setBackground(creditPanel.getBackground());
-        ejecucionText.setBorder(new EmptyBorder(5, 10, 5, 10));
-        ejecucionText.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar texto de ejecución
-        creditPanel.add(ejecucionText);
+        JTextArea ejecucionText = createTextArea(
+                "- Insertar la USB con el archivo.\n- Ejecutar el Programa: FiGeo.exe",
+                textFont, creditPanel.getBackground());
+        JScrollPane ejecucionScroll = new JScrollPane(ejecucionText);
+        gbc.gridy = 12;
+        creditPanel.add(ejecucionScroll, gbc);
 
-        // Crear el JDialog con tamaño personalizado
-        JDialog dialog = new JDialog((JFrame) parent, "Créditos", true);
-        dialog.setSize(1280, 800); // Tamaño personalizado de la ventana
-        dialog.setLocationRelativeTo(null);
+        // Botón de regreso al menú
+        JButton volverMenuButton = new JButton("Menú");
+        volverMenuButton.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        volverMenuButton.addActionListener(e -> {
+            PaginaPrincipal menu = new PaginaPrincipal();
+            menu.setVisible(true);
+            dispose();
+        });
+        gbc.gridy = 13;
+        creditPanel.add(volverMenuButton, gbc);
 
-
-        // Agregar el panel a un JScrollPane por si el contenido es muy largo
+        // Scroll principal para el panel de créditos
         JScrollPane scrollPane = new JScrollPane(creditPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        dialog.add(scrollPane);
-
-        // Mostrar el diálogo
-        dialog.setVisible(true);
+        add(scrollPane);
     }
-    // Método para redimensionar iconos
+
+    private JTextArea createTextArea(String text, Font font, Color bg) {
+        JTextArea textArea = new JTextArea(text);
+        textArea.setFont(font);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        textArea.setBackground(bg);
+        return textArea;
+    }
+
     private static ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
-        Image img = icon.getImage(); // obtener la imagen
-        Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH); // redimensionar la imagen
-        return new ImageIcon(newImg); // devolver nueva imagen
+        Image img = icon.getImage();
+        Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(newImg);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            CreditosParaFG frame = new CreditosParaFG();
+            frame.setVisible(true);
+        });
     }
 }

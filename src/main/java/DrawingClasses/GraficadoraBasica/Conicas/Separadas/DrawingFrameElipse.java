@@ -211,7 +211,7 @@ public class DrawingFrameElipse extends JFrame {
         add(rightPanel, BorderLayout.EAST);
     }
     private void addActionListeners() {
-        creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
+       // creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();
