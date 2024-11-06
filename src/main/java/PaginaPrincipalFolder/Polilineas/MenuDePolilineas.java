@@ -40,10 +40,7 @@ public class MenuDePolilineas extends JFrame {
         buttonPanel.setBackground(BACKGROUND_COLOR);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        JButton polilineasButton = createStyledButton(
-                "Polilíneas",
-                "Cartesianas Absolutas, Relativas, Polares Relativas y Absolutas"
-        );
+        JButton polilineasButton = createStyledButton("Polilíneas");
         polilineasButton.addActionListener(e -> {
             this.dispose();
             PolilineasDrawMenu frame2 = new PolilineasDrawMenu();
@@ -55,7 +52,7 @@ public class MenuDePolilineas extends JFrame {
             frame2.setVisible(true);
         });
 
-        JButton backButton = createStyledButton("Menú", "");
+        JButton backButton = createStyledButton("Menú");
         backButton.addActionListener(e -> {
             new PaginaPrincipal().setVisible(true);
             dispose();
@@ -79,23 +76,18 @@ public class MenuDePolilineas extends JFrame {
         this.add(mainPanel);
     }
 
-    private JButton createStyledButton(String title, String description) {
+    private JButton createStyledButton(String title) {
         JButton button = new JButton();
         button.setLayout(new BorderLayout());
 
-        JPanel buttonContent = new JPanel(new GridLayout(2, 1));
-        buttonContent.setOpaque(false);
+        button.setOpaque(false);
 
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
-        JLabel descLabel = new JLabel(description, SwingConstants.CENTER);
-        descLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        buttonContent.add(titleLabel);
-        buttonContent.add(descLabel);
+        button.add(titleLabel);
 
-        button.add(buttonContent, BorderLayout.CENTER);
 
         button.setBackground(BUTTON_COLOR);
         button.setForeground(Color.WHITE);

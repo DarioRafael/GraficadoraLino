@@ -55,21 +55,22 @@ public class MenuDeLineas extends JFrame {
         JPanel specificLinesPanel = new JPanel(new GridLayout(1, 3, 20, 20));
         specificLinesPanel.setBackground(BACKGROUND_COLOR);
 
-        horizontalLineButton = createStyledButton("<html>Líneas <br>Horizontales</html>", false);
+        //<html>Líneas <br>Horizontales</html>
+        horizontalLineButton = createStyledButton("<html>Horizontales</html>", false);
         horizontalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameHorizontal frameVen = new DrawingFrameHorizontal();
             frameVen.setVisible(true);
         });
 
-        verticalLineButton = createStyledButton("<html>Líneas <br>Verticales</html>", false);
+        verticalLineButton = createStyledButton("<html>Verticales</html>", false);
         verticalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameVertical frameVen = new DrawingFrameVertical();
             frameVen.setVisible(true);
         });
 
-        diagonalLineButton = createStyledButton("<html>Líneas <br>Diagonales</html>", false);
+        diagonalLineButton = createStyledButton("<html>Diagonales</html>", false);
         diagonalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameDiagonal frameVen = new DrawingFrameDiagonal();
