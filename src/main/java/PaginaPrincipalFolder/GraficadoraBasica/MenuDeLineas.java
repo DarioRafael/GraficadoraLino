@@ -17,6 +17,9 @@ public class MenuDeLineas extends JFrame {
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
 
+    private JLabel titleLabel;
+    private JButton generalLineButton, horizontalLineButton, verticalLineButton,diagonalLineButton;
+
     public MenuDeLineas() {
         setTitle("Graficación Básica - Líneas");
         setSize(800, 600);
@@ -32,7 +35,7 @@ public class MenuDeLineas extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("<html>Graficación Básica por Computadora:<br>Figuras Geométricas Simples - Lineas</html>", SwingConstants.CENTER);
+        titleLabel = new JLabel("<html>Graficación Básica por Computadora:<br>Figuras Geométricas Simples - Lineas</html>", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
@@ -42,7 +45,7 @@ public class MenuDeLineas extends JFrame {
         buttonPanel.setBackground(BACKGROUND_COLOR);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        JButton generalLineButton = createStyledButton("Graficadora General de Líneas", false);
+        generalLineButton = createStyledButton("Graficadora General de Líneas", false);
         generalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameLineas frameVen = new DrawingFrameLineas();
@@ -52,21 +55,21 @@ public class MenuDeLineas extends JFrame {
         JPanel specificLinesPanel = new JPanel(new GridLayout(1, 3, 20, 20));
         specificLinesPanel.setBackground(BACKGROUND_COLOR);
 
-        JButton horizontalLineButton = createStyledButton("Líneas Horizontales", false);
+        horizontalLineButton = createStyledButton("<html>Líneas <br>Horizontales</html>", false);
         horizontalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameHorizontal frameVen = new DrawingFrameHorizontal();
             frameVen.setVisible(true);
         });
 
-        JButton verticalLineButton = createStyledButton("Líneas Verticales", false);
+        verticalLineButton = createStyledButton("<html>Líneas <br>Verticales</html>", false);
         verticalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameVertical frameVen = new DrawingFrameVertical();
             frameVen.setVisible(true);
         });
 
-        JButton diagonalLineButton = createStyledButton("Líneas Diagonales", false);
+        diagonalLineButton = createStyledButton("<html>Líneas <br>Diagonales</html>", false);
         diagonalLineButton.addActionListener(e -> {
             dispose();
             DrawingFrameDiagonal frameVen = new DrawingFrameDiagonal();
@@ -146,6 +149,21 @@ public class MenuDeLineas extends JFrame {
             }
         }
     }
+
+    private void adjustFontSizes() {
+        int width = getWidth();
+
+        // Ajustar el tamaño de la fuente del título
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, width / 40));
+
+        // Ajustar el tamaño de la fuente de los botones
+        Font buttonFont = new Font("Segoe UI", Font.BOLD, width / 60);
+        generalLineButton.setFont(buttonFont);
+        verticalLineButton.setFont(buttonFont);
+        horizontalLineButton.setFont(buttonFont);
+        diagonalLineButton.setFont(buttonFont);
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MenuDeLineas().setVisible(true));
