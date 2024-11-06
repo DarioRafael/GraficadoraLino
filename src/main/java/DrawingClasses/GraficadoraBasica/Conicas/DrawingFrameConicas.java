@@ -41,7 +41,6 @@ public class DrawingFrameConicas extends JFrame {
 
     private JTable infoTable;
     private DefaultTableModel tableModel;
-    private JButton creditosButton;
     public JLabel titleLabel;
 
     private JButton menuButton;
@@ -106,7 +105,6 @@ public class DrawingFrameConicas extends JFrame {
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-        creditosButton = new JButton("Créditos");
 
 
         figurasMap = new HashMap<>();
@@ -165,7 +163,6 @@ public class DrawingFrameConicas extends JFrame {
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);
-        optionsPanel.add(creditosButton);
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
@@ -217,7 +214,6 @@ public class DrawingFrameConicas extends JFrame {
         circleLabel.setText(selectedFigure);
     }
     private void addActionListeners() {
-       // creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();

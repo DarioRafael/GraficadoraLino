@@ -43,7 +43,6 @@ public class DrawingFrameElipse extends JFrame {
 
     private JTable infoTable;
     private DefaultTableModel tableModel;
-    private JButton creditosButton;
     JLabel titleLabel;
 
     private JButton menuButton;
@@ -106,7 +105,6 @@ public class DrawingFrameElipse extends JFrame {
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-        creditosButton = new JButton("Créditos");
 
 
         figurasMap = new HashMap<>();
@@ -163,7 +161,6 @@ public class DrawingFrameElipse extends JFrame {
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);
-        optionsPanel.add(creditosButton);
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
@@ -211,7 +208,6 @@ public class DrawingFrameElipse extends JFrame {
         add(rightPanel, BorderLayout.EAST);
     }
     private void addActionListeners() {
-       // creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();

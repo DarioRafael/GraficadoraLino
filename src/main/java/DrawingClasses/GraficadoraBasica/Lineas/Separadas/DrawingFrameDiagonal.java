@@ -29,7 +29,7 @@ public class DrawingFrameDiagonal extends JFrame {
     private PlanoCartesianoLineas planoCartesiano;
     private Punto puntoActual;
     private JLabel metodoLabel,titleLabel;
-    private JButton clearButton,menuButton,drawPointButton,creditosButton;
+    private JButton clearButton,menuButton,drawPointButton;
     private JButton originDraw, endDraw;
     JPanel optionsPanel;
     JScrollPane scrollPane;
@@ -105,7 +105,6 @@ public class DrawingFrameDiagonal extends JFrame {
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-        creditosButton = new JButton("Créditos");
 
         figurasMap = new HashMap<>();
         figurasComboBox = new JComboBox<>();
@@ -136,7 +135,6 @@ public class DrawingFrameDiagonal extends JFrame {
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);
-        optionsPanel.add(creditosButton);
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);

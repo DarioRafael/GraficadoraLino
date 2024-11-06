@@ -43,7 +43,6 @@ public class DrawingFrameCirculos extends JFrame {
 
     private JTable infoTable;
     private DefaultTableModel tableModel;
-    private JButton creditosButton;
     JLabel titleLabel;
 
     private JButton menuButton;
@@ -104,7 +103,6 @@ public class DrawingFrameCirculos extends JFrame {
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-        creditosButton = new JButton("Créditos");
 
         figurasMap = new HashMap<>();
         figurasComboBox = new JComboBox<>();
@@ -177,7 +175,6 @@ public class DrawingFrameCirculos extends JFrame {
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);
-        optionsPanel.add(creditosButton);
 
         // Añadiendo los panels al panel superior
         topPanel.add(titlePanel, BorderLayout.NORTH);
@@ -219,7 +216,6 @@ public class DrawingFrameCirculos extends JFrame {
     }
 
     private void addActionListeners() {
-       // creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();

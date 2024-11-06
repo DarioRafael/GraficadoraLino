@@ -1,10 +1,9 @@
 package PaginaPrincipalFolder.GraficadoraBasica;
 
 import DrawingClasses.GraficadoraBasica.Conicas.DrawingFrameConicas;
-import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameAngulos;
+import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameArcos;
 import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameCirculos;
 import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameElipse;
-import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +65,7 @@ public class MenuDeConicas extends JFrame {
         JButton arcButton = createStyledButton("Arcos", false);
         arcButton.addActionListener(e -> {
             dispose();
-            DrawingFrameAngulos frame = new DrawingFrameAngulos();
+            DrawingFrameArcos frame = new DrawingFrameArcos();
             frame.handlerclear();
             frame.setVisible(true);
         });

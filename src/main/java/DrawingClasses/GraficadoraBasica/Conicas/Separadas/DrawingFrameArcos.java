@@ -1,12 +1,8 @@
 package DrawingClasses.GraficadoraBasica.Conicas.Separadas;
 
-import PaginaPrincipalFolder.GraficadoraBasica.CreditosParaFG;
 import PaginaPrincipalFolder.GraficadoraBasica.MenuDeConicas;
-import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 import Plano.GraficadoraBasica.PlanoCartesianoConicasV;
 import formasADibujar.Rotacion.Arco;
-import formasADibujar.Rotacion.Circulo;
-import formasADibujar.Rotacion.Elipse;
 import formasADibujar.Rotacion.Punto;
 
 import javax.swing.*;
@@ -24,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DrawingFrameAngulos extends JFrame {
+public class DrawingFrameArcos extends JFrame {
 
     private PlanoCartesianoConicasV planoCartesiano;
 
@@ -43,7 +39,6 @@ public class DrawingFrameAngulos extends JFrame {
 
     private JTable infoTable;
     private DefaultTableModel tableModel;
-    private JButton creditosButton;
     JLabel titleLabel;
 
     private JButton menuButton;
@@ -56,7 +51,7 @@ public class DrawingFrameAngulos extends JFrame {
     private boolean modoTrigonometrico;
 
 
-    public DrawingFrameAngulos() {
+    public DrawingFrameArcos() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,7 +107,6 @@ public class DrawingFrameAngulos extends JFrame {
         infoTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         infoTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-        creditosButton = new JButton("Créditos");
 
 
         figurasMap = new HashMap<>();
@@ -168,7 +162,6 @@ public class DrawingFrameAngulos extends JFrame {
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
         optionsPanel.add(clearButton);
-        optionsPanel.add(creditosButton);
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
         topPanel.add(optionsPanel, BorderLayout.CENTER);
@@ -218,7 +211,6 @@ public class DrawingFrameAngulos extends JFrame {
 
 
     private void addActionListeners() {
-       // creditosButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
         clearButton.addActionListener(e -> handlerclear());
         menuButton.addActionListener(e -> {
             dispose();
@@ -640,7 +632,7 @@ public class DrawingFrameAngulos extends JFrame {
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new DrawingFrameAngulos();
+            new DrawingFrameArcos();
         });
     }
 }
