@@ -6,12 +6,19 @@ import PaginaPrincipalFolder.Polilineas.PrincipalGraficacionPolilineas;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class PaginaPrincipal extends JFrame {
     private static final Color BACKGROUND_COLOR = new Color(245, 245, 250);
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
+
+    private JLabel titleLabel;
+    private JButton goToLineButton, goToConicsButton, goToPolilineasButton, creditsButton;
 
     public PaginaPrincipal() {
         setTitle("Página Principal");
@@ -33,8 +40,8 @@ public class PaginaPrincipal extends JFrame {
         JLabel bannerLabel = new JLabel(new ImageIcon(getClass().getResource("/images/bannerTec.jpeg")));
         headerPanel.add(bannerLabel, BorderLayout.NORTH);
 
-        // Título
-        JLabel titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples", SwingConstants.CENTER);
+        // Título con salto de línea
+        titleLabel = new JLabel("<html>Graficación Básica por Computadora:<br>Figuras Geométricas Simples</html>", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
@@ -45,35 +52,47 @@ public class PaginaPrincipal extends JFrame {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
         // Botones
-        JButton goToLineButton = createStyledButton("Graficadora de Líneas", "Acceso a la graficadora de líneas");
-        goToLineButton.addActionListener(e -> {
-            MenuDeLineas menuDeLineas = new MenuDeLineas();
-            menuDeLineas.setLocationRelativeTo(null);
-            menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            menuDeLineas.setVisible(true);
-            dispose();
+        goToLineButton = createStyledButton("Graficadora de Líneas");
+        goToConicsButton = createStyledButton("Graficadora de Cónicas");
+        goToPolilineasButton = createStyledButton("Graficadora de Polilineas");
+        creditsButton = createStyledButton("Créditos");
+
+        // Agregar ActionListeners para los botones
+        goToLineButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuDeLineas menuDeLineas = new MenuDeLineas();
+                menuDeLineas.setLocationRelativeTo(null);
+                menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                menuDeLineas.setVisible(true);
+                dispose();
+            }
         });
 
-        JButton goToConicsButton = createStyledButton("Graficadora de Cónicas", "Acceso a la graficadora de cónicas");
-        goToConicsButton.addActionListener(e -> {
-            MenuDeConicas menuDeConicas = new MenuDeConicas();
-            menuDeConicas.setLocationRelativeTo(null);
-            menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            menuDeConicas.setVisible(true);
-            dispose();
+        goToConicsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuDeConicas menuDeConicas = new MenuDeConicas();
+                menuDeConicas.setLocationRelativeTo(null);
+                menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                menuDeConicas.setVisible(true);
+                dispose();
+            }
         });
 
-        JButton goToPolilineasButton = createStyledButton("Graficadora de Polilineas", "Acceso a la graficadora de polilineas");
-        goToPolilineasButton.addActionListener(e -> {
-            PrincipalGraficacionPolilineas menuPolilineas = new PrincipalGraficacionPolilineas();
-            menuPolilineas.setLocationRelativeTo(null);
-            menuPolilineas.setVisible(true);
-            menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            dispose();
+        goToPolilineasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrincipalGraficacionPolilineas menuPolilineas = new PrincipalGraficacionPolilineas();
+                menuPolilineas.setLocationRelativeTo(null);
+                menuPolilineas.setVisible(true);
+                menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                dispose();        }
         });
 
-        JButton creditsButton = createStyledButton("Créditos", "Ver créditos del proyecto");
         creditsButton.addActionListener(e -> CreditosParaFG.mostrarCreditos(this));
+
+
 
         buttonPanel.add(goToLineButton);
         buttonPanel.add(goToConicsButton);
@@ -96,28 +115,21 @@ public class PaginaPrincipal extends JFrame {
 
         add(mainPanel);
         setVisible(true);
+
+        // Ajustar tamaño de fuente en función del tamaño de la ventana
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                adjustFontSizes();
+            }
+        });
     }
 
-    private JButton createStyledButton(String title, String description) {
-        JButton button = new JButton();
-        button.setLayout(new BorderLayout());
-
-        JPanel buttonContent = new JPanel(new GridLayout(2, 1));
-        buttonContent.setOpaque(false);
-
-        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
-
-        JLabel descLabel = new JLabel(description, SwingConstants.CENTER);
-        descLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-        buttonContent.add(titleLabel);
-        buttonContent.add(descLabel);
-
-        button.add(buttonContent, BorderLayout.CENTER);
-
+    private JButton createStyledButton(String title) {
+        JButton button = new JButton(title);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 20));
         button.setBackground(BUTTON_COLOR);
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
@@ -131,6 +143,20 @@ public class PaginaPrincipal extends JFrame {
         });
 
         return button;
+    }
+
+    private void adjustFontSizes() {
+        int width = getWidth();
+
+        // Ajustar el tamaño de la fuente del título
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, width / 40));
+
+        // Ajustar el tamaño de la fuente de los botones
+        Font buttonFont = new Font("Segoe UI", Font.BOLD, width / 60);
+        goToLineButton.setFont(buttonFont);
+        goToConicsButton.setFont(buttonFont);
+        goToPolilineasButton.setFont(buttonFont);
+        creditsButton.setFont(buttonFont);
     }
 
     public static void main(String[] args) {
