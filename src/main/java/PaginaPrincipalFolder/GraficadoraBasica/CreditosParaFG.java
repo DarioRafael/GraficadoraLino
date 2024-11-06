@@ -10,8 +10,13 @@ public class CreditosParaFG extends JFrame {
     public CreditosParaFG() {
         setTitle("Créditos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setPreferredSize(new Dimension(800, 600)); // Tamaño inicial adaptable
-        setLocationRelativeTo(null); // Centrar en la pantalla
+
+
+        // Obtener tamaño de pantalla y establecer pantalla completa
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(screenSize);
+        setUndecorated(true); // Elimina el borde y título de la ventana
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza la ventana
 
         // Panel principal con BorderLayout
         JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
@@ -34,7 +39,6 @@ public class CreditosParaFG extends JFrame {
         contentPanel.add(scrollPane, BorderLayout.CENTER);
 
         add(contentPanel);
-        pack();
         setLocationRelativeTo(null);
     }
 
