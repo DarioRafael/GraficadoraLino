@@ -1,6 +1,6 @@
     package DrawingClasses.Polilineas;
 
-    import PaginaPrincipalFolder.Polilineas.PrincipalGraficacionPolilineas;
+    import PaginaPrincipalFolder.Polilineas.MenuDePolilineas;
     import Plano.GenericsPlano.CoordinateSystem;
     import Plano.Polilineas.PlanoCartesianoFiguraPer;
     import formasADibujar.Linea;
@@ -252,7 +252,7 @@
                 clearPlanoAndData(); // Limpia el plano y los datos de las figuras
                 dispose();
                 SwingUtilities.invokeLater(() -> {
-                    PrincipalGraficacionPolilineas principalFrame = new PrincipalGraficacionPolilineas();
+                    MenuDePolilineas principalFrame = new MenuDePolilineas();
                     principalFrame.setVisible(true);
                 });
             });

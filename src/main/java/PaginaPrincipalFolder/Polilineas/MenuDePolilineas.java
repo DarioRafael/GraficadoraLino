@@ -7,13 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PrincipalGraficacionPolilineas extends JFrame {
+public class MenuDePolilineas extends JFrame {
     private static final Color BACKGROUND_COLOR = new Color(245, 245, 250);
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
 
-    public PrincipalGraficacionPolilineas() {
+    public MenuDePolilineas() {
         setTitle("Graficación Geométrica 2D Básica: Polilíneas");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,10 +47,10 @@ public class PrincipalGraficacionPolilineas extends JFrame {
         polilineasButton.addActionListener(e -> {
             this.dispose();
             PolilineasDrawMenu frame2 = new PolilineasDrawMenu();
-            frame2.drawFiguraAnonimaInternal(frame2.xInicio, frame2.yInicio,2);
+            frame2.drawFiguraAnonimaInternal(frame2.xInicio, frame2.yInicio,1);
             frame2.xInicialFieldNuevo.setText("2");
             frame2.yInicialFieldNuevo.setText("2");
-            frame2.aumentoComboBox.setSelectedIndex(1);
+            frame2.aumentoComboBox.setSelectedIndex(0);
 
             frame2.setVisible(true);
         });
@@ -122,7 +122,7 @@ public class PrincipalGraficacionPolilineas extends JFrame {
         }
 
         SwingUtilities.invokeLater(() -> {
-            PrincipalGraficacionPolilineas principalFrame = new PrincipalGraficacionPolilineas();
+            MenuDePolilineas principalFrame = new MenuDePolilineas();
             principalFrame.setVisible(true);
         });
     }

@@ -1,8 +1,6 @@
 package PaginaPrincipalFolder.GraficadoraBasica;
 
-import DrawingClasses.GraficadoraBasica.Conicas.DrawingFrameConicas;
-import DrawingClasses.GraficadoraBasica.Lineas.DrawingFrameLineas;
-import PaginaPrincipalFolder.Polilineas.PrincipalGraficacionPolilineas;
+import PaginaPrincipalFolder.Polilineas.MenuDePolilineas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,7 +81,7 @@ public class PaginaPrincipal extends JFrame {
         goToPolilineasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PrincipalGraficacionPolilineas menuPolilineas = new PrincipalGraficacionPolilineas();
+                MenuDePolilineas menuPolilineas = new MenuDePolilineas();
                 menuPolilineas.setLocationRelativeTo(null);
                 menuPolilineas.setVisible(true);
                 menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);

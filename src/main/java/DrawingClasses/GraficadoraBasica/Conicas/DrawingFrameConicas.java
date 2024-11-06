@@ -71,7 +71,7 @@ public class DrawingFrameConicas extends JFrame {
 
         addActionListeners();
 
-        inicializarCirculoPredeterminado();
+        //inicializarCirculoPredeterminado();
 
         setVisible(true);
     }
@@ -231,7 +231,6 @@ public class DrawingFrameConicas extends JFrame {
 
         metodoComboBox.addActionListener(e -> {
             updateFieldsBasedOnSelection();
-            inicializarCirculoPredeterminado();
         });
 
         calcularButton.addActionListener(e -> calculateAndDrawFigure());
