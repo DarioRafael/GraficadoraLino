@@ -80,10 +80,12 @@ public class MenuDePolilineas extends JFrame {
         JButton button = new JButton();
         button.setLayout(new BorderLayout());
 
-        button.setOpaque(false);
+        button.setOpaque(true);
 
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
+
 
 
         button.add(titleLabel);
