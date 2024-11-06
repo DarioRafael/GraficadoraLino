@@ -292,7 +292,7 @@ public class DrawingFrameElipse extends JFrame {
         infoPanel.add(kField);
 
         JLabel radioXLabel = new JLabel("a (longitud del eje mayor):");
-        JTextField radioXField = new JTextField("5", 10); // Valor predeterminado
+        JTextField radioXField = new JTextField("3", 10); // Valor predeterminado
         radioXField.setName("radioXField");
         infoPanel.add(radioXLabel);
         infoPanel.add(radioXField);

@@ -275,7 +275,7 @@ public class DrawingFrameArcos extends JFrame {
                     infoPanel.add(yOrigenField);
 
                     JLabel radioLabel = new JLabel("Radio:");
-                    JTextField radioField = new JTextField("5", 10);
+                    JTextField radioField = new JTextField("3", 10);
                     infoPanel.add(radioLabel);
                     infoPanel.add(radioField);
 

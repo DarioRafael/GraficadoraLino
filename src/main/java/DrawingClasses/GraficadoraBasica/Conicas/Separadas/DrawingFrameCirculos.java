@@ -478,7 +478,7 @@ public class DrawingFrameCirculos extends JFrame {
         // Valores predeterminados
         int hPredeterminado = 0;
         int kPredeterminado = 0;
-        int radioPredeterminado = 5;
+        int radioPredeterminado = 2;
 
         // Actualizar campos según el método seleccionado
         String metodoSeleccionado = (String) metodoComboBox.getSelectedItem();
