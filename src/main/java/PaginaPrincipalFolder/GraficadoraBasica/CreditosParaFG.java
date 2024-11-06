@@ -4,73 +4,123 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+
 public class CreditosParaFG extends JFrame {
 
     public CreditosParaFG() {
-        // Configuración del JFrame
         setTitle("Créditos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setPreferredSize(new Dimension(800, 600)); // Tamaño inicial adaptable
+        setLocationRelativeTo(null); // Centrar en la pantalla
 
-        // Tamaño adaptable a la pantalla
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza en pantallas grandes
+        // Panel principal con BorderLayout
+        JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Crear el panel principal con GridBagLayout
+        // Botón de "Menú" en la parte superior izquierda
+        JButton volverMenuButton = new JButton("Menú");
+        volverMenuButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        volverMenuButton.addActionListener(e -> {
+            PaginaPrincipal menu = new PaginaPrincipal();
+            menu.setVisible(true);
+            dispose();
+        });
+        contentPanel.add(volverMenuButton, BorderLayout.PAGE_START);
+
+        // Panel de contenido con información
+        JPanel creditPanel = createCreditPanel();
+        JScrollPane scrollPane = new JScrollPane(creditPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        add(contentPanel);
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private JPanel createCreditPanel() {
         JPanel creditPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10); // Espaciado
         creditPanel.setBackground(Color.WHITE);
 
-        // Estilo de fuente
+        // Estilos de fuente
         Font titleFont = new Font("Segoe UI", Font.BOLD, 22);
         Font headerFont = new Font("Segoe UI", Font.BOLD, 20);
         Font textFont = new Font("Segoe UI", Font.PLAIN, 18);
 
-        // Título
-        JLabel tituloLabel = new JLabel("Software Utilizado para Crear Figuras Geométricas", SwingConstants.CENTER);
-        tituloLabel.setFont(titleFont);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        creditPanel.add(tituloLabel, gbc);
+        // Títulos y contenido
+        addLabelAndText(creditPanel, "Software Utilizado para Crear Figuras Geométricas", titleFont, 0, 0);
+        addLogosPanel(creditPanel, 0, 1);
+        addLabelAndText(creditPanel, "INTEGRANTES DEL EQUIPO:", headerFont, 0, 2);
+        addTextArea(creditPanel, "22380382 --- Dario Rafael García Bárcenas\n22380426 --- Juan Carlos Torres Reyna", textFont, 0, 3);
+        addLabelAndText(creditPanel, "Copyright:", headerFont, 0, 4);
+        addTextArea(creditPanel, "Este software es una obra intelectual desarrollada por alumnos de la carrera\n" +
+                "de Ing. en Sistemas Computacionales del Instituto Tecnológico de Ciudad\n" +
+                "Victoria. Prohibida su reproducción total o parcial sin consentimiento de los\n" +
+                "autores. Los autores de este tipo de producto no se hacen responsables por\n" +
+                "el uso indebido de esta información. Prohibida su comercialización, ya que es\n" +
+                "un software de propósito Educativo.", textFont, 0, 5);
+        addIconsPanel(creditPanel, 0, 6);
+        addLabelAndText(creditPanel, "REQUERIMIENTOS DEL HARDWARE:", headerFont, 0, 7);
+        addTextArea(creditPanel, "- Procesador: Pentium II 600 MHz.\n- Disco Duro: Mb espacio ocupado...\n", textFont, 0, 8);
+        addLabelAndText(creditPanel, "REQUERIMIENTOS DEL SOFTWARE:", headerFont, 0, 9);
+        addTextArea(creditPanel, "- Sistema Operativo: Windows XP, Vista, Windows 7, Windows 8, Windows 10, Windows 11\n- Lenguaje de Programación: Java (NetBeans)", textFont, 0, 10);
+        addLabelAndText(creditPanel, "EJECUCIÓN DE LAS FIGURAS GEOMÉTRICAS:", headerFont, 0, 11);
+        addTextArea(creditPanel, "- Insertar la USB con el archivo.\n- Ejecutar el Programa: FiGeo.exe", textFont, 0, 12);
 
-        // Logos
+        return creditPanel;
+    }
+
+    private void addLabelAndText(JPanel panel, String labelText, Font font, int gridX, int gridY) {
+        JLabel label = new JLabel(labelText, SwingConstants.CENTER);
+        label.setFont(font);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        panel.add(label, gbc);
+    }
+
+    private void addTextArea(JPanel panel, String text, Font font, int gridX, int gridY) {
+        JTextArea textArea = new JTextArea(text);
+        textArea.setFont(font);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        textArea.setBackground(Color.WHITE);
+        textArea.setFocusable(false);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        panel.add(scrollPane, gbc);
+    }
+
+    private void addLogosPanel(JPanel panel, int gridX, int gridY) {
         JPanel logoPanel = new JPanel();
         logoPanel.setBackground(Color.WHITE);
         ImageIcon javaIcon = new ImageIcon(getClass().getResource("/images/Java.png"));
         ImageIcon netbeansIcon = new ImageIcon(getClass().getResource("/images/netbeans.png"));
         logoPanel.add(new JLabel(javaIcon));
         logoPanel.add(new JLabel(netbeansIcon));
-        gbc.gridy = 1;
-        creditPanel.add(logoPanel, gbc);
 
-        // Integrantes del equipo
-        JLabel integrantesLabel = new JLabel("INTEGRANTES DEL EQUIPO:", SwingConstants.CENTER);
-        integrantesLabel.setFont(headerFont);
-        gbc.gridy = 2;
-        creditPanel.add(integrantesLabel, gbc);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        panel.add(logoPanel, gbc);
+    }
 
-        JTextArea integrantesText = createTextArea(
-                "22380382 --- Dario Rafael García Bárcenas\n22380426 --- Juan Carlos Torres Reyna",
-                textFont, creditPanel.getBackground());
-        JScrollPane integrantesScroll = new JScrollPane(integrantesText);
-        gbc.gridy = 3;
-        creditPanel.add(integrantesScroll, gbc);
-
-        // Copyright
-        JLabel copyrightLabel = new JLabel("Copyright:", SwingConstants.CENTER);
-        copyrightLabel.setFont(headerFont);
-        gbc.gridy = 4;
-        creditPanel.add(copyrightLabel, gbc);
-
-        JTextArea copyrightText = createTextArea(
-                "Este software es una obra intelectual desarrollada por alumnos de la carrera de Ing. en Sistemas Computacionales del Instituto Tecnológico de Ciudad Victoria...",
-                textFont, creditPanel.getBackground());
-        JScrollPane copyrightScroll = new JScrollPane(copyrightText);
-        gbc.gridy = 5;
-        creditPanel.add(copyrightScroll, gbc);
-
-        // Fila de iconos
+    private void addIconsPanel(JPanel panel, int gridX, int gridY) {
         JPanel iconPanel = new JPanel();
         iconPanel.setBackground(Color.WHITE);
         ImageIcon icon1 = resizeIcon(new ImageIcon(getClass().getResource("/images/mexico.png")), 100, 50);
@@ -81,74 +131,14 @@ public class CreditosParaFG extends JFrame {
         iconPanel.add(new JLabel(icon2));
         iconPanel.add(new JLabel(icon3));
         iconPanel.add(new JLabel(icon4));
-        gbc.gridy = 6;
-        creditPanel.add(iconPanel, gbc);
 
-        // Requerimientos de Hardware
-        JLabel hardwareReqLabel = new JLabel("REQUERIMIENTOS DEL HARDWARE:", SwingConstants.CENTER);
-        hardwareReqLabel.setFont(headerFont);
-        gbc.gridy = 7;
-        creditPanel.add(hardwareReqLabel, gbc);
-
-        JTextArea hardwareReq = createTextArea(
-                "- Procesador: Pentium II 600 MHz.\n- Disco Duro: Mb espacio ocupado...\n",
-                textFont, creditPanel.getBackground());
-        JScrollPane hardwareReqScroll = new JScrollPane(hardwareReq);
-        gbc.gridy = 8;
-        creditPanel.add(hardwareReqScroll, gbc);
-
-        // Requerimientos de Software
-        JLabel softwareReqLabel = new JLabel("REQUERIMIENTOS DEL SOFTWARE:", SwingConstants.CENTER);
-        softwareReqLabel.setFont(headerFont);
-        gbc.gridy = 9;
-        creditPanel.add(softwareReqLabel, gbc);
-
-        JTextArea softwareReq = createTextArea(
-                "- Sistema Operativo: Windows XP, Vista, Windows 7, Windows 8, Windows 10, Windows 11\n" +
-                        "- Lenguaje de Programación: Java (NetBeans)",
-                textFont, creditPanel.getBackground());
-        JScrollPane softwareReqScroll = new JScrollPane(softwareReq);
-        gbc.gridy = 10;
-        creditPanel.add(softwareReqScroll, gbc);
-
-        // Ejecución de las figuras geométricas
-        JLabel ejecucionLabel = new JLabel("EJECUCIÓN DE LAS FIGURAS GEOMÉTRICAS:", SwingConstants.CENTER);
-        ejecucionLabel.setFont(headerFont);
-        gbc.gridy = 11;
-        creditPanel.add(ejecucionLabel, gbc);
-
-        JTextArea ejecucionText = createTextArea(
-                "- Insertar la USB con el archivo.\n- Ejecutar el Programa: FiGeo.exe",
-                textFont, creditPanel.getBackground());
-        JScrollPane ejecucionScroll = new JScrollPane(ejecucionText);
-        gbc.gridy = 12;
-        creditPanel.add(ejecucionScroll, gbc);
-
-        // Botón de regreso al menú
-        JButton volverMenuButton = new JButton("Menú");
-        volverMenuButton.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        volverMenuButton.addActionListener(e -> {
-            PaginaPrincipal menu = new PaginaPrincipal();
-            menu.setVisible(true);
-            dispose();
-        });
-        gbc.gridy = 13;
-        creditPanel.add(volverMenuButton, gbc);
-
-        // Scroll principal para el panel de créditos
-        JScrollPane scrollPane = new JScrollPane(creditPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane);
-    }
-
-    private JTextArea createTextArea(String text, Font font, Color bg) {
-        JTextArea textArea = new JTextArea(text);
-        textArea.setFont(font);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setEditable(false);
-        textArea.setBackground(bg);
-        return textArea;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        panel.add(iconPanel, gbc);
     }
 
     private static ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
