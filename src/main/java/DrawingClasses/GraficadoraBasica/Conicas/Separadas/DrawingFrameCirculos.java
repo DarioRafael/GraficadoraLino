@@ -209,7 +209,7 @@ public class DrawingFrameCirculos extends JFrame {
         // ScrollPane para la tabla
         scrollPane = new JScrollPane(infoTable);
         scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
-        rightPanel.add(scrollPane, BorderLayout.SOUTH); // Añadir ScrollPane al panel derecho
+        rightPanel.add(scrollPane, BorderLayout.CENTER); // Añadir ScrollPane al panel derecho
 
         // Agregar el panel derecho al layout
         add(rightPanel, BorderLayout.EAST);

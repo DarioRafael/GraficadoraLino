@@ -202,7 +202,7 @@ public class DrawingFrameArcos extends JFrame {
 
         scrollPane = new JScrollPane(infoTable);
         scrollPane.setPreferredSize(new Dimension(300, 400)); // Ajustar el tamaño preferido
-        rightPanel.add(scrollPane, BorderLayout.SOUTH);
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
 
 
 
