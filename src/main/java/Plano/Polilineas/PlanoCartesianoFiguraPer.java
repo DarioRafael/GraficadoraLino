@@ -28,8 +28,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
     public PlanoCartesianoFiguraPer() {
         setupMouseListeners();
-        offsetX = -1000;
-        offsetY = 500;
+        offsetX = 10;
+        offsetY = 10;
 
     }
 

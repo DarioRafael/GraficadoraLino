@@ -31,7 +31,7 @@ public class PrincipalGraficacionPolilineas extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Graficación Geométrica 2D Básica: Polilíneas", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("<html>Graficación Geométrica 2D Básica:<br>Polilíneas</html>", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
