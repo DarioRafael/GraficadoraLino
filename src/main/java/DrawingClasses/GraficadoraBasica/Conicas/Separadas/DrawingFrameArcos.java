@@ -293,17 +293,17 @@ public class DrawingFrameArcos extends JFrame {
                 } else {
                     // Valores precargados para método trigonométrico
                     JLabel xOrigenLabel = new JLabel("X origen:");
-                    JTextField xOrigenField = new JTextField("3", 10);
+                    JTextField xOrigenField = new JTextField("0", 10);
                     infoPanel.add(xOrigenLabel);
                     infoPanel.add(xOrigenField);
 
                     JLabel yOrigenLabel = new JLabel("Y origen:");
-                    JTextField yOrigenField = new JTextField("3", 10);
+                    JTextField yOrigenField = new JTextField("0", 10);
                     infoPanel.add(yOrigenLabel);
                     infoPanel.add(yOrigenField);
 
                     JLabel radioLabel = new JLabel("Radio:");
-                    JTextField radioField = new JTextField("4", 10);
+                    JTextField radioField = new JTextField("3", 10);
                     infoPanel.add(radioLabel);
                     infoPanel.add(radioField);
 
