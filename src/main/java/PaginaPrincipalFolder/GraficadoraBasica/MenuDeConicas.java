@@ -32,7 +32,7 @@ public class MenuDeConicas extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - CÓNICAS", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("<html>Graficación Básica por Computadora:<br>Figuras Geométricas Simples - Cónicas</html>", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
