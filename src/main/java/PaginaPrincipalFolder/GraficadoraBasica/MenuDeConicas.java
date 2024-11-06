@@ -74,7 +74,7 @@ public class MenuDeConicas extends JFrame {
         specificConicsPanel.add(ellipseButton);
         specificConicsPanel.add(arcButton);
 
-        JButton backButton = createStyledButton("Volver a Página Principal", false);
+        JButton backButton = createStyledButton("Menú", false);
         backButton.addActionListener(e -> {
             new PaginaPrincipal().setVisible(true);
             dispose();

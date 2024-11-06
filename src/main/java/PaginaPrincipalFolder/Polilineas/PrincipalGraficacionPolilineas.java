@@ -55,7 +55,7 @@ public class PrincipalGraficacionPolilineas extends JFrame {
             frame2.setVisible(true);
         });
 
-        JButton backButton = createStyledButton("Volver a Página Principal", "Regresar al menú principal");
+        JButton backButton = createStyledButton("Menú", "");
         backButton.addActionListener(e -> {
             new PaginaPrincipal().setVisible(true);
             dispose();
