@@ -60,6 +60,8 @@ public class DrawingFrameConicas extends JFrame {
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 
         createComponents();
 
@@ -221,6 +223,7 @@ public class DrawingFrameConicas extends JFrame {
             dispose();
             MenuDeConicas menuDeConicas = new MenuDeConicas();
             menuDeConicas.setLocationRelativeTo(null); // Centra la ventana en pantalla
+            menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeConicas.setVisible(true);
             dispose(); // Cierra la ventana actual
         });

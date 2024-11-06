@@ -6,6 +6,9 @@ import java.awt.*;
 
 public class CreditosParaFG {
 
+    public CreditosParaFG(){
+    }
+
     public static void mostrarCreditos(Component parent) {
         // Crear el panel principal
         JPanel creditPanel = new JPanel();
@@ -175,8 +178,9 @@ public class CreditosParaFG {
 
         // Crear el JDialog con tamaño personalizado
         JDialog dialog = new JDialog((JFrame) parent, "Créditos", true);
-        dialog.setSize(1280, 1080); // Tamaño personalizado de la ventana
-        dialog.setLocationRelativeTo(parent);
+        dialog.setSize(1280, 800); // Tamaño personalizado de la ventana
+        dialog.setLocationRelativeTo(null);
+
 
         // Agregar el panel a un JScrollPane por si el contenido es muy largo
         JScrollPane scrollPane = new JScrollPane(creditPanel);

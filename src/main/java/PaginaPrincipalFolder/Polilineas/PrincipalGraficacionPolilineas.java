@@ -1,6 +1,7 @@
 package PaginaPrincipalFolder.Polilineas;
 
 import DrawingClasses.Polilineas.PolilineasDrawMenu;
+import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,53 +14,56 @@ public class PrincipalGraficacionPolilineas extends JFrame {
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
 
     public PrincipalGraficacionPolilineas() {
-        // Configuración del frame
-        setTitle("Graficación Geométrica 2D Básica: Polilineas");
+        setTitle("Graficación Geométrica 2D Básica: Polilíneas");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // Llamar a la configuración de la interfaz
         initializeUI();
     }
 
     private void initializeUI() {
-        // Panel principal con margen y layout
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBackground(BACKGROUND_COLOR);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
-        // Panel superior con título
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel titleLabel = new JLabel("Polilíneas", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Graficación Geométrica 2D Básica: Polilíneas", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titleLabel.setForeground(TEXT_COLOR);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
-        // Panel central con botón de Polilíneas
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 1, 20, 20));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 20, 20));
         buttonPanel.setBackground(BACKGROUND_COLOR);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        // Crear botón estilizado
         JButton polilineasButton = createStyledButton(
                 "Polilíneas",
                 "Cartesianas Absolutas, Relativas, Polares Relativas y Absolutas"
         );
-
-        // Acción para el botón
         polilineasButton.addActionListener(e -> {
-            this.dispose(); // Cierra la ventana actual
-            PolilineasDrawMenu frame2 = new PolilineasDrawMenu(); // Abre la nueva ventana
-            frame2.initializeAndDraw(frame2.xInicio, frame2.yInicio);
+            this.dispose();
+            PolilineasDrawMenu frame2 = new PolilineasDrawMenu();
+            frame2.drawFiguraAnonimaInternal(frame2.xInicio, frame2.yInicio,2);
+            frame2.xInicialFieldNuevo.setText("2");
+            frame2.yInicialFieldNuevo.setText("2");
+            frame2.aumentoComboBox.setSelectedIndex(1);
+
             frame2.setVisible(true);
         });
 
-        buttonPanel.add(polilineasButton);
+        JButton backButton = createStyledButton("Volver a Página Principal", "Regresar al menú principal");
+        backButton.addActionListener(e -> {
+            new PaginaPrincipal().setVisible(true);
+            dispose();
+        });
 
-        // Panel inferior con créditos
+        buttonPanel.add(polilineasButton);
+        buttonPanel.add(backButton);
+
         JPanel footerPanel = new JPanel(new BorderLayout());
         footerPanel.setBackground(BACKGROUND_COLOR);
 
@@ -68,12 +72,10 @@ public class PrincipalGraficacionPolilineas extends JFrame {
         creditosLabel.setForeground(new Color(100, 100, 100));
         footerPanel.add(creditosLabel, BorderLayout.CENTER);
 
-        // Agregar todo al panel principal
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
 
-        // Agregar panel al frame
         this.add(mainPanel);
     }
 
@@ -100,7 +102,6 @@ public class PrincipalGraficacionPolilineas extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        // Efecto hover
         button.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(HOVER_COLOR);
@@ -113,7 +114,6 @@ public class PrincipalGraficacionPolilineas extends JFrame {
         return button;
     }
 
-    // Método main para iniciar la aplicación
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -121,7 +121,6 @@ public class PrincipalGraficacionPolilineas extends JFrame {
             e.printStackTrace();
         }
 
-        // Crear e iniciar el frame
         SwingUtilities.invokeLater(() -> {
             PrincipalGraficacionPolilineas principalFrame = new PrincipalGraficacionPolilineas();
             principalFrame.setVisible(true);

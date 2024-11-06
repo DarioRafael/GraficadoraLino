@@ -2,6 +2,7 @@ package PaginaPrincipalFolder.GraficadoraBasica;
 
 import DrawingClasses.GraficadoraBasica.Conicas.DrawingFrameConicas;
 import DrawingClasses.GraficadoraBasica.Lineas.DrawingFrameLineas;
+import PaginaPrincipalFolder.Polilineas.PrincipalGraficacionPolilineas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ public class PaginaPrincipal extends JFrame {
         setSize(1280, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
@@ -47,6 +49,7 @@ public class PaginaPrincipal extends JFrame {
         goToLineButton.addActionListener(e -> {
             MenuDeLineas menuDeLineas = new MenuDeLineas();
             menuDeLineas.setLocationRelativeTo(null);
+            menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeLineas.setVisible(true);
             dispose();
         });
@@ -55,7 +58,17 @@ public class PaginaPrincipal extends JFrame {
         goToConicsButton.addActionListener(e -> {
             MenuDeConicas menuDeConicas = new MenuDeConicas();
             menuDeConicas.setLocationRelativeTo(null);
+            menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeConicas.setVisible(true);
+            dispose();
+        });
+
+        JButton goToPolilineasButton = createStyledButton("Graficadora de Polilineas", "Acceso a la graficadora de polilineas");
+        goToPolilineasButton.addActionListener(e -> {
+            PrincipalGraficacionPolilineas menuPolilineas = new PrincipalGraficacionPolilineas();
+            menuPolilineas.setLocationRelativeTo(null);
+            menuPolilineas.setVisible(true);
+            menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             dispose();
         });
 
@@ -64,6 +77,7 @@ public class PaginaPrincipal extends JFrame {
 
         buttonPanel.add(goToLineButton);
         buttonPanel.add(goToConicsButton);
+        buttonPanel.add(goToPolilineasButton);
         buttonPanel.add(creditsButton);
 
         // Panel inferior con créditos

@@ -27,14 +27,15 @@
         private String nombreFiguraAnonima;
         JLabel titleLabel;
 
-        JComboBox<Integer> aumentoComboBox;
+
+        public JComboBox<Integer> aumentoComboBox;
 
         int aumento = 1;
         public static int xInicio = 2;
         public static int yInicio= 2;
 
-        static JTextField xInicialFieldNuevo;
-        static JTextField yInicialFieldNuevo;
+        public static JTextField xInicialFieldNuevo;
+        public static JTextField yInicialFieldNuevo;
         JButton regenerarFigura;
 
         private JButton backButton; // New button to go back to PaginaPrincipal
@@ -43,9 +44,10 @@
 
         public PolilineasDrawMenu() {
             setTitle("Graficación Geométrica 2D Básica: Polilineas");
-            setSize(1650, 960);
+            setSize(1500, 800);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
 
             createComponents();
             configureLayout();
@@ -63,10 +65,10 @@
 
             // Create the "Generar" button and its menu
 
-            titleLabel = new JLabel("Graficación Geométrica 2D Básica: Polilineas");
+            titleLabel = new JLabel("Graficación Geométrica 2D Básica: Polilíneas");
             titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Set larger font size
 
-            JMenuItem figuraAnonimaItem = new JMenuItem("Graficación Geométrica 2D Básica: Polilineas");
+            JMenuItem figuraAnonimaItem = new JMenuItem("Graficación Geométrica 2D Básica: Polilíneas");
             figuraAnonimaItem.addActionListener(e -> regenerarDrawAnonima());
 
             // Coordinate system components
@@ -82,7 +84,7 @@
             figurasComboBox.addActionListener(e -> mostrarPuntosFiguraSeleccionada());
 
             // Create the back button
-            backButton = new JButton("Regresar a Página Principal");
+            backButton = new JButton("Menu");
 
             coordSystemComboBox.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -342,7 +344,7 @@
             }
         }
 
-        private void drawFiguraAnonimaInternal(int xInicio, int yInicio, int aumento) {
+        public void drawFiguraAnonimaInternal(int xInicio, int yInicio, int aumento) {
             clearPlanoAndData(); // Limpia el plano y los datos antes de dibujar la nueva figura
 
             nombreFiguraAnonima = "Figura Anonima " + figuraAnonimaCounter++;

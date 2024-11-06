@@ -50,6 +50,7 @@ public class DrawingFrameLineas extends JFrame {
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         createComponents();
 
@@ -262,6 +263,7 @@ public class DrawingFrameLineas extends JFrame {
             dispose();
             MenuDeLineas menuDeLineas = new MenuDeLineas();
             menuDeLineas.setLocationRelativeTo(null); // Centra la ventana en pantalla
+            menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeLineas.setVisible(true);
             dispose(); // Cierra la ventana actual
         });

@@ -61,6 +61,7 @@ public class DrawingFrameAngulos extends JFrame {
         setSize(1650, 960);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         createComponents();
 
@@ -223,6 +224,7 @@ public class DrawingFrameAngulos extends JFrame {
             dispose();
             MenuDeConicas menuDeConicas = new MenuDeConicas();
             menuDeConicas.setLocationRelativeTo(null);
+            menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeConicas.setVisible(true);
             dispose();
         });

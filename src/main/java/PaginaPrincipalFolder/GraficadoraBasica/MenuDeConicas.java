@@ -27,6 +27,7 @@ public class MenuDeConicas extends JFrame {
         setSize(1280, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBackground(BACKGROUND_COLOR);
