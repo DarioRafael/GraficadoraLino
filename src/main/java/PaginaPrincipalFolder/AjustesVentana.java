@@ -6,7 +6,7 @@ public class AjustesVentana {
     private Dimension windowSize;
 
     public AjustesVentana() {
-        this.windowSize = new Dimension(1024, 768);
+        this.windowSize = new Dimension(960, 600);
     }
 
     public Dimension getWindowSize() {
