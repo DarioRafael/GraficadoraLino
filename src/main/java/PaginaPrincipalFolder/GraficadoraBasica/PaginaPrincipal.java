@@ -14,6 +14,8 @@ public class PaginaPrincipal extends JFrame {
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
+    private static final int letter = 20;
+
 
     private JLabel titleLabel;
     private JButton goToLineButton, goToConicsButton, goToPolilineasButton, creditsButton;
@@ -23,26 +25,64 @@ public class PaginaPrincipal extends JFrame {
         setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
-       // setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBackground(BACKGROUND_COLOR);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
-        // Panel superior con banner y título
+        // Panel superior con banner que ocupa toda la franja superior
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
 
-        // Cargar la imagen del banner
+        // Cargar la imagen del banner y hacer que ocupe todo el ancho
         JLabel bannerLabel = new JLabel(new ImageIcon(getClass().getResource("/images/bannerTec.jpeg")));
-        headerPanel.add(bannerLabel, BorderLayout.NORTH);
+        bannerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        headerPanel.add(bannerLabel, BorderLayout.NORTH); // Añadir el banner al norte del panel
 
-        // Título con salto de línea
-        titleLabel = new JLabel("<html>Graficación Básica por Computadora:<br>Figuras Geométricas Simples</html>", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
-        titleLabel.setForeground(TEXT_COLOR);
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        // Título con salto de línea debajo del banner
+        // Crear las etiquetas separadas
+        JLabel institutoLabel = new JLabel("Instituto Tecnológico de Cd. Victoria", SwingConstants.CENTER);
+        institutoLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
+        institutoLabel.setForeground(TEXT_COLOR);
+
+        JLabel carreraLabel = new JLabel("Ing. en Sistemas Computacionales", SwingConstants.CENTER);
+        carreraLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
+        carreraLabel.setForeground(TEXT_COLOR);
+
+        JLabel materiaLabel = new JLabel("Graficación", SwingConstants.CENTER);
+        materiaLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
+        materiaLabel.setForeground(TEXT_COLOR);
+
+        JLabel temaLabel = new JLabel("Graficación Básica por Computadora:", SwingConstants.CENTER);
+        temaLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
+        temaLabel.setForeground(TEXT_COLOR);
+
+        JLabel figurasLabel = new JLabel("Figuras Geométricas Simples", SwingConstants.CENTER);
+        figurasLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
+        figurasLabel.setForeground(TEXT_COLOR);
+
+// Panel para alinear las etiquetas verticalmente
+        // Panel para alinear las etiquetas verticalmente con GridBagLayout
+        JPanel titlePanel = new JPanel(new GridBagLayout());
+        titlePanel.setBackground(BACKGROUND_COLOR);
+
+// Configurar restricciones de GridBag
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE; // Añadir las etiquetas una debajo de otra
+        gbc.anchor = GridBagConstraints.CENTER;  // Centrar las etiquetas
+        gbc.insets = new Insets(5, 0, 5, 0);   // Espacio entre las etiquetas
+
+// Añadir las etiquetas al panel con las restricciones
+        titlePanel.add(institutoLabel, gbc);
+        titlePanel.add(carreraLabel, gbc);
+        titlePanel.add(materiaLabel, gbc);
+        titlePanel.add(temaLabel, gbc);
+        titlePanel.add(figurasLabel, gbc);
+
+        headerPanel.add(titlePanel, BorderLayout.CENTER);
+
 
         // Panel central con botones
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 20, 20));
@@ -62,7 +102,6 @@ public class PaginaPrincipal extends JFrame {
                 MenuDeLineas menuDeLineas = new MenuDeLineas();
                 menuDeLineas.setSize(1280, 768);
                 menuDeLineas.setLocationRelativeTo(null);
-                //menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 menuDeLineas.setVisible(true);
                 dispose();
             }
@@ -74,7 +113,6 @@ public class PaginaPrincipal extends JFrame {
                 MenuDeConicas menuDeConicas = new MenuDeConicas();
                 menuDeConicas.setSize(1280, 768);
                 menuDeConicas.setLocationRelativeTo(null);
-                //menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 menuDeConicas.setVisible(true);
                 dispose();
             }
@@ -87,7 +125,6 @@ public class PaginaPrincipal extends JFrame {
                 menuPolilineas.setSize(1280, 768);
                 menuPolilineas.setLocationRelativeTo(null);
                 menuPolilineas.setVisible(true);
-                //menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 dispose();
             }
         });
@@ -100,7 +137,6 @@ public class PaginaPrincipal extends JFrame {
                 dispose();
             }
         });
-
 
         buttonPanel.add(goToLineButton);
         buttonPanel.add(goToConicsButton);
@@ -128,7 +164,6 @@ public class PaginaPrincipal extends JFrame {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                adjustFontSizes();
             }
         });
     }
@@ -154,19 +189,6 @@ public class PaginaPrincipal extends JFrame {
         return button;
     }
 
-    private void adjustFontSizes() {
-        int width = getWidth();
-
-        // Ajustar el tamaño de la fuente del título
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, width / 40));
-
-        // Ajustar el tamaño de la fuente de los botones
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, width / 60);
-        goToLineButton.setFont(buttonFont);
-        goToConicsButton.setFont(buttonFont);
-        goToPolilineasButton.setFont(buttonFont);
-        creditsButton.setFont(buttonFont);
-    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new PaginaPrincipal().setVisible(true));
