@@ -46,10 +46,10 @@ public class DrawingFrameVertical extends JFrame {
 
     public DrawingFrameVertical() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
-        setSize(1650, 960);
+        setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         createComponents();
 
@@ -119,10 +119,18 @@ public class DrawingFrameVertical extends JFrame {
         titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
 
-        titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - Lineas");
+        titleLabel = new JLabel("Graficación Básica por Computadora:");
+        JLabel subtitleLabel = new JLabel("Figuras Geométricas Simples - Lineas");
+
+
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
         titlePanel.add(titleLabel); // Agregar el JLabel del título al panel
+
+        subtitleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
+        titlePanel.add(subtitleLabel); // Agregar el JLabel del título al panel
+
 
         JLabel circleLabel = new JLabel("Linea vertical");
         circleLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -256,7 +264,6 @@ public class DrawingFrameVertical extends JFrame {
             dispose();
             MenuDeLineas menuDeLineas = new MenuDeLineas();
             menuDeLineas.setLocationRelativeTo(null); // Centra la ventana en pantalla
-            menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeLineas.setVisible(true);
             dispose(); // Cierra la ventana actual
         });

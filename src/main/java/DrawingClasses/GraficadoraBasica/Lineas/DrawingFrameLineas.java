@@ -47,7 +47,7 @@ public class DrawingFrameLineas extends JFrame {
 
     public DrawingFrameLineas() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
-        setSize(1650, 960);
+        setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
 
@@ -118,9 +118,25 @@ public class DrawingFrameLineas extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
 
         titlePanel = new JPanel();
-        titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+
+        titleLabel = new JLabel("Graficación Básica por Computadora:");
+        JLabel subtitleLabel = new JLabel("Figuras Geométricas Simples - Lineas");
+
+
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        titlePanel.add(titleLabel);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
+        titlePanel.add(titleLabel); // Agregar el JLabel del título al panel
+
+        subtitleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
+        titlePanel.add(subtitleLabel); // Agregar el JLabel del título al panel
+
+        JLabel lineaTitle = new JLabel("Linea Vertical");
+        lineaTitle.setFont(new Font("Arial", Font.BOLD, 25));
+        lineaTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titlePanel.add(lineaTitle);
+
 
         optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         optionsPanel.add(menuButton);
@@ -153,6 +169,7 @@ public class DrawingFrameLineas extends JFrame {
 
         // Modificar el ActionListener del ComboBox
         figurasComboBox.addActionListener(e -> {
+            lineaTitle.setText("Linea " + figurasComboBox.getSelectedItem());
             String selectedType = (String) figurasComboBox.getSelectedItem();
             if (selectedType != null) {
                 int[] valores = valoresIniciales.get(selectedType);
@@ -260,7 +277,6 @@ public class DrawingFrameLineas extends JFrame {
             dispose();
             MenuDeLineas menuDeLineas = new MenuDeLineas();
             menuDeLineas.setLocationRelativeTo(null); // Centra la ventana en pantalla
-            menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeLineas.setVisible(true);
             dispose(); // Cierra la ventana actual
         });

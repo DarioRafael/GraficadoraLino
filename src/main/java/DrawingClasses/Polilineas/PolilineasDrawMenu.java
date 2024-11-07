@@ -44,10 +44,8 @@
 
         public PolilineasDrawMenu() {
             setTitle("Graficación Geométrica 2D Básica: Polilineas");
-            setSize(1500, 800);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1280, 768);            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
 
             createComponents();
             configureLayout();

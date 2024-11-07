@@ -56,10 +56,10 @@ public class DrawingFrameConicas extends JFrame {
 
     public DrawingFrameConicas() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
-        setSize(1650, 960);
+        setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
         createComponents();
@@ -136,10 +136,19 @@ public class DrawingFrameConicas extends JFrame {
         titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
 
-        titleLabel = new JLabel("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
+        titleLabel = new JLabel("Graficación Básica por Computadora:");
+        JLabel subtitleLabel = new JLabel("Figuras Geométricas Simples - Cónicas");
+
+
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
-        titlePanel.add(titleLabel);
+        subtitleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el título
+
+
+        titlePanel.add(titleLabel); // Agregar el JLabel del título al panel
+        titlePanel.add(subtitleLabel);
+
 
         circleLabel = new JLabel("Círculos");
         circleLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -218,8 +227,9 @@ public class DrawingFrameConicas extends JFrame {
         menuButton.addActionListener(e -> {
             dispose();
             MenuDeConicas menuDeConicas = new MenuDeConicas();
+            menuDeConicas.setSize(1280, 768);
             menuDeConicas.setLocationRelativeTo(null); // Centra la ventana en pantalla
-            menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            //menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeConicas.setVisible(true);
             dispose(); // Cierra la ventana actual
         });

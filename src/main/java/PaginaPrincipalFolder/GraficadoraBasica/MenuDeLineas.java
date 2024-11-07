@@ -22,10 +22,9 @@ public class MenuDeLineas extends JFrame {
 
     public MenuDeLineas() {
         setTitle("Graficación Básica - Líneas");
-        setSize(800, 600);
+        setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBackground(BACKGROUND_COLOR);
@@ -97,7 +96,7 @@ public class MenuDeLineas extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
         add(mainPanel);
-        pack();
+        //pack();
         setVisible(true);
 
         // Listener para ajustar los tamaños al cambiar el tamaño de la ventana

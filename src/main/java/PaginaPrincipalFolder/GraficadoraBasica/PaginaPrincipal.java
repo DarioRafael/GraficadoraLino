@@ -20,10 +20,10 @@ public class PaginaPrincipal extends JFrame {
 
     public PaginaPrincipal() {
         setTitle("Página Principal");
-        setSize(1280, 800);
+        setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+       // setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
@@ -60,8 +60,9 @@ public class PaginaPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MenuDeLineas menuDeLineas = new MenuDeLineas();
+                menuDeLineas.setSize(1280, 768);
                 menuDeLineas.setLocationRelativeTo(null);
-                menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                //menuDeLineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 menuDeLineas.setVisible(true);
                 dispose();
             }
@@ -71,8 +72,9 @@ public class PaginaPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MenuDeConicas menuDeConicas = new MenuDeConicas();
+                menuDeConicas.setSize(1280, 768);
                 menuDeConicas.setLocationRelativeTo(null);
-                menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                //menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 menuDeConicas.setVisible(true);
                 dispose();
             }
@@ -82,9 +84,10 @@ public class PaginaPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MenuDePolilineas menuPolilineas = new MenuDePolilineas();
+                menuPolilineas.setSize(1280, 768);
                 menuPolilineas.setLocationRelativeTo(null);
                 menuPolilineas.setVisible(true);
-                menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                //menuPolilineas.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 dispose();
             }
         });

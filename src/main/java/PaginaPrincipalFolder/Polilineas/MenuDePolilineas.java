@@ -15,10 +15,11 @@ public class MenuDePolilineas extends JFrame {
 
     public MenuDePolilineas() {
         setTitle("Graficación Geométrica 2D Básica: Polilíneas");
-        setSize(800, 600);
+        setSize(1280, 768);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         initializeUI();
     }
@@ -44,6 +45,8 @@ public class MenuDePolilineas extends JFrame {
         polilineasButton.addActionListener(e -> {
             this.dispose();
             PolilineasDrawMenu frame2 = new PolilineasDrawMenu();
+            frame2.setSize(1280, 768);
+            frame2.setLocationRelativeTo(null);
             frame2.drawFiguraAnonimaInternal(frame2.xInicio, frame2.yInicio,1);
             frame2.xInicialFieldNuevo.setText("2");
             frame2.yInicialFieldNuevo.setText("2");

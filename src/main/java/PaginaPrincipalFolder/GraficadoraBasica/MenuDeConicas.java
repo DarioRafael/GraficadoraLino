@@ -18,7 +18,7 @@ public class MenuDeConicas extends JFrame {
 
     public MenuDeConicas() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CÓNICAS");
-        setSize(1280, 800);
+        setSize(1280, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
