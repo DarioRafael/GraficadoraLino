@@ -64,17 +64,10 @@ public class MenuDePolilineas extends JFrame {
         buttonPanel.add(polilineasButton);
         buttonPanel.add(backButton);
 
-        JPanel footerPanel = new JPanel(new BorderLayout());
-        footerPanel.setBackground(BACKGROUND_COLOR);
 
-        JLabel creditosLabel = new JLabel("<html><center>Asesor: ING. José Lino Hernández Omaña<br>Cd. Victoria, Tamaulipas - Septiembre 2024</center></html>", SwingConstants.CENTER);
-        creditosLabel.setFont(new Font("Segoe UI", Font.ITALIC, 14));
-        creditosLabel.setForeground(new Color(100, 100, 100));
-        footerPanel.add(creditosLabel, BorderLayout.CENTER);
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
-        mainPanel.add(footerPanel, BorderLayout.SOUTH);
 
         this.add(mainPanel);
     }
