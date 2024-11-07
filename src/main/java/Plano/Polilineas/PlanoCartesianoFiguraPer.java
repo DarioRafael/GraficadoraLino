@@ -27,8 +27,8 @@ public class PlanoCartesianoFiguraPer extends JPanel {
 
 
     public PlanoCartesianoFiguraPer() {
-        offsetX = -GRID_SIZE * 2; // Desplazar hacia la derecha
-        offsetY = GRID_SIZE * 2; // Desplazar hacia arriba
+        offsetX = -GRID_SIZE * 3; // Desplazar hacia la derecha
+        offsetY = GRID_SIZE * 3; // Desplazar hacia arriba
         setupMouseListeners();
     }
 
