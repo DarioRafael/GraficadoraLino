@@ -80,7 +80,7 @@ public class PaginaPrincipal extends JFrame {
         headerPanel.add(titlePanel, BorderLayout.CENTER);
 
         // Panel central con botones
-        JPanel buttonPanel = new JPanel(new GridLayout(0, 2, 20, 20));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 2, 5, 5));
         buttonPanel.setBackground(BACKGROUND_COLOR);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 100));
 
@@ -90,48 +90,7 @@ public class PaginaPrincipal extends JFrame {
         goToPolilineasButton = createStyledButton("Graficadora de Polilineas");
         creditsButton = createStyledButton("Créditos");
 
-        // Agregar ActionListeners para los botones
-        goToLineButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MenuDeLineas menuDeLineas = new MenuDeLineas();
-                menuDeLineas.setSize(1280, 768);
-                menuDeLineas.setLocationRelativeTo(null);
-                menuDeLineas.setVisible(true);
-                dispose();
-            }
-        });
 
-        goToConicsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MenuDeConicas menuDeConicas = new MenuDeConicas();
-                menuDeConicas.setSize(1280, 768);
-                menuDeConicas.setLocationRelativeTo(null);
-                menuDeConicas.setVisible(true);
-                dispose();
-            }
-        });
-
-        goToPolilineasButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MenuDePolilineas menuPolilineas = new MenuDePolilineas();
-                menuPolilineas.setSize(1280, 768);
-                menuPolilineas.setLocationRelativeTo(null);
-                menuPolilineas.setVisible(true);
-                dispose();
-            }
-        });
-
-        creditsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CreditosParaFG menuPolilineas = new CreditosParaFG();
-                menuPolilineas.setVisible(true);
-                dispose();
-            }
-        });
 
         buttonPanel.add(goToLineButton);
         buttonPanel.add(goToConicsButton);
@@ -162,6 +121,49 @@ public class PaginaPrincipal extends JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 adjustFontSizes();
+            }
+        });
+
+        // Agregar ActionListeners para los botones
+        goToLineButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuDeLineas menuDeLineas = new MenuDeLineas();
+                menuDeLineas.setSize(ajustesVentana.getWindowSize());
+                menuDeLineas.setLocationRelativeTo(null);
+                menuDeLineas.setVisible(true);
+                dispose();
+            }
+        });
+
+        goToConicsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuDeConicas menuDeConicas = new MenuDeConicas();
+                menuDeConicas.setSize(ajustesVentana.getWindowSize());
+                menuDeConicas.setLocationRelativeTo(null);
+                menuDeConicas.setVisible(true);
+                dispose();
+            }
+        });
+
+        goToPolilineasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuDePolilineas menuPolilineas = new MenuDePolilineas();
+                menuPolilineas.setSize(ajustesVentana.getWindowSize());
+                menuPolilineas.setLocationRelativeTo(null);
+                menuPolilineas.setVisible(true);
+                dispose();
+            }
+        });
+
+        creditsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreditosParaFG menuPolilineas = new CreditosParaFG();
+                menuPolilineas.setVisible(true);
+                dispose();
             }
         });
 
