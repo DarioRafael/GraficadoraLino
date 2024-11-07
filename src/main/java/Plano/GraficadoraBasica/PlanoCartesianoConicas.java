@@ -31,6 +31,9 @@ public class PlanoCartesianoConicas extends JPanel {
 
     public PlanoCartesianoConicas() {
         setupMouseListeners();
+        offsetX = -GRID_SIZE * 4; // Desplazar hacia la derecha
+        offsetY = GRID_SIZE * 4; // Desplazar hacia arriba
+        zoomFactor = 0.9; // Ajustar el zoom inicial a 0.8x
     }
 
     private void setupMouseListeners() {

@@ -29,7 +29,7 @@ public class PaginaPrincipal extends JFrame {
         setLocationRelativeTo(null); // Centra la ventana
 
         // Panel principal
-        JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
+        JPanel mainPanel = new JPanel(new BorderLayout(5, 5));
         mainPanel.setBackground(BACKGROUND_COLOR);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
