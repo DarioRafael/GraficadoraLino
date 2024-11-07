@@ -80,9 +80,9 @@ public class PaginaPrincipal extends JFrame {
         headerPanel.add(titlePanel, BorderLayout.CENTER);
 
         // Panel central con botones
-        JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 20, 20));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 2, 20, 20));
         buttonPanel.setBackground(BACKGROUND_COLOR);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 100));
 
         // Botones
         goToLineButton = createStyledButton("Graficadora de Líneas");
