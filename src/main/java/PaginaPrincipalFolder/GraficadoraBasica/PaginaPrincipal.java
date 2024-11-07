@@ -14,8 +14,7 @@ public class PaginaPrincipal extends JFrame {
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
-    private static final int letter = 20;
-
+    private static final int FONT_SIZE = 20;
 
     private JLabel titleLabel;
     private JButton goToLineButton, goToConicsButton, goToPolilineasButton, creditsButton;
@@ -41,51 +40,44 @@ public class PaginaPrincipal extends JFrame {
         headerPanel.add(bannerLabel, BorderLayout.NORTH); // Añadir el banner al norte del panel
 
         // Título con salto de línea debajo del banner
-        // Crear las etiquetas separadas
-        JLabel institutoLabel = new JLabel("Instituto Tecnológico de Cd. Victoria", SwingConstants.CENTER);
-        institutoLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
-        institutoLabel.setForeground(TEXT_COLOR);
-
-        JLabel carreraLabel = new JLabel("Ing. en Sistemas Computacionales", SwingConstants.CENTER);
-        carreraLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
-        carreraLabel.setForeground(TEXT_COLOR);
-
-        JLabel materiaLabel = new JLabel("Graficación", SwingConstants.CENTER);
-        materiaLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
-        materiaLabel.setForeground(TEXT_COLOR);
-
-        JLabel temaLabel = new JLabel("Graficación Básica por Computadora:", SwingConstants.CENTER);
-        temaLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
-        temaLabel.setForeground(TEXT_COLOR);
-
-        JLabel figurasLabel = new JLabel("Figuras Geométricas Simples", SwingConstants.CENTER);
-        figurasLabel.setFont(new Font("Segoe UI", Font.BOLD, letter));
-        figurasLabel.setForeground(TEXT_COLOR);
-
-// Panel para alinear las etiquetas verticalmente
-        // Panel para alinear las etiquetas verticalmente con GridBagLayout
         JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setBackground(BACKGROUND_COLOR);
 
-// Configurar restricciones de GridBag
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = GridBagConstraints.RELATIVE; // Añadir las etiquetas una debajo de otra
-        gbc.anchor = GridBagConstraints.CENTER;  // Centrar las etiquetas
-        gbc.insets = new Insets(5, 0, 5, 0);   // Espacio entre las etiquetas
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 0, 0, 0);
 
-// Añadir las etiquetas al panel con las restricciones
+        JLabel institutoLabel = new JLabel("Instituto Tecnológico de Cd. Victoria", SwingConstants.CENTER);
+        institutoLabel.setFont(new Font("Segoe UI", Font.BOLD, FONT_SIZE));
+        institutoLabel.setForeground(TEXT_COLOR);
         titlePanel.add(institutoLabel, gbc);
+
+        JLabel carreraLabel = new JLabel("Ing. en Sistemas Computacionales", SwingConstants.CENTER);
+        carreraLabel.setFont(new Font("Segoe UI", Font.BOLD, FONT_SIZE));
+        carreraLabel.setForeground(TEXT_COLOR);
         titlePanel.add(carreraLabel, gbc);
+
+        JLabel materiaLabel = new JLabel("Graficación", SwingConstants.CENTER);
+        materiaLabel.setFont(new Font("Segoe UI", Font.BOLD, FONT_SIZE));
+        materiaLabel.setForeground(TEXT_COLOR);
         titlePanel.add(materiaLabel, gbc);
+
+        JLabel temaLabel = new JLabel("Graficación Básica por Computadora:", SwingConstants.CENTER);
+        temaLabel.setFont(new Font("Segoe UI", Font.BOLD, FONT_SIZE));
+        temaLabel.setForeground(TEXT_COLOR);
         titlePanel.add(temaLabel, gbc);
+
+        JLabel figurasLabel = new JLabel("Figuras Geométricas Simples", SwingConstants.CENTER);
+        figurasLabel.setFont(new Font("Segoe UI", Font.BOLD, FONT_SIZE));
+        figurasLabel.setForeground(TEXT_COLOR);
         titlePanel.add(figurasLabel, gbc);
 
         headerPanel.add(titlePanel, BorderLayout.CENTER);
 
-
         // Panel central con botones
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 20, 20));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 20, 20));
         buttonPanel.setBackground(BACKGROUND_COLOR);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
@@ -157,20 +149,25 @@ public class PaginaPrincipal extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
 
-        add(mainPanel);
-        setVisible(true);
+        // Agregar un JScrollPane al panel principal si el tamaño es demasiado pequeño
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
 
         // Ajustar tamaño de fuente en función del tamaño de la ventana
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                adjustFontSizes();
             }
         });
+
+        setVisible(true);
     }
 
     private JButton createStyledButton(String title) {
         JButton button = new JButton(title);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        button.setFont(new Font("Segoe UI", Font.BOLD, FONT_SIZE));
         button.setBackground(BUTTON_COLOR);
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
@@ -189,6 +186,17 @@ public class PaginaPrincipal extends JFrame {
         return button;
     }
 
+    private void adjustFontSizes() {
+        Dimension size = getSize();
+        int newFontSize = Math.max(12, (int) (size.width / 64)); // Ajusta el factor de escala según sea necesario
+        Font newFont = new Font("Segoe UI", Font.BOLD, newFontSize);
+
+        // Ajustar la fuente de todos los botones
+        goToLineButton.setFont(newFont);
+        goToConicsButton.setFont(newFont);
+        goToPolilineasButton.setFont(newFont);
+        creditsButton.setFont(newFont);
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new PaginaPrincipal().setVisible(true));
