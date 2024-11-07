@@ -30,7 +30,7 @@ public class MenuDeLineas extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 5, 5, 5));
 
         // Panel superior con título simplificado
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -44,7 +44,7 @@ public class MenuDeLineas extends JFrame {
         // Panel central con botones sin descripciones ni imágenes
         JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 20, 20));
         buttonPanel.setBackground(BACKGROUND_COLOR);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 5, 5, 5));
 
         generalLineButton = createStyledButton("Graficadora General de Líneas", false);
         generalLineButton.addActionListener(e -> {
@@ -53,7 +53,7 @@ public class MenuDeLineas extends JFrame {
             frameVen.setVisible(true);
         });
 
-        JPanel specificLinesPanel = new JPanel(new GridLayout(1, 3, 20, 20));
+        JPanel specificLinesPanel = new JPanel(new GridLayout(1, 3, 5, 5));
         specificLinesPanel.setBackground(BACKGROUND_COLOR);
 
         //<html>Líneas <br>Horizontales</html>

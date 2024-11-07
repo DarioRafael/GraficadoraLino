@@ -39,9 +39,9 @@ public class MenuDeConicas extends JFrame {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         // Panel central con botones
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 20, 20));
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         buttonPanel.setBackground(BACKGROUND_COLOR);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 5, 5, 5));
 
         JButton generalConicsButton = createStyledButton("Graficadora General de Cónicas", false);
         generalConicsButton.addActionListener(e -> {
@@ -49,7 +49,7 @@ public class MenuDeConicas extends JFrame {
             new DrawingFrameConicas().setVisible(true);
         });
 
-        JPanel specificConicsPanel = new JPanel(new GridLayout(1, 3, 20, 20));
+        JPanel specificConicsPanel = new JPanel(new GridLayout(1, 3, 5, 5));
         specificConicsPanel.setBackground(BACKGROUND_COLOR);
 
         JButton circleButton = createStyledButton("Círculos", false);
