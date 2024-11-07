@@ -4,6 +4,7 @@ import DrawingClasses.GraficadoraBasica.Lineas.DrawingFrameLineas;
 import DrawingClasses.GraficadoraBasica.Lineas.Separadas.DrawingFrameDiagonal;
 import DrawingClasses.GraficadoraBasica.Lineas.Separadas.DrawingFrameHorizontal;
 import DrawingClasses.GraficadoraBasica.Lineas.Separadas.DrawingFrameVertical;
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 
 import javax.swing.*;
@@ -19,10 +20,11 @@ public class MenuDeLineas extends JFrame {
 
     private JLabel titleLabel;
     private JButton generalLineButton, horizontalLineButton, verticalLineButton,diagonalLineButton;
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
     public MenuDeLineas() {
         setTitle("Graficación Básica - Líneas");
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

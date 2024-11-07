@@ -1,5 +1,6 @@
 package DrawingClasses.GraficadoraBasica.Conicas;
 
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.GraficadoraBasica.CreditosParaFG;
 import PaginaPrincipalFolder.GraficadoraBasica.MenuDeConicas;
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
@@ -52,11 +53,12 @@ public class DrawingFrameConicas extends JFrame {
     private JButton calcularButton; // Add this new field
     private boolean modoTrigonometrico;
     public JLabel circleLabel;
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
 
     public DrawingFrameConicas() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);

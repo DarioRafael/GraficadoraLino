@@ -1,6 +1,7 @@
 package DrawingClasses.GraficadoraBasica.Lineas.Separadas;
 
 
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.GraficadoraBasica.CreditosParaFG;
 import PaginaPrincipalFolder.GraficadoraBasica.MenuDeConicas;
 import PaginaPrincipalFolder.GraficadoraBasica.MenuDeLineas;
@@ -43,10 +44,11 @@ public class DrawingFrameHorizontal extends JFrame {
 
     private JComboBox<String> figurasComboBox;
     private Map<String, List<Punto>> figurasMap = new HashMap<>();
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
     public DrawingFrameHorizontal() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - LINEAS");
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
         //tendedState(JFrame.MAXIMIZED_BOTH);

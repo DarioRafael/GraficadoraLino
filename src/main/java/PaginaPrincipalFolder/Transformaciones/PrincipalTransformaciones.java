@@ -1,5 +1,6 @@
 package PaginaPrincipalFolder.Transformaciones;
 
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesBasicas;
 import PaginaPrincipalFolder.Transformaciones.Componentes.TransformacionesCompuestas;
 
@@ -12,6 +13,7 @@ public class PrincipalTransformaciones {
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
+    static AjustesVentana ajustesVentana = new AjustesVentana();
 
     public static void main(String[] args) {
         try {
@@ -21,7 +23,7 @@ public class PrincipalTransformaciones {
         }
 
         JFrame frame = new JFrame("Transformaciones Geométricas en 2D");
-        frame.setSize(1080, 850);
+        frame.setSize(ajustesVentana.getWindowSize());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 

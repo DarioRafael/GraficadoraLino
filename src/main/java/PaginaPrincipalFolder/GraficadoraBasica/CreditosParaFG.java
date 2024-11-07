@@ -1,11 +1,14 @@
 package PaginaPrincipalFolder.GraficadoraBasica;
 
+import PaginaPrincipalFolder.AjustesVentana;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 
 public class CreditosParaFG extends JFrame {
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
     public CreditosParaFG() {
         setTitle("Créditos");
@@ -14,7 +17,7 @@ public class CreditosParaFG extends JFrame {
 
         // Obtener tamaño de pantalla y establecer pantalla completa
 
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         //setUndecorated(true); // Elimina el borde y título de la ventana
         //setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza la ventana
 

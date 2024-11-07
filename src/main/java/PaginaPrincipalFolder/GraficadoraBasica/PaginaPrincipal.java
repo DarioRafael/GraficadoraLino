@@ -1,5 +1,6 @@
 package PaginaPrincipalFolder.GraficadoraBasica;
 
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.Polilineas.MenuDePolilineas;
 
 import javax.swing.*;
@@ -15,13 +16,15 @@ public class PaginaPrincipal extends JFrame {
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
     private static final int FONT_SIZE = 20;
+    AjustesVentana ajustesVentana = new AjustesVentana();
+
 
     private JLabel titleLabel;
     private JButton goToLineButton, goToConicsButton, goToPolilineasButton, creditsButton;
 
     public PaginaPrincipal() {
         setTitle("Página Principal");
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centra la ventana
 

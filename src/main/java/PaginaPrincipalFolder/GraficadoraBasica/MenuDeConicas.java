@@ -4,6 +4,7 @@ import DrawingClasses.GraficadoraBasica.Conicas.DrawingFrameConicas;
 import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameArcos;
 import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameCirculos;
 import DrawingClasses.GraficadoraBasica.Conicas.Separadas.DrawingFrameElipse;
+import PaginaPrincipalFolder.AjustesVentana;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +16,11 @@ public class MenuDeConicas extends JFrame {
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
     public MenuDeConicas() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CÓNICAS");
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);

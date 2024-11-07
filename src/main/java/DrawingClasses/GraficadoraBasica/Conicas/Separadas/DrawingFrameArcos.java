@@ -1,5 +1,6 @@
 package DrawingClasses.GraficadoraBasica.Conicas.Separadas;
 
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.GraficadoraBasica.MenuDeConicas;
 import Plano.GraficadoraBasica.PlanoCartesianoConicasV;
 import formasADibujar.Rotacion.Arco;
@@ -49,11 +50,12 @@ public class DrawingFrameArcos extends JFrame {
 
     private JButton calcularButton; // Add this new field
     private boolean modoTrigonometrico;
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
 
     public DrawingFrameArcos() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CONICAS");
-        setSize(1280, 768);
+        setSize(ajustesVentana.getWindowSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -227,7 +229,7 @@ public class DrawingFrameArcos extends JFrame {
         menuButton.addActionListener(e -> {
             dispose();
             MenuDeConicas menuDeConicas = new MenuDeConicas();
-            menuDeConicas.setSize(1280, 768);
+            menuDeConicas.setSize(ajustesVentana.getWindowSize());
             menuDeConicas.setLocationRelativeTo(null);
             //menuDeConicas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menuDeConicas.setVisible(true);
