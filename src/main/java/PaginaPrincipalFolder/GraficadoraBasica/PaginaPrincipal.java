@@ -15,7 +15,7 @@ public class PaginaPrincipal extends JFrame {
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
-    private static final int FONT_SIZE = 20;
+    private static final int FONT_SIZE = 14;
     AjustesVentana ajustesVentana = new AjustesVentana();
 
 

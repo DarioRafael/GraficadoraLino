@@ -1,5 +1,6 @@
     package DrawingClasses.Polilineas;
 
+    import PaginaPrincipalFolder.AjustesVentana;
     import PaginaPrincipalFolder.Polilineas.MenuDePolilineas;
     import Plano.GenericsPlano.CoordinateSystem;
     import Plano.Polilineas.PlanoCartesianoFiguraPer;
@@ -41,10 +42,10 @@
         private JButton backButton; // New button to go back to PaginaPrincipal
 
         List<Punto> puntosList;
-
+        AjustesVentana ajustesVentana = new AjustesVentana();
         public PolilineasDrawMenu() {
             setTitle("Graficación Geométrica 2D Básica: Polilineas");
-            setSize(1280, 768);            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(ajustesVentana.getWindowSize());            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
 
             createComponents();
@@ -251,6 +252,8 @@
                 dispose();
                 SwingUtilities.invokeLater(() -> {
                     MenuDePolilineas principalFrame = new MenuDePolilineas();
+                    principalFrame.setSize(ajustesVentana.getWindowSize());
+                    principalFrame.setLocationRelativeTo(null);
                     principalFrame.setVisible(true);
                 });
             });

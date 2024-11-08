@@ -1,6 +1,7 @@
 package PaginaPrincipalFolder.Polilineas;
 
 import DrawingClasses.Polilineas.PolilineasDrawMenu;
+import PaginaPrincipalFolder.AjustesVentana;
 import PaginaPrincipalFolder.GraficadoraBasica.PaginaPrincipal;
 
 import javax.swing.*;
@@ -12,6 +13,8 @@ public class MenuDePolilineas extends JFrame {
     private static final Color BUTTON_COLOR = new Color(70, 130, 180);
     private static final Color HOVER_COLOR = new Color(100, 149, 237);
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
+
+    AjustesVentana ajustesVentana = new AjustesVentana();
 
     public MenuDePolilineas() {
         setTitle("Graficación Geométrica 2D Básica: Polilíneas");
@@ -45,7 +48,7 @@ public class MenuDePolilineas extends JFrame {
         polilineasButton.addActionListener(e -> {
             this.dispose();
             PolilineasDrawMenu frame2 = new PolilineasDrawMenu();
-            frame2.setSize(1280, 768);
+            frame2.setSize(ajustesVentana.getWindowSize());
             frame2.setLocationRelativeTo(null);
             frame2.drawFiguraAnonimaInternal(frame2.xInicio, frame2.yInicio,1);
             frame2.xInicialFieldNuevo.setText("2");
