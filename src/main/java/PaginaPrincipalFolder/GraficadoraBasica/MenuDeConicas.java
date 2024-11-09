@@ -18,6 +18,7 @@ public class MenuDeConicas extends JFrame {
     private static final Color TEXT_COLOR = new Color(25, 25, 25);
     AjustesVentana ajustesVentana = new AjustesVentana();
 
+    //
     public MenuDeConicas() {
         setTitle("Graficación Básica por Computadora: Figuras Geométricas Simples - CÓNICAS");
         setSize(ajustesVentana.getWindowSize());
